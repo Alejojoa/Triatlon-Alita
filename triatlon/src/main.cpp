@@ -516,26 +516,16 @@ U8G2_FOR_ADAFRUIT_GFX u8g2_for_adafruit_gfx;
 #define MA2 27
 #define MB1 16
 #define MB2 17
-#define MOTOR1 1
-#define MOTOR2 2 
 
 // Define display buttons 
-#define select 18
-#define down 5
+#define select 23 //18
+#define down 4 //5
 
-// Define a default order for icons
-char menu_items [NUM_ITEMS] [MAX_ITEM_LENGTH] = {
-  
-  { "Area cleaner" }, 
-  { "Sprinter" }, 
-  { "Sumo" }, 
+#define LED 23
 
-};
-
-const int NUM_ITEMS = 3; 
+const int NUM_MODALITIES = 3; 
 const int MAX_ITEM_LENGTH = 20;
 
-int selected = 0;
 int next;
 int previous;
 
@@ -544,10 +534,8 @@ int progressY1 = 0;
 int progressX2 = 127;
 int progressY2 = 63;
 
-int current_screen = 0;
-
 // Sets line position
-int setPoint = 3500;
+int setPoint = 0;
 
 int position;
 
@@ -575,6 +563,36 @@ bool blink = true;
 
 bool realese = false;
 
+// Defines a default order for modalities and their respective icons and names
+char menu_items [NUM_MODALITIES] [MAX_ITEM_LENGTH] = {
+  
+  { "Area cleaner" }, 
+  { "Sprinter" }, 
+  { "Sumo" }, 
+
+};
+
+enum screens {
+
+  selection,
+  modality,
+  calibration,
+  flags,
+
+};
+
+enum modalities {
+
+  areaCleaner,
+  sprinter,
+  sumo,
+
+};
+
+modalities selected = areaCleaner;
+
+screens current_screen = selection;
+
 BluetoothSerial SerialBT;
 
 multiplexedQTR qtr;
@@ -583,10 +601,20 @@ const uint8_t SensorCount = 8;
 uint16_t sensorValues[SensorCount];
 
 // Gets line position
-int getPosition (){
+int getPosition(){
 
   int position = qtr.readLineWhite(sensorValues);
   return position;
+
+}
+
+// Waits untill a modality is selected
+void standby(){
+
+  digitalWrite (MA1,LOW);
+  digitalWrite (MA2,LOW);
+  digitalWrite (MB1,LOW);
+  digitalWrite (MB2,LOW);
 
 }
 
@@ -602,8 +630,8 @@ void frame(){
 
 // Prints a menu
 void menu(){
-  
-  if (current_screen == 0) {
+
+  if (current_screen == selection) {
 
     display.clearDisplay();
 
@@ -646,7 +674,7 @@ void menu(){
     display.display();
 
   } 
-  else if (current_screen == 1 && selected == 0) {
+  else if (current_screen == modality && selected == areaCleaner) {
 
     display.clearDisplay();
     
@@ -660,7 +688,7 @@ void menu(){
 
       display.clearDisplay();
       
-      current_screen = 2;
+      current_screen = flags;
 
     }
 
@@ -709,7 +737,7 @@ void menu(){
     display.display();
 
   }
-  else if (current_screen == 2 && selected == 0){
+  else if (current_screen == flags && selected == areaCleaner){
 
     display.clearDisplay();
 
@@ -720,7 +748,7 @@ void menu(){
     display.display();
 
   }
-  else if (current_screen == 2 && selected == 1){
+  else if (current_screen == flags && selected == sprinter){
   
     display.clearDisplay();
 
@@ -729,16 +757,7 @@ void menu(){
     display.display();
 
   }
-  else if (current_screen == 3){
-
-    display.clearDisplay();
-
-    display.drawXBitmap( 0, 0, bitmap_calibration, 128, 64, WHITE);
-
-    display.display();
-
-  }
-  else if (current_screen == 1 && selected == 2){
+  else if (current_screen == modality && selected == sumo){
 
     if (!SerialBT.connected()) {
       
@@ -776,7 +795,7 @@ void menu(){
     }
 
   }
-  else if (current_screen == 1 && selected == 1){
+  else if (current_screen == modality == 1 && selected == sprinter){
 
     display.clearDisplay();
 
@@ -808,6 +827,8 @@ void sprinter_calibration(){
     qtr.calibrate();
     
   }
+
+  current_screen = modality;
 
 }
 
@@ -867,12 +888,15 @@ void PID(){
 }
 
 
-void area_cleaner(){}
+void areaCleaner_modality(){}
 
-void sumo(){}
+void sumo_modality(){}
 
 void setup(){
     
+  pinMode(LED, OUTPUT);
+  digitalWrite(LED, HIGH);
+
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
     
     Serial.println(F("SSD1306 allocation failed"));
@@ -905,14 +929,14 @@ void loop() {
   // Down button system    
   if (!digitalRead(down)) {
     
-    if (current_screen == 0) {
+    if (current_screen == selection) {
 
-      selected = selected + 1;
+      selected = static_cast<modalities>(selected + 1);
     
-      if (selected >= NUM_ITEMS) {
+      if (selected >= NUM_MODALITIES) {
     
-        selected = 0;
-    
+        selected = static_cast<modalities>(selected = areaCleaner);
+        
       }
     
       delay(200);
@@ -924,24 +948,19 @@ void loop() {
   // Select button system
   if (!digitalRead(select)) {
     
-    if (current_screen == 0) {current_screen = 1;} // Displays selected screen
-    else if (current_screen == 0 && selected == 1) {current_screen = 3;} // Displays calibration screen
-    else if (current_screen == 1 && selected == 0) {current_screen = 0;} // Area cleaner screen to menu
-    else if (current_screen == 1 && selected == 1) {current_screen = 0;} // Sprinter screen to menu
-    else if (current_screen == 1 && selected == 2) {current_screen = 0;} // Sumo screen to menu
-    else if (current_screen == 2 || current_screen == 3) {current_screen = 0;} // Flag and calibration screens to menu
+    if (current_screen == selection && selected != sprinter) {current_screen = modality;} // Displays selected screen
+    else if (current_screen == selection && selected == sprinter) {current_screen = calibration;} // Displays calibration screen
+    else if (current_screen == modality) {current_screen = selection;} // Area cleaner screen to menu
+    else if (current_screen == flags || current_screen == calibration) {current_screen = selection;} // Flag and calibration screens to menu
 
     delay(200);
   
   }
 
-  if (current_screen == 1 && selected == 2){
+  if (current_screen == selection){
   
-    SerialBT.begin("Alita"); // Starts bluetooth connection
-  
-  }
-  else if (current_screen == 0){
-  
+    //standby();
+
     SerialBT.end(); // Ends bluetooth connection
 
     progressX1 = 0;
@@ -952,8 +971,8 @@ void loop() {
     realese = false;
 
   }
-  
-  if (current_screen == 1 && selected == 1){
+
+  if (current_screen == modality && selected == sprinter){
   
     if (!digitalRead(down)){
 
@@ -963,33 +982,33 @@ void loop() {
 
     if (realese == true && digitalRead(down)){
 
-      current_screen = 2;
+      current_screen = flags;
 
     }
 
   }
 
   // Scroll system
-  previous = selected - 1;
+  previous = static_cast<modalities>(selected - 1);
+
+  if (previous < 0) {previous = NUM_MODALITIES - 1;}
   
-  if (previous < 0) {previous = NUM_ITEMS - 1;}
+  next = static_cast<modalities>(selected + 1);
   
-  next = selected + 1;
-  
-  if (next >= NUM_ITEMS) {next = 0;}
+  if (next >= NUM_MODALITIES) {next = 0;}
 
   menu();
 
   // Calibration trigger
-  if (current_screen == 3){sprinter_calibration();}
+  if (current_screen == calibration){sprinter_calibration();}
 
   // Sumo trigger
-  if (current_screen == 1 && selected == 2){sumo();}
+  if (current_screen == modality && selected == sumo){sumo_modality();}
 
   // Area cleaner trigger
-  if (current_screen == 2 && selected == 0){area_cleaner();}
+  if (current_screen == flags && selected == areaCleaner){areaCleaner_modality();}
 
   // Sprinter trigger
-  if (current_screen == 2 && selected == 1){PID();}
+  if (current_screen == flags && selected == sprinter){PID();}
 
 }
