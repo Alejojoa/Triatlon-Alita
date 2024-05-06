@@ -619,7 +619,7 @@ void standby(){
 }
 
 // Prints full progress bar
-void frame(){
+void displayFrame(){
   
   display.drawLine(0, 0, 127, 0, WHITE);
   display.drawLine(127, 63, 0, 63, WHITE);
@@ -629,7 +629,7 @@ void frame(){
 }
 
 // Prints a menu
-void menu(){
+void displayMenu(){
 
   if (current_screen == selection) {
 
@@ -743,7 +743,7 @@ void menu(){
 
     display.drawXBitmap( 0, 0, epd_bitmap_flag, 128, 64, WHITE);
 
-    frame();
+    displayFrame();
 
     display.display();
 
@@ -808,7 +808,7 @@ void menu(){
 }
 
 // Calibrates sprinters QTR sensors
-void sprinter_calibration(){
+void startSprinterCalibration(){
 
   qtr.setTypeAnalog();
   qtr.setSensorPins((const uint8_t[]){0, 1, 2, 3, 4, 5, 6, 7}, SensorCount); 
@@ -833,7 +833,7 @@ void sprinter_calibration(){
 }
 
 //PID control system code
-void PID(){
+void startSprinterModality(){
   
   position = getPosition();
 
@@ -888,9 +888,9 @@ void PID(){
 }
 
 
-void areaCleaner_modality(){}
+void startAreaCleanerModality(){}
 
-void sumo_modality(){}
+void startSumoModality(){}
 
 void setup(){
     
@@ -997,18 +997,18 @@ void loop() {
   
   if (next >= NUM_MODALITIES) {next = 0;}
 
-  menu();
+  displayMenu();
 
   // Calibration trigger
-  if (current_screen == calibration){sprinter_calibration();}
+  if (current_screen == calibration){startSprinterCalibration();}
 
   // Sumo trigger
-  if (current_screen == modality && selected == sumo){sumo_modality();}
+  if (current_screen == modality && selected == sumo){startSumoModality();}
 
   // Area cleaner trigger
-  if (current_screen == flags && selected == areaCleaner){areaCleaner_modality();}
+  if (current_screen == flags && selected == areaCleaner){startAreaCleanerModality();}
 
   // Sprinter trigger
-  if (current_screen == flags && selected == sprinter){PID();}
+  if (current_screen == flags && selected == sprinter){startSprinterModality();}
 
 }
