@@ -512,54 +512,19 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 U8G2_FOR_ADAFRUIT_GFX u8g2_for_adafruit_gfx;
 
 // Define motor pins
-#define MA1 26
+#define MA1 26 // right
 #define MA2 27
-#define MB1 16
+#define MB1 16 // left
 #define MB2 17
 
 // Define display buttons 
-#define select 23 //18
-#define down 4 //5
+#define select 18 //18
+#define down 5 //5
 
 #define LED 23
 
 const int NUM_MODALITIES = 3; 
 const int MAX_ITEM_LENGTH = 20;
-
-int next;
-int previous;
-
-int progressX1 = 0;
-int progressY1 = 0;
-int progressX2 = 127;
-int progressY2 = 63;
-
-// Sets line position
-int setPoint = 0;
-
-int position;
-
-int proportional = 0;
-int derivative = 0;
-int integral = 0;
-int lastErr = 0;
-
-int maxSpeed = 255;
-int minSpeed = 130;
-
-int velocity = 255;
-
-// PID const
-float kp = 0.087;
-float ki = 0;
-float kd = 0.4;
-
-float speed = 0;
-
-float pidRight = 0;
-float pidLeft = 0;
-
-bool blink = true;
 
 bool realese = false;
 
@@ -627,6 +592,14 @@ void displayFrame(){
   display.drawLine(127, 0, 127, 63, WHITE);
 
 }
+
+int next;
+int previous;
+
+int progressX1 = 0;
+int progressY1 = 0;
+int progressX2 = 127;
+int progressY2 = 63;
 
 // Prints a menu
 void displayMenu(){
@@ -759,6 +732,8 @@ void displayMenu(){
   }
   else if (current_screen == modality && selected == sumo){
 
+    bool blink = true;
+
     if (!SerialBT.connected()) {
       
       if (blink) {
@@ -828,6 +803,8 @@ void startSprinterCalibration(){
     
   }
 
+  display.clearDisplay();
+
   current_screen = modality;
 
 }
@@ -835,20 +812,36 @@ void startSprinterCalibration(){
 //PID control system code
 void startSprinterModality(){
   
-  position = getPosition();
+  int setPoint = 3500; // Sets line position
+
+  int proportional = 0;
+  int derivative = 0;
+  int integral = 0;
+  int lastError = 0;
+
+  int position = getPosition();
 
   proportional = position - setPoint; // Newest error
   integral += proportional; // Integral of the error
-  derivative = proportional - lastErr; // Derivative of the error
+  derivative = proportional - lastError; // Derivative of the error
     
-  // PID aftermath
-  speed = (proportional * kp) + (integral * ki) + (derivative * kd);
-    
-  // Saves last error
-  lastErr = proportional;
+  // PID const
+  float kp = 1;
+  float ki = 1;
+  float kd = 1;
 
-  pidRight = velocity - speed;
-  pidLeft = velocity + speed;
+  // PID aftermath
+  float speed = (proportional * kp) + (integral * ki) + (derivative * kd);
+    
+  lastError = proportional; // Saves last error
+
+  int maxSpeed = 130;
+  int minSpeed = 80;
+
+  int velocity = 130;
+
+  float pidRight = velocity - speed;
+  float pidLeft = velocity + speed;
 
   // Defines speed limits for right motor
   if (pidRight > maxSpeed){pidRight = maxSpeed;} 
@@ -859,34 +852,31 @@ void startSprinterModality(){
   else if (pidLeft < minSpeed){pidLeft = minSpeed;}
 
   // Defines turning speed
-  if(pidRight < minSpeed){
+  if (pidRight < minSpeed){ // Turns right
     
-    analogWrite(MA1, speed);
-    analogWrite(MA2, 0);
-    
-  } 
-  else {
-        
-    analogWrite(MB1, 0);
-    analogWrite(MB2, speed);
-  
-  }
-
-  if(pidLeft < minSpeed){
-  
     analogWrite(MA1, 0);
-    analogWrite(MA2, speed);
-  
-  } 
-  else {
+    analogWrite(MA2, pidRight);
     
-    analogWrite(MB1, speed);
-    analogWrite(MB2, 0);
+  } else if (pidRight >= minSpeed){ // Goes stright
+
+    analogWrite(MA1, pidRight);
+    analogWrite(MA2, 0);
+
+  }
   
+  if (pidLeft < minSpeed){ // Turns left
+  
+    analogWrite(MB1, 0);
+    analogWrite(MB2, pidLeft);
+  
+  } else if (pidLeft >= minSpeed){ // Goes stright
+
+    analogWrite(MB1, pidLeft);
+    analogWrite(MB2, 0);
+
   }
 
 }
-
 
 void startAreaCleanerModality(){}
 
@@ -957,9 +947,11 @@ void loop() {
   
   }
 
+  bool blink = true;
+
   if (current_screen == selection){
   
-    //standby();
+    standby();
 
     SerialBT.end(); // Ends bluetooth connection
 
