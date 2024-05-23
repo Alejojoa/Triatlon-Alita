@@ -3,6 +3,7 @@
 #include <Adafruit_GFX.h>
 #include <U8g2_for_Adafruit_GFX.h>
 #include <multiplexedQTR.h>
+#include <CD74HC4067.h>
 #include "BluetoothSerial.h"
 
 /* Bitmap section
@@ -514,41 +515,31 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 U8G2_FOR_ADAFRUIT_GFX u8g2_for_adafruit_gfx;
 
 // Define motor pins
-#define MA1 26 // right
-#define MA2 27
-#define MB1 16 // left
-#define MB2 17
+#define PIN_MA1 26 // right
+#define PIN_MA2 27
+#define PIN_MB1 16 // left
+#define PIN_MB2 17
 
 // Define display buttons 
-#define select 18 //18
-#define down 5 //5
+#define PIN_SELECT 18 //18
+#define PIN_DOWN 5 //5
 
-#define LED 23
+#define PIN_LED 23
  
 multiplexedQTR qtr;
 
 // Waits untill a modality is selected
 void Standby(){
 
-  analogWrite (MA1, LOW);
-  analogWrite (MA2, LOW);
-  analogWrite (MB1, LOW);
-  analogWrite (MB2, LOW);
+  analogWrite (PIN_MA1, LOW);
+  analogWrite (PIN_MA2, LOW);
+  analogWrite (PIN_MB1, LOW);
+  analogWrite (PIN_MB2, LOW);
 
 }
 
 /* Menu section
 --------------------------------------------------------------------------*/
-
-// Prints full progress bar
-void DisplayFrame(){
-  
-  display.drawLine(0, 0, 127, 0, WHITE);
-  display.drawLine(127, 63, 0, 63, WHITE);
-  display.drawLine(0, 63, 0, 0, WHITE);
-  display.drawLine(127, 0, 127, 63, WHITE);
-
-}
 
 const int NUM_MODALITIES = 3; 
 const int MAX_ITEM_LENGTH = 20;
@@ -586,10 +577,21 @@ screens current_screen = selection;
 int next;
 int previous;
 
-int progressX1 = 0;
-int progressY1 = 0;
-int progressX2 = 127;
-int progressY2 = 63;
+int progress;
+
+void DrawProgressBar() {
+  
+  for(progress = 0; progress <= 128; progress ++){
+
+    display.clearDisplay();
+    display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
+    display.drawRect(0, 0, 128, 64, BLACK);
+    display.fillRect(progress, 0, 128, 64, BLACK);
+    display.display();
+
+  }
+
+}
 
 // Prints a menu
 void DisplayMenu(){
@@ -640,79 +642,16 @@ void DisplayMenu(){
   else if (current_screen == modality && selected == areaCleaner) {
 
     display.clearDisplay();
-    
-    display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
-
-    display.drawLine(0, 0, progressX1, 0, WHITE);
-
-    if (progressY2 == 0){
-
-      progressX1 = 0;
-
-      display.clearDisplay();
       
-      current_screen = flags;
+    DrawProgressBar();
 
-    }
-
-    if (progressY1 == 63){
-    
-      display.drawLine(127, 63, progressX2, 63, WHITE);
-
-      if (progressX2 <= 127 && progressX2 >= 1){
-    
-        progressX2 -= 1;
-
-      }
-  
-    }
-
-    if (progressX2 == 0){
-    
-      display.drawLine(0, 63, 0, progressY2, WHITE);
-
-      if (progressY2 <= 63 && progressY2 >= 1){
-    
-        progressY2 -= 1;
-
-      }
-  
-    }
-
-    if (progressX1 == 127){
-
-      display.drawLine(127, 0, 127, progressY1, WHITE);
-
-      if (progressY1 <= 62){
-
-        progressY1 += 1;
-    
-      }
-
-    }
-
-    if (progressX1 <= 126){
-    
-      progressX1 += 1;
-
-    }
+    current_screen = flags;
 
     display.display();
 
   }
-  else if (current_screen == flags && selected == areaCleaner){
+  else if (current_screen == flags){
 
-    display.clearDisplay();
-
-    display.drawXBitmap( 0, 0, epd_bitmap_flag, 128, 64, WHITE);
-
-    DisplayFrame();
-
-    display.display();
-
-  }
-  else if (current_screen == flags && selected == sprinter){
-  
     display.clearDisplay();
 
     display.drawXBitmap( 0, 0, epd_bitmap_flag, 128, 64, WHITE);
@@ -779,10 +718,12 @@ void DisplayMenu(){
 const uint8_t SensorCount = 8;
 uint16_t sensorValues[SensorCount];
 
+int position;
+
 // Gets line position
 int getPosition(){
 
-  int position = qtr.readLineWhite(sensorValues);
+  position = qtr.readLineWhite(sensorValues);
   return position;
 
 }
@@ -812,38 +753,39 @@ void StartSprinterCalibration(){
 
 }
 
-int setPoint = 4875; // Sets line position
+int setPoint = 5200; // Sets line position
 
 int proportional = 0;
 int derivative = 0;
 int integral = 0;
 int lastError = 0;
 
-int maxSpeed = 255;
-int minSpeed = 130;
-int velocity = 255;
+int maxSpeed = 125;
+int minSpeed = 85;
+int speed = 105;
 
 // PID const
-float kp = 0.087;
+float kp = 0.013;
 float ki = 0;
-float kd = 0.4;
+float kd = 0;
+float pid;
 
 //PID control system code
 void StartSprinterModality(){
 
-  int position = getPosition();
+  position = getPosition();
 
   proportional = position - setPoint; // Newest error
   integral += proportional; // Integral of the error
   derivative = proportional - lastError; // Derivative of the error
 
   // PID aftermath
-  float speed = (proportional * kp) + (integral * ki) + (derivative * kd);
+  pid = (proportional * kp) + (integral * ki) + (derivative * kd);
     
   lastError = proportional; // Saves last error
 
-  float pidRight = velocity - speed;
-  float pidLeft = velocity + speed;
+  float pidRight = speed + pid;
+  float pidLeft = speed - pid;
 
   // Defines speed limits for right motor
   if (pidRight > maxSpeed){pidRight = maxSpeed;} 
@@ -854,22 +796,26 @@ void StartSprinterModality(){
   else if (pidLeft < minSpeed){pidLeft = minSpeed;}
 
   // Defines turning speed
-  if (pidRight <= minSpeed){ // Turns right
+  if (pidRight <= minSpeed&& pidLeft > minSpeed){ // Turns right
     
-    analogWrite(MA1, 0);
-    analogWrite(MA2, pidRight);
-    
-  } else if (pidLeft <= minSpeed){ // Turns left
-  
-    analogWrite(MB1, 0);
-    analogWrite(MB2, pidLeft);
-  
-  } else{ // Goes stright
+    analogWrite(PIN_MA1, 0);
+    analogWrite(PIN_MA2, pidRight);
+    analogWrite(PIN_MB1, pidLeft);
+    analogWrite(PIN_MB2, 0);
 
-    analogWrite(MA1, pidRight);
-    analogWrite(MA2, 0);
-    analogWrite(MB1, pidLeft);
-    analogWrite(MB2, 0);
+  } else if (pidLeft <= minSpeed && pidRight > minSpeed){ // Turns left
+
+    analogWrite(PIN_MA1, pidRight);
+    analogWrite(PIN_MA2, 0);
+    analogWrite(PIN_MB1, 0);
+    analogWrite(PIN_MB2, pidLeft);
+  
+  } else { // Goes stright
+
+    analogWrite(PIN_MA1, pidRight);
+    analogWrite(PIN_MA2, 0);
+    analogWrite(PIN_MB1, pidLeft);
+    analogWrite(PIN_MB2, 0);
 
   }
 
@@ -879,205 +825,202 @@ void StartSprinterModality(){
 --------------------------------------------------------------------------*/
 /* SerialBT section */
 
+bool position_and_pid = false;
+
 BluetoothSerial SerialBT;
+
+char message = SerialBT.read();
 
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth in not enabled! Plese run 'make menuconfig' to and enable it
 #endif
 
+void DisplayPositionAndPid() {
+
+  SerialBT.print("- position =");
+  SerialBT.println(position);
+
+  SerialBT.print("- pid =");
+  SerialBT.println(pid);
+
+}
+
 // Prints SerialBT menu
-void menuBT(){
+void DisplayMenuBT(){
 
   // clean the serial
-  for (int i = 0; i < 10; i++)
-  {
+  for (int i = 0; i < 10; i++) {
+    
     SerialBT.println("");
+  
   }
+  // probar a sacar el for para que el menú se lea mejor
+  // y probar a meter todo el menú en una sola función
+  // de paso hacé lo del ticker para que muestre la posición cada un segundo, vago
+  // cada cinco segundo refrescar el menú si es posible
+
 
   SerialBT.println("Configuracion Actual:");
 
-  SerialBT.print("- kp = ");
+  SerialBT.print("- KP = ");
   SerialBT.println(kp);
 
-  SerialBT.print("- ki = ");
-  SerialBT.println(ki);
-
-  SerialBT.print("- kd = ");
+  SerialBT.print("- KD = ");
   SerialBT.println(kd);
 
-  SerialBT.print("- maxSpeed = ");
+  SerialBT.print("- SETPOINT = ");
+  SerialBT.println(setPoint);
+  
+  SerialBT.print("- MAXSPEED = ");
   SerialBT.println(maxSpeed);
 
-  SerialBT.print("- minSpeed = ");
+  SerialBT.print("- MINSPEED = ");
   SerialBT.println(minSpeed);
 
-  SerialBT.print("- velocity = ");
-  SerialBT.println(velocity);
+  SerialBT.print("- SPEED = ");
+  SerialBT.println(speed);
 
-  SerialBT.println(" (x) KP + 0.1 / (z) KP - 0.1");
-  SerialBT.println(" (t) KP + 0.01 / (g) KP - 0.01");
+  /*SerialBT.println(" (x) KP + 0.01 / (z) KP - 0.01");
+  SerialBT.println(" (t) KP + 0.001 / (g) KP - 0.001");
 
-  SerialBT.println(" (v) KI + 0.1 / (r) KI - 0.1");
-  SerialBT.println(" (y) KI + 0.01 / (h) KI - 00.1");
-
-  SerialBT.println(" (p) KD + 0.1 / (n) KD - 0.1");
-  SerialBT.println(" (u) KD + 0.01 / (j) KD - 00.1");
+  SerialBT.println(" (p) KD + 0.01 / (n) KD - 0.01");
+  SerialBT.println(" (u) KD + 0.001 / (j) KD - 0.001");
 
   SerialBT.println(" (b) setPoint + 100 / (c) setPoint - 100");
 
   SerialBT.println(" (q) maxSpeed + 5 / (a) maxSpeed - 5");
   SerialBT.println(" (w) minSpeed + 5 / (s) minSpeed - 5");
-  SerialBT.println(" (e) velocity + 5 / (d) velocity - 5");
+  SerialBT.println(" (e) speed + 5 / (d) speed - 5");*/
 
 }
 
-void Telemetry(){
+void StartTelemetry(){
 
-  char message = SerialBT.read();
+  message = SerialBT.read();
+
+  if(position_and_pid) {DisplayPositionAndPid();}
 
   switch (message) {
 
     case 'b': {
       
       setPoint += 100;
-      menuBT();
+      DisplayMenuBT();
       break;
     
     }
     case 'c': {
       
       setPoint -= 100;
-      menuBT();
+      DisplayMenuBT();
       break;
     
     }
     case 'q': {
       
       maxSpeed += 5;
-      menuBT();
+      DisplayMenuBT();
       break;
     
     }
     case 'a': {
       
       maxSpeed -= 5;
-      menuBT();
+      DisplayMenuBT();
       break;
     
     }
     case 'w': {
       
       minSpeed += 5;
-      menuBT();
+      DisplayMenuBT();
       break;
     
     }
     case 's': {
       
       minSpeed -= 5;
-      menuBT();
+      DisplayMenuBT();
       break;
     
     }
     case 'e': {
 
-      velocity += 5;
-      menuBT();
+      speed += 5;
+      DisplayMenuBT();
       break;
 
     }
     case 'd': {
 
-      velocity -= 5;
-      menuBT();
+      speed -= 5;
+      DisplayMenuBT();
       break;
 
     }
     case 't': {
       
-      kp += 0.01;
-      menuBT();
+      kp += 0.001;
+      DisplayMenuBT();
       break;
     
     }
     case 'g': {
       
-      kp -= 0.01;
-      menuBT();
+      kp -= 0.001;
+      DisplayMenuBT();
       break;
     
     }
     case 'x': {
       
-      kp += 0.1;
-      menuBT();
+      kp += 0.01;
+      DisplayMenuBT();
       break;
     
     }
     case 'z': {
       
-      kp -= 0.1;
-      menuBT();
-      break;
-    
-    }
-    case 'y': {
-     
-      ki += 0.01;
-      menuBT();
-      break;
-    
-    }
-    case 'h': {
-      
-      ki -= 0.01;
-      menuBT();
-      break;
-    
-    }
-    case 'v': {
-     
-      ki += 0.1;
-      menuBT();
-      break;
-    
-    }
-    case 'r': {
-      
-      ki -= 0.1;
-      menuBT();
+      kp -= 0.01;
+      DisplayMenuBT();
       break;
     
     }
     case 'u': {
       
       kd += 0.01;
-      menuBT();
+      DisplayMenuBT();
       break;
     
     }
     case 'j': {
       
       kd -= 0.01;
-      menuBT();
+      DisplayMenuBT();
       break;
     
     }
     case 'p': {
       
       kd += 0.1;
-      menuBT();
+      DisplayMenuBT();
       break;
     
     }
     case 'n': {
       
       kd -= 0.1;
-      menuBT();
+      DisplayMenuBT();
       break;
     
     }
+    case 'r': {
 
+      position_and_pid = !position_and_pid;
+      break;
+
+    }
+  
   }
 
 }
@@ -1086,7 +1029,223 @@ void Telemetry(){
 --------------------------------------------------------------------------*/
 /* Area cleaner section */
 
-void StartAreaCleanerModality(){}
+#define PIN_SIG 34
+
+// Sharp
+int sharp_left;
+int sharp_right;
+int sharp_front_right;
+int sharp_front;
+int sharp_front_left;
+
+int qre_right;
+int qre_left;
+int qre_back;
+
+int low_speed = 100;
+int mid_speed = 150;
+int full_speed = 200;
+
+int signal_input;
+
+CD74HC4067 my_mux(4, 25, 33, 32); // s0, s1, s2, s3
+
+void MoveLeft() {
+
+  analogWrite(PIN_MA1, mid_speed);
+  analogWrite(PIN_MA2, 0);
+  analogWrite(PIN_MB1, 0);
+  analogWrite(PIN_MB2, mid_speed);
+
+}
+
+void MoveRight() {
+
+  analogWrite(PIN_MA1, 0);
+  analogWrite(PIN_MA2, mid_speed);
+  analogWrite(PIN_MB1, mid_speed);
+  analogWrite(PIN_MB2, 0);
+
+}
+
+void MoveSoftLeft() {
+
+  analogWrite(PIN_MA1, low_speed);
+  analogWrite(PIN_MA2, 0);
+  analogWrite(PIN_MB1, 0);
+  analogWrite(PIN_MB2, low_speed);
+
+}
+
+void MoveSoftRight() {
+
+  analogWrite(PIN_MA1, 0);
+  analogWrite(PIN_MA2, low_speed);
+  analogWrite(PIN_MB1, low_speed);
+  analogWrite(PIN_MB2, 0);
+
+}
+
+void MoveStop() {
+
+  analogWrite(PIN_MA1, 0);
+  analogWrite(PIN_MA2, 0);
+  analogWrite(PIN_MB1, 0);
+  analogWrite(PIN_MB2, 0);
+
+}
+
+void MoveReverse() {
+
+  analogWrite(PIN_MA1, 0);
+  analogWrite(PIN_MA2, full_speed);
+  analogWrite(PIN_MB1, 0);
+  analogWrite(PIN_MB2, full_speed);
+
+}
+
+void MoveForward() {
+  
+  analogWrite(PIN_MA1, full_speed);
+  analogWrite(PIN_MA2, 0);
+  analogWrite(PIN_MB1, full_speed);
+  analogWrite(PIN_MB2, 0);
+
+}
+
+void MoveBackwards() {
+
+  analogWrite(PIN_MA1, 0);
+  analogWrite(PIN_MA2, full_speed);
+  analogWrite(PIN_MB1, 0);
+  analogWrite(PIN_MB2, full_speed);
+
+}
+
+void ReadCleanerSensors() {
+
+  for (int x = 8; x < 15; x++) {
+    
+    my_mux.channel(x);
+  
+    signal_input = analogRead(PIN_SIG);
+
+    switch (x) {
+
+      case 8: {
+        
+        sharp_right = signal_input;
+        
+        SerialBT.print("Right sharp =");
+        SerialBT.println(signal_input);
+
+      }
+      case 9: {
+        
+        sharp_front_right = signal_input;
+
+        SerialBT.print("Front Right sharp =");
+        SerialBT.println(signal_input);
+
+      }
+      case 10: {
+        
+        sharp_front = signal_input;
+
+        SerialBT.print("Front sharp =");
+        SerialBT.println(signal_input);
+
+      }
+      case 11: {
+        
+        sharp_front_left = signal_input;
+        
+        SerialBT.print("Front Left sharp =");
+        SerialBT.println(signal_input);
+      
+      }
+      case 12: {
+        
+        sharp_left = signal_input;
+        
+        SerialBT.print("Left sharp =");
+        SerialBT.println(signal_input);
+        
+      }
+      /*case 13: {
+
+        qre_right = signal_input;
+
+      }
+      case 14: {
+
+        qre_back = signal_input;
+
+      }
+      case 15: {
+
+        qre_left = signal_input;
+
+      }*/
+
+    }
+  
+  }
+
+}
+
+void StartAreaCleanerModality(){
+
+  ReadCleanerSensors();
+
+  if (sharp_front < 1100) {
+    
+    MoveForward();
+  
+  } else if (sharp_front_right < 1100) {
+    
+    MoveSoftRight();
+  
+  } else if(sharp_front_left < 1100) {
+    
+    MoveSoftLeft();
+  
+  } else if(sharp_right < 1100) {
+    
+    MoveRight();
+  
+  } else if(sharp_left < 1100) {
+    
+    MoveLeft();
+  
+  } else {
+    
+    MoveStop();
+  
+  }
+
+  /*if(qre_back < 500) {
+
+    MoveForward();
+
+  }
+  if(qre_right < 500) {
+
+    MoveLeft();
+
+  }
+  if(qre_left < 500) {
+
+    MoveRight();
+
+  }
+  if(qre_right < 500 && qre_left < 500) {
+
+    MoveRight();
+
+  }*/
+
+}
 
 /* End of area cleaner section
 --------------------------------------------------------------------------*/
@@ -1099,8 +1258,8 @@ void StartSumoModality(){}
 
 void setup(){
     
-  pinMode(LED, OUTPUT);
-  digitalWrite(LED, HIGH);
+  pinMode(PIN_LED, OUTPUT);
+  digitalWrite(PIN_LED, HIGH);
 
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
     
@@ -1109,8 +1268,8 @@ void setup(){
   
   }
 
-  pinMode(select, INPUT_PULLUP);
-  pinMode(down, INPUT_PULLUP);
+  pinMode(PIN_SELECT, INPUT_PULLUP);
+  pinMode(PIN_DOWN, INPUT_PULLUP);
   
   u8g2_for_adafruit_gfx.begin(display); // Begins u8g2 for gfx library
 
@@ -1122,10 +1281,12 @@ void setup(){
 
   delay(3000);
 
-  pinMode(MA1, OUTPUT);
-  pinMode(MA2, OUTPUT);
-  pinMode(MB1, OUTPUT);
-  pinMode(MB2, OUTPUT);
+  pinMode(PIN_MA1, OUTPUT);
+  pinMode(PIN_MA2, OUTPUT);
+  pinMode(PIN_MB1, OUTPUT);
+  pinMode(PIN_MB2, OUTPUT);
+
+  pinMode(signal_input, INPUT);
 
 }
 
@@ -1134,7 +1295,7 @@ bool release = false;
 void loop() {
 
   // Down button system    
-  if (!digitalRead(down)) {
+  if (!digitalRead(PIN_DOWN)) {
     
     if (current_screen == selection) {
 
@@ -1145,15 +1306,16 @@ void loop() {
         selected = static_cast<modalities>(selected = areaCleaner);
         
       }
-    
-      delay(200);
-    
+      
     }
-
+    
+    delay(200);
+    
   }
 
   // Select button system
-  if (!digitalRead(select)) {
+
+  if (!digitalRead (PIN_SELECT)) {
     
     if (current_screen == selection && selected != sprinter) {current_screen = modality;} // Displays selected screen
     else if (current_screen == selection && selected == sprinter) {current_screen = calibration;} // Displays calibration screen
@@ -1172,10 +1334,7 @@ void loop() {
 
     SerialBT.end(); // Ends bluetooth connection
 
-    progressX1 = 0;
-    progressY1 = 0;
-    progressX2 = 127;
-    progressY2 = 63;
+    progress = 128;
 
     release = false;
 
@@ -1183,13 +1342,13 @@ void loop() {
 
   if (current_screen == modality && selected == sprinter){
   
-    if (!digitalRead(down)){
+    if (!digitalRead(PIN_DOWN)){
 
       release = true;
 
     }
 
-    if (release == true && digitalRead(down)){
+    if (release == true && digitalRead(PIN_DOWN)){
 
       current_screen = flags;
 
@@ -1214,18 +1373,31 @@ void loop() {
   // Sumo trigger
   if (current_screen == modality && selected == sumo){StartSumoModality();}
 
-  // Area cleaner trigger
-  if (current_screen == flags && selected == areaCleaner){StartAreaCleanerModality();}
-
-  // Sprinter trigger
-  else if (current_screen == flags && selected == sprinter){
+  // Begin serial bluetooth
+  else if (current_screen == modality && selected == sprinter){
     
     SerialBT.begin("Alita");
 
-    Telemetry();
-    
-    StartSprinterModality();
-    
+    StartTelemetry();
+
   }
 
-}
+  // Area cleaner trigger
+  if (current_screen == flags && selected == areaCleaner){
+    
+    SerialBT.begin("Alita");
+
+    StartAreaCleanerModality();
+
+  }
+
+  // Sprinter trigger
+  else if (current_screen == flags && selected == sprinter){
+
+    StartTelemetry();
+
+    StartSprinterModality();
+
+  }
+
+} 
