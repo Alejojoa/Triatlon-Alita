@@ -8,6 +8,7 @@
 
 /* Bitmap section
 --------------------------------------------------------------------------*/
+// Ya se usar git
 
 // ' sprinter_screen', 124x60px
 const unsigned char bitmap_screen_sprinter [] PROGMEM = {//listo
