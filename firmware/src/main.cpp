@@ -613,10 +613,10 @@ void DrawProgressBar() {
     display.clearDisplay();
     secondProgress = map(currentTime, startingTime, startingTime + SECOND_TIMEOUT, 0, 128);
 
-    //display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
-    //display.fillRect(0, 0, secondProgress, 64, BLACK);
-    //display.drawRect(0, 0, 128, 64, BLACK);
-    display.print(secondProgress);
+    display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
+    display.fillRect(0, 0, secondProgress, 64, BLACK);
+    display.drawRect(0, 0, 128, 64, BLACK);
+    //display.print(secondProgress);
     display.display();
     
     delay(125);
