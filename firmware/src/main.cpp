@@ -2,13 +2,12 @@
 #include <Adafruit_SSD1306.h> 
 #include <Adafruit_GFX.h>
 #include <U8g2_for_Adafruit_GFX.h>
-#include <multiplexedQTR.h>
+#include "multiplexedQTR.h"
 #include <CD74HC4067.h>
 #include "BluetoothSerial.h"
 
 /* Bitmap section
 --------------------------------------------------------------------------*/
-// Ya se usar git
 
 // ' sprinter_screen', 124x60px
 const unsigned char bitmap_screen_sprinter [] PROGMEM = {//listo
@@ -1197,54 +1196,96 @@ void ReadCleanerSensors() {
 
 void StartAreaCleanerModality(){
 
+  //Aclaraciones, no se usan los qre Front_Right ni Front_Left por ahora porque es solo para probar que onda
+  //Tampoco se usan los qre de los costados, solo el back
+
+  int Atacar_Forward = 0;  //Para Definir cuando esta atacando y no se frene por estar el objeto muy pegado
+  int Objeto_Derecha = 0;  //Mientras ataca detectar objetos a los costados
+  int Objeto_Derecha_Time;  //Si detecta, que tan lejos estan
+  int Objeto_Izquierda = 0;
+  int Objeto_Izquierda_Time;
+
   ReadCleanerSensors();
 
-  if (sharp_front < 1100) {
-    
-    MoveForward();
-  
-  } else if (sharp_front_right < 1100) {
-    
-    MoveSoftRight();
-  
-  } else if(sharp_front_left < 1100) {
-    
-    MoveSoftLeft();
-  
-  } else if(sharp_right < 1100) {
-    
-    MoveRight();
-  
-  } else if(sharp_left < 1100) {
-    
-    MoveLeft();
-  
-  } else {
-    
+while (qre_back > 500) {      //Ataca mientras los qre esten en el blanco
+  if (sharp_front < 1100 && sharp_left > 1100 && sharp_right > 1100) {   //Puede que el signo del qre este mal XD habiria que probarlo
+    Atacar_Forward = 1;
+    Objeto_Izquierda = 0;
+    Objeto_Derecha = 0;
+  } 
+  if (sharp_front > 1100 && sharp_left < 1100 && sharp_right > 1100) {
+    Atacar_Forward = 0;
+    Objeto_Izquierda = 1;
+    Objeto_Derecha = 0;
+  }
+  if (sharp_front > 1100 && sharp_left > 1100 && sharp_right < 1100) {
+    Atacar_Forward = 0;
+    Objeto_Izquierda = 0;
+    Objeto_Derecha = 1;
+  }
+  else {
     MoveStop();
+  }
+}
+
+  while (Atacar_Forward == 1) {   //Mientras atacabas ¿Viste algo a los costados?
+    MoveForward();                //No viste nada, segui en 0
+                                  //¿Viste algo? CHETOOO Comenza a contar los segundos asi volver para atacar
+    if (sharp_left > 900) {
+      Objeto_Izquierda = 1;
+      Objeto_Izquierda = millis();
+    }
+    if (sharp_right > 900) {
+      Objeto_Derecha = 1;
+      Objeto_Derecha_Time = millis();
+    }
+  }
+
+  if (qre_back < 500) {        //Una vez que llegaste al negro retrocede 1seg por las dudas
+    MoveBackwards();
+    delay (1000);
+  }
+
+//LLegamos al negro ¿Que vimos?
   
+  if (Objeto_Izquierda == 1 && Objeto_Derecha == 0) {  //Si viste algo retrocede lo que contaste
+    MoveBackwards();                                   //Menos el seg que ya retrocediste
+    delay (Objeto_Derecha_Time - 1000);
+    while (sharp_front < 1100) {
+      MoveSoftRight();
+    }
+  }
+  if (Objeto_Derecha == 0 && Objeto_Izquierda == 1) {
+    MoveBackwards();
+    delay (Objeto_Izquierda_Time - 1000);
+    while (sharp_front < 1100) {
+      MoveSoftLeft;
+    }
+  }
+  if (Objeto_Derecha == 1 && Objeto_Izquierda == 1) {      //¿Viste de los dos lados?
+    if (Objeto_Derecha_Time > Objeto_Izquierda_Time) {     //Anda por el que este mas cerca
+      MoveBackwards();
+      delay (Objeto_Izquierda_Time);
+      while (sharp_front < 1100) {
+        MoveSoftLeft();
+      }
+    }
+    else if (Objeto_Derecha_Time < Objeto_Izquierda_Time) {
+      MoveBackwards();
+      delay (Objeto_Derecha_Time);
+      while (sharp_front < 1100) {
+        MoveSoftLeft();
+      }
+    }
   }
 
-  /*if(qre_back < 500) {
-
-    MoveForward();
-
+  if (Objeto_Derecha == 1) {
+    MoveSoftRight();
   }
-  if(qre_right < 500) {
-
-    MoveLeft();
-
+  if (Objeto_Izquierda == 1) {
+    MoveSoftLeft();
   }
-  if(qre_left < 500) {
 
-    MoveRight();
-
-  }
-  if(qre_right < 500 && qre_left < 500) {
-
-    MoveRight();
-
-  }*/
 
 }
 
