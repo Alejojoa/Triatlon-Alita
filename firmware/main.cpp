@@ -2,7 +2,7 @@
 #include <Adafruit_SSD1306.h> 
 #include <Adafruit_GFX.h>
 #include <U8g2_for_Adafruit_GFX.h>
-#include <multiplexedQTR.h>
+#include "multiplexedQTR.h"
 #include <CD74HC4067.h>
 #include "BluetoothSerial.h"
 
@@ -1208,17 +1208,29 @@ void StartAreaCleanerModality(){
   ReadCleanerSensors();
 
 while (qre_back > 500) {      //Ataca mientras los qre esten en el blanco
-  if (sharp_front < 1100) {   //Puede que el signo del qre este mal XD habiria que probarlo
+  if (sharp_front < 1100 && sharp_left > 1100 && sharp_right > 1100) {   //Puede que el signo del qre este mal XD habiria que probarlo
     Atacar_Forward = 1;
+    Objeto_Izquierda = 0;
+    Objeto_Derecha = 0;
   } 
- else {
+  if (sharp_front > 1100 && sharp_left < 1100 && sharp_right > 1100) {
+    Atacar_Forward = 0;
+    Objeto_Izquierda = 1;
+    Objeto_Derecha = 0;
+  }
+  if (sharp_front > 1100 && sharp_left > 1100 && sharp_right < 1100) {
+    Atacar_Forward = 0;
+    Objeto_Izquierda = 0;
+    Objeto_Derecha = 1;
+  }
+  else {
     MoveStop();
   }
 }
 
   while (Atacar_Forward == 1) {   //Mientras atacabas ¿Viste algo a los costados?
     MoveForward();                //No viste nada, segui en 0
-                                  //¿Viste algo? Comenza a contar los segundos asi volver para atacar
+                                  //¿Viste algo? CHETOOO Comenza a contar los segundos asi volver para atacar
     if (sharp_left > 900) {
       Objeto_Izquierda = 1;
       Objeto_Izquierda = millis();
@@ -1258,7 +1270,7 @@ while (qre_back > 500) {      //Ataca mientras los qre esten en el blanco
         MoveSoftLeft();
       }
     }
-    else if (Objeto_Derecha_Time < Objeto_IZquierda_Time) {
+    else if (Objeto_Derecha_Time < Objeto_Izquierda_Time) {
       MoveBackwards();
       delay (Objeto_Derecha_Time);
       while (sharp_front < 1100) {
@@ -1267,7 +1279,13 @@ while (qre_back > 500) {      //Ataca mientras los qre esten en el blanco
     }
   }
 
- 
+  if (Objeto_Derecha == 1) {
+    MoveSoftRight();
+  }
+  if (Objeto_Izquierda == 1) {
+    MoveSoftLeft();
+  }
+
 
 }
 
