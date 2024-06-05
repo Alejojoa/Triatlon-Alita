@@ -2,8 +2,9 @@
 #include <Adafruit_SSD1306.h> 
 #include <Adafruit_GFX.h>
 #include <U8g2_for_Adafruit_GFX.h>
-#include "multiplexedQTR.h"
+#include <multiplexedQTR.h>
 #include <CD74HC4067.h>
+#include <Ticker.h>
 #include "BluetoothSerial.h"
 
 /* Bitmap section
@@ -506,25 +507,11 @@ const unsigned char bitmap_calibration [] PROGMEM = {
 /* End of bitmap section
 --------------------------------------------------------------------------*/
 
-// define display size in pixels
-#define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 64
-#define OLED_RESET -1
-
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-U8G2_FOR_ADAFRUIT_GFX u8g2_for_adafruit_gfx;
-
 // Define motor pins
 #define PIN_MA1 26 // right
 #define PIN_MA2 27
 #define PIN_MB1 16 // left
 #define PIN_MB2 17
-
-// Define display buttons 
-#define PIN_SELECT 18 //18
-#define PIN_DOWN 5 //5
-
-#define PIN_LED 23
  
 multiplexedQTR qtr;
 
@@ -541,8 +528,19 @@ void Standby(){
 /* Menu section
 --------------------------------------------------------------------------*/
 
-const int NUM_MODALITIES = 3; 
-const int MAX_ITEM_LENGTH = 20;
+// define display size in pixels
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET -1
+
+#define NUM_MODALITIES 3
+#define MAX_ITEM_LENGTH 20
+
+#define FIRST_TIMEOUT 3000
+#define SECOND_TIMEOUT 5000
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+U8G2_FOR_ADAFRUIT_GFX u8g2_for_adafruit_gfx;
 
 // Defines a default order for modalities and their respective icons and names
 char menu_items [NUM_MODALITIES] [MAX_ITEM_LENGTH] = {
@@ -577,17 +575,51 @@ screens current_screen = selection;
 int next;
 int previous;
 
-int progress;
+int firstProgress = 0;
+int secondProgress = 2;
+
+int currentTime;
+
+
 
 void DrawProgressBar() {
-  
-  for(progress = 0; progress <= 128; progress ++){
+
+  int startingTime = millis();
+  currentTime = millis();
+
+  display.setTextColor(WHITE);
+  display.setTextSize(3);
+
+  while(currentTime < startingTime + FIRST_TIMEOUT) {
+
+    currentTime = millis();
 
     display.clearDisplay();
+
+    firstProgress = map(currentTime, startingTime, startingTime + FIRST_TIMEOUT, 0, 128);
+    
     display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
+    display.fillRect(firstProgress, 0, 128, 64, BLACK);
     display.drawRect(0, 0, 128, 64, BLACK);
-    display.fillRect(progress, 0, 128, 64, BLACK);
     display.display();
+
+    delay(305);
+
+  }
+
+  while(currentTime < startingTime + SECOND_TIMEOUT) {
+
+    currentTime = millis();
+    display.clearDisplay();
+    secondProgress = map(currentTime, startingTime, startingTime + SECOND_TIMEOUT, 0, 128);
+
+    //display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
+    //display.fillRect(0, 0, secondProgress, 64, BLACK);
+    //display.drawRect(0, 0, 128, 64, BLACK);
+    display.print(secondProgress);
+    display.display();
+    
+    delay(125);
 
   }
 
@@ -639,7 +671,7 @@ void DisplayMenu(){
     display.display();
 
   } 
-  else if (current_screen == modality && selected == areaCleaner) {
+  else if (current_screen == modality && selected != sumo) {
 
     display.clearDisplay();
       
@@ -697,15 +729,6 @@ void DisplayMenu(){
       display.display();
     
     }*/
-
-  }
-  else if (current_screen == modality && selected == sprinter){
-
-    display.clearDisplay();
-
-    display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
-
-    display.display();
 
   }
 
@@ -1030,6 +1053,10 @@ void StartTelemetry(){
 /* Area cleaner section */
 
 #define PIN_SIG 34
+#define LOW_SPEED 100
+#define MID_SPEED 150
+#define FULL_SPEED 200
+#define MIN_DISTANCE 1250
 
 // Sharp
 int sharp_left;
@@ -1042,51 +1069,47 @@ int qre_right;
 int qre_left;
 int qre_back;
 
-int low_speed = 100;
-int mid_speed = 150;
-int full_speed = 200;
-
 int signal_input;
 
 CD74HC4067 my_mux(4, 25, 33, 32); // s0, s1, s2, s3
 
 void MoveLeft() {
 
-  analogWrite(PIN_MA1, mid_speed);
+  analogWrite(PIN_MA1, MID_SPEED);
   analogWrite(PIN_MA2, 0);
   analogWrite(PIN_MB1, 0);
-  analogWrite(PIN_MB2, mid_speed);
+  analogWrite(PIN_MB2, MID_SPEED);
 
 }
 
 void MoveRight() {
 
   analogWrite(PIN_MA1, 0);
-  analogWrite(PIN_MA2, mid_speed);
-  analogWrite(PIN_MB1, mid_speed);
+  analogWrite(PIN_MA2, MID_SPEED);
+  analogWrite(PIN_MB1, MID_SPEED);
   analogWrite(PIN_MB2, 0);
 
 }
 
 void MoveSoftLeft() {
 
-  analogWrite(PIN_MA1, low_speed);
+  analogWrite(PIN_MA1, LOW_SPEED);
   analogWrite(PIN_MA2, 0);
   analogWrite(PIN_MB1, 0);
-  analogWrite(PIN_MB2, low_speed);
+  analogWrite(PIN_MB2, LOW_SPEED);
 
 }
 
 void MoveSoftRight() {
 
   analogWrite(PIN_MA1, 0);
-  analogWrite(PIN_MA2, low_speed);
-  analogWrite(PIN_MB1, low_speed);
+  analogWrite(PIN_MA2, LOW_SPEED);
+  analogWrite(PIN_MB1, LOW_SPEED);
   analogWrite(PIN_MB2, 0);
 
 }
 
-void MoveStop() {
+void Stop() {
 
   analogWrite(PIN_MA1, 0);
   analogWrite(PIN_MA2, 0);
@@ -1098,17 +1121,17 @@ void MoveStop() {
 void MoveReverse() {
 
   analogWrite(PIN_MA1, 0);
-  analogWrite(PIN_MA2, full_speed);
+  analogWrite(PIN_MA2, FULL_SPEED);
   analogWrite(PIN_MB1, 0);
-  analogWrite(PIN_MB2, full_speed);
+  analogWrite(PIN_MB2, FULL_SPEED);
 
 }
 
 void MoveForward() {
   
-  analogWrite(PIN_MA1, full_speed);
+  analogWrite(PIN_MA1, FULL_SPEED);
   analogWrite(PIN_MA2, 0);
-  analogWrite(PIN_MB1, full_speed);
+  analogWrite(PIN_MB1, FULL_SPEED);
   analogWrite(PIN_MB2, 0);
 
 }
@@ -1116,21 +1139,21 @@ void MoveForward() {
 void MoveBackwards() {
 
   analogWrite(PIN_MA1, 0);
-  analogWrite(PIN_MA2, full_speed);
+  analogWrite(PIN_MA2, FULL_SPEED);
   analogWrite(PIN_MB1, 0);
-  analogWrite(PIN_MB2, full_speed);
+  analogWrite(PIN_MB2, FULL_SPEED);
 
 }
 
 void ReadCleanerSensors() {
 
-  for (int x = 8; x < 15; x++) {
+  for (int currentChannel = 8; currentChannel <= 15; currentChannel++) {
     
-    my_mux.channel(x);
+    my_mux.channel(currentChannel);
   
     signal_input = analogRead(PIN_SIG);
 
-    switch (x) {
+    switch (currentChannel) {
 
       case 8: {
         
@@ -1196,96 +1219,54 @@ void ReadCleanerSensors() {
 
 void StartAreaCleanerModality(){
 
-  //Aclaraciones, no se usan los qre Front_Right ni Front_Left por ahora porque es solo para probar que onda
-  //Tampoco se usan los qre de los costados, solo el back
-
-  int Atacar_Forward = 0;  //Para Definir cuando esta atacando y no se frene por estar el objeto muy pegado
-  int Objeto_Derecha = 0;  //Mientras ataca detectar objetos a los costados
-  int Objeto_Derecha_Time;  //Si detecta, que tan lejos estan
-  int Objeto_Izquierda = 0;
-  int Objeto_Izquierda_Time;
-
   ReadCleanerSensors();
 
-while (qre_back > 500) {      //Ataca mientras los qre esten en el blanco
-  if (sharp_front < 1100 && sharp_left > 1100 && sharp_right > 1100) {   //Puede que el signo del qre este mal XD habiria que probarlo
-    Atacar_Forward = 1;
-    Objeto_Izquierda = 0;
-    Objeto_Derecha = 0;
-  } 
-  if (sharp_front > 1100 && sharp_left < 1100 && sharp_right > 1100) {
-    Atacar_Forward = 0;
-    Objeto_Izquierda = 1;
-    Objeto_Derecha = 0;
-  }
-  if (sharp_front > 1100 && sharp_left > 1100 && sharp_right < 1100) {
-    Atacar_Forward = 0;
-    Objeto_Izquierda = 0;
-    Objeto_Derecha = 1;
-  }
-  else {
-    MoveStop();
-  }
-}
-
-  while (Atacar_Forward == 1) {   //Mientras atacabas ¿Viste algo a los costados?
-    MoveForward();                //No viste nada, segui en 0
-                                  //¿Viste algo? CHETOOO Comenza a contar los segundos asi volver para atacar
-    if (sharp_left > 900) {
-      Objeto_Izquierda = 1;
-      Objeto_Izquierda = millis();
-    }
-    if (sharp_right > 900) {
-      Objeto_Derecha = 1;
-      Objeto_Derecha_Time = millis();
-    }
-  }
-
-  if (qre_back < 500) {        //Una vez que llegaste al negro retrocede 1seg por las dudas
-    MoveBackwards();
-    delay (1000);
-  }
-
-//LLegamos al negro ¿Que vimos?
+  if (sharp_front > MIN_DISTANCE) {
+    
+    MoveForward();
   
-  if (Objeto_Izquierda == 1 && Objeto_Derecha == 0) {  //Si viste algo retrocede lo que contaste
-    MoveBackwards();                                   //Menos el seg que ya retrocediste
-    delay (Objeto_Derecha_Time - 1000);
-    while (sharp_front < 1100) {
-      MoveSoftRight();
-    }
-  }
-  if (Objeto_Derecha == 0 && Objeto_Izquierda == 1) {
-    MoveBackwards();
-    delay (Objeto_Izquierda_Time - 1000);
-    while (sharp_front < 1100) {
-      MoveSoftLeft;
-    }
-  }
-  if (Objeto_Derecha == 1 && Objeto_Izquierda == 1) {      //¿Viste de los dos lados?
-    if (Objeto_Derecha_Time > Objeto_Izquierda_Time) {     //Anda por el que este mas cerca
-      MoveBackwards();
-      delay (Objeto_Izquierda_Time);
-      while (sharp_front < 1100) {
-        MoveSoftLeft();
-      }
-    }
-    else if (Objeto_Derecha_Time < Objeto_Izquierda_Time) {
-      MoveBackwards();
-      delay (Objeto_Derecha_Time);
-      while (sharp_front < 1100) {
-        MoveSoftLeft();
-      }
-    }
-  }
-
-  if (Objeto_Derecha == 1) {
+  } else if (sharp_front_right > MIN_DISTANCE) {
+    
     MoveSoftRight();
-  }
-  if (Objeto_Izquierda == 1) {
+  
+  } else if(sharp_front_left > MIN_DISTANCE) {
+    
     MoveSoftLeft();
+  
+  } else if(sharp_right > MIN_DISTANCE) {
+    
+    MoveRight();
+  
+  } else if(sharp_left > MIN_DISTANCE) {
+    
+    MoveLeft();
+  
+  } else {
+    
+    Stop();
+  
   }
 
+  /*if(qre_back < 500) {
+
+    MoveForward();
+
+  }
+  if(qre_right < 500) {
+
+    MoveLeft();
+
+  }
+  if(qre_left < 500) {
+
+    MoveRight();
+
+  }
+  if(qre_right < 500 && qre_left < 500) {
+
+    MoveRight();
+
+  }*/
 
 }
 
@@ -1297,6 +1278,12 @@ void StartSumoModality(){}
 
 /* End of sumo section
 --------------------------------------------------------------------------*/
+
+// Define display buttons 
+#define PIN_SELECT 18 //18
+#define PIN_DOWN 4 //5
+
+#define PIN_LED 23
 
 void setup(){
     
@@ -1376,9 +1363,11 @@ void loop() {
 
     SerialBT.end(); // Ends bluetooth connection
 
-    progress = 128;
-
     release = false;
+
+    firstProgress = 0;
+
+    secondProgress = 0;
 
   }
 
@@ -1424,10 +1413,16 @@ void loop() {
 
   }
 
+  else if (current_screen == modality && selected == areaCleaner) {
+
+    SerialBT.begin("Alita");
+
+  }
+
   // Area cleaner trigger
   if (current_screen == flags && selected == areaCleaner){
     
-    SerialBT.begin("Alita");
+    //SerialBT.begin("Alita");
 
     StartAreaCleanerModality();
 
