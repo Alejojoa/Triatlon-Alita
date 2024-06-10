@@ -580,8 +580,6 @@ int secondProgress = 2;
 
 int currentTime;
 
-
-
 void DrawProgressBar() {
 
   int startingTime = millis();
