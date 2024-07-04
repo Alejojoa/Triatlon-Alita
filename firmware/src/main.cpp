@@ -875,11 +875,8 @@ void DisplayMenuBT(){
     SerialBT.println("");
   
   }
-  // probar a sacar el for para que el menú se lea mejor
-  // y probar a meter todo el menú en una sola función
-  // de paso hacé lo del ticker para que muestre la posición cada un segundo, vago
-  // cada cinco segundo refrescar el menú si es posible
-
+  // hacé lo del ticker para que muestre la posición cada un segundo, vago
+  // cada cinco segundos refrescar el menú si es posible
 
   SerialBT.println("Configuracion Actual:");
 
@@ -1116,21 +1113,30 @@ void Stop() {
 
 }
 
-void MoveReverse() {
-
-  analogWrite(PIN_MA1, 0);
-  analogWrite(PIN_MA2, FULL_SPEED);
-  analogWrite(PIN_MB1, 0);
-  analogWrite(PIN_MB2, FULL_SPEED);
-
-}
-
 void MoveForward() {
   
   analogWrite(PIN_MA1, FULL_SPEED);
   analogWrite(PIN_MA2, 0);
   analogWrite(PIN_MB1, FULL_SPEED);
   analogWrite(PIN_MB2, 0);
+
+}
+
+void MoveBackwardsLeft() {
+
+  analogWrite(PIN_MA1, 0);
+  analogWrite(PIN_MA2, FULL_SPEED);
+  analogWrite(PIN_MB1, 0);
+  analogWrite(PIN_MB2, LOW_SPEED);
+
+}
+
+void MoveBackwardsRight() {
+
+  analogWrite(PIN_MA1, 0);
+  analogWrite(PIN_MA2, LOW_SPEED);
+  analogWrite(PIN_MB1, 0);
+  analogWrite(PIN_MB2, FULL_SPEED);
 
 }
 
@@ -1252,17 +1258,17 @@ void StartAreaCleanerModality(){
   }
   if(qre_right < 500) {
 
-    MoveLeft();
+    MoveBackwardsLeft();
 
   }
   if(qre_left < 500) {
 
-    MoveRight();
+    MoveBackwardsRight();
 
   }
   if(qre_right < 500 && qre_left < 500) {
 
-    MoveRight();
+    MoveBackwards();
 
   }*/
 
