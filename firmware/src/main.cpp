@@ -506,6 +506,7 @@ const unsigned char bitmap_calibration [] PROGMEM = {
 
 /* End of bitmap section
 --------------------------------------------------------------------------*/
+/* Global section */
 
 // Define motor pins
 #define PIN_MA1 26 // right
@@ -516,7 +517,7 @@ const unsigned char bitmap_calibration [] PROGMEM = {
 multiplexedQTR qtr;
 
 // Waits untill a modality is selected
-void Standby(){
+inline void Standby(){
 
   analogWrite (PIN_MA1, LOW);
   analogWrite (PIN_MA2, LOW);
@@ -525,8 +526,12 @@ void Standby(){
 
 }
 
-/* Menu section
+int currentTime;
+int startingTime;
+
+/* End of global section
 --------------------------------------------------------------------------*/
+/* Menu section */
 
 // define display size in pixels
 #define SCREEN_WIDTH 128
@@ -536,8 +541,8 @@ void Standby(){
 #define NUM_MODALITIES 3
 #define MAX_ITEM_LENGTH 20
 
-#define FIRST_TIMEOUT 3000
-#define SECOND_TIMEOUT 5000
+#define FIRST_SAFETY_TIMEOUT 3000
+#define SECOND_SAFETY_TIMEOUT 5000
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 U8G2_FOR_ADAFRUIT_GFX u8g2_for_adafruit_gfx;
@@ -578,23 +583,21 @@ int previous;
 int firstProgress = 0;
 int secondProgress = 2;
 
-int currentTime;
-
 void DrawProgressBar() {
 
-  int startingTime = millis();
+  startingTime = millis();
   currentTime = millis();
 
   display.setTextColor(WHITE);
   display.setTextSize(3);
 
-  while(currentTime < startingTime + FIRST_TIMEOUT) {
+  while(currentTime < startingTime + FIRST_SAFETY_TIMEOUT) {
 
     currentTime = millis();
 
     display.clearDisplay();
 
-    firstProgress = map(currentTime, startingTime, startingTime + FIRST_TIMEOUT, 0, 128);
+    firstProgress = map(currentTime, startingTime, startingTime + FIRST_SAFETY_TIMEOUT, 0, 128);
     
     display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
     display.fillRect(firstProgress, 0, 128, 64, BLACK);
@@ -605,16 +608,15 @@ void DrawProgressBar() {
 
   }
 
-  while(currentTime < startingTime + SECOND_TIMEOUT) {
+  while(currentTime < startingTime + SECOND_SAFETY_TIMEOUT) {
 
     currentTime = millis();
     display.clearDisplay();
-    secondProgress = map(currentTime, startingTime, startingTime + SECOND_TIMEOUT, 0, 128);
+    secondProgress = map(currentTime, startingTime, startingTime + SECOND_SAFETY_TIMEOUT, 0, 128);
 
     display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
     display.fillRect(0, 0, secondProgress, 64, BLACK);
     display.drawRect(0, 0, 128, 64, BLACK);
-    //display.print(secondProgress);
     display.display();
     
     delay(125);
@@ -692,8 +694,17 @@ void DisplayMenu(){
   else if (current_screen == modality && selected == sumo){
 
     bool blink = true;
+    
+    if(myController->isConnected()) {
+    
+      display.clearDisplay();
 
-    //if (!SerialBT.connected()) {
+      display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
+        
+      display.display();
+    
+    }
+    else {
       
       if (blink) {
         
@@ -717,16 +728,7 @@ void DisplayMenu(){
 
       delay(250);
 
-    /*}
-    else {
-    
-      display.clearDisplay();
-
-      display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
-        
-      display.display();
-    
-    }*/
+    }
 
   }
 
@@ -1054,7 +1056,9 @@ void StartTelemetry(){
 #define LOW_SPEED 100
 #define MID_SPEED 150
 #define FULL_SPEED 200
-#define MIN_DISTANCE 1250
+#define SHARP_ATACK_RANGE 1250
+#define QRE_BLACK 2800
+#define TIMEOUT 750
 
 // Sharp
 int sharp_left;
@@ -1071,7 +1075,7 @@ int signal_input;
 
 CD74HC4067 my_mux(4, 25, 33, 32); // s0, s1, s2, s3
 
-void MoveLeft() {
+inline void MoveLeft() {
 
   analogWrite(PIN_MA1, MID_SPEED);
   analogWrite(PIN_MA2, 0);
@@ -1080,7 +1084,7 @@ void MoveLeft() {
 
 }
 
-void MoveRight() {
+inline void MoveRight() {
 
   analogWrite(PIN_MA1, 0);
   analogWrite(PIN_MA2, MID_SPEED);
@@ -1089,7 +1093,7 @@ void MoveRight() {
 
 }
 
-void MoveSoftLeft() {
+inline void MoveSoftLeft() {
 
   analogWrite(PIN_MA1, LOW_SPEED);
   analogWrite(PIN_MA2, 0);
@@ -1098,7 +1102,7 @@ void MoveSoftLeft() {
 
 }
 
-void MoveSoftRight() {
+inline void MoveSoftRight() {
 
   analogWrite(PIN_MA1, 0);
   analogWrite(PIN_MA2, LOW_SPEED);
@@ -1107,7 +1111,7 @@ void MoveSoftRight() {
 
 }
 
-void Stop() {
+inline void Stop() {
 
   analogWrite(PIN_MA1, 0);
   analogWrite(PIN_MA2, 0);
@@ -1116,7 +1120,7 @@ void Stop() {
 
 }
 
-void MoveReverse() {
+inline void MoveReverse() {
 
   analogWrite(PIN_MA1, 0);
   analogWrite(PIN_MA2, FULL_SPEED);
@@ -1125,7 +1129,7 @@ void MoveReverse() {
 
 }
 
-void MoveForward() {
+inline void MoveForward() {
   
   analogWrite(PIN_MA1, FULL_SPEED);
   analogWrite(PIN_MA2, 0);
@@ -1134,7 +1138,7 @@ void MoveForward() {
 
 }
 
-void MoveBackwards() {
+inline void MoveBackwards() {
 
   analogWrite(PIN_MA1, 0);
   analogWrite(PIN_MA2, FULL_SPEED);
@@ -1193,7 +1197,7 @@ void ReadCleanerSensors() {
         SerialBT.println(signal_input);
         
       }
-      /*case 13: {
+      case 13: {
 
         qre_right = signal_input;
 
@@ -1207,7 +1211,7 @@ void ReadCleanerSensors() {
 
         qre_left = signal_input;
 
-      }*/
+      }
 
     }
   
@@ -1219,23 +1223,23 @@ void StartAreaCleanerModality(){
 
   ReadCleanerSensors();
 
-  if (sharp_front > MIN_DISTANCE) {
+  if (sharp_front > SHARP_ATACK_RANGE) {
     
     MoveForward();
   
-  } else if (sharp_front_right > MIN_DISTANCE) {
+  } else if (sharp_front_right > SHARP_ATACK_RANGE) {
     
     MoveSoftRight();
   
-  } else if(sharp_front_left > MIN_DISTANCE) {
+  } else if(sharp_front_left > SHARP_ATACK_RANGE) {
     
     MoveSoftLeft();
   
-  } else if(sharp_right > MIN_DISTANCE) {
+  } else if(sharp_right > SHARP_ATACK_RANGE) {
     
     MoveRight();
   
-  } else if(sharp_left > MIN_DISTANCE) {
+  } else if(sharp_left > SHARP_ATACK_RANGE) {
     
     MoveLeft();
   
@@ -1245,26 +1249,19 @@ void StartAreaCleanerModality(){
   
   }
 
-  /*if(qre_back < 500) {
+  if(qre_back < QRE_BLACK || qre_left < QRE_BLACK || qre_right < QRE_BLACK/*2800*/) {
 
-    MoveForward();
+    startingTime = millis();
 
-  }
-  if(qre_right < 500) {
+    while (currentTime < startingTime + TIMEOUT/*750ms*/) {
+      
+      currentTime = millis();
 
-    MoveLeft();
+      MoveBackwards();
 
-  }
-  if(qre_left < 500) {
-
-    MoveRight();
+    }
 
   }
-  if(qre_right < 500 && qre_left < 500) {
-
-    MoveRight();
-
-  }*/
 
 }
 
@@ -1272,14 +1269,330 @@ void StartAreaCleanerModality(){
 --------------------------------------------------------------------------*/
 /* Sumo section */
 
-void StartSumoModality(){}
+/* int throttlePWM;
+int brakePWM;
+
+int axisXValue;
+
+int throttleValue ;
+int brakeValue;
+
+int leftPWM;
+int rightPWM;
+
+inline void leftPWM(){
+  
+  analogWrite(MA1, leftPWM);
+  analogWrite(MA2, 0);
+  analogWrite(MB1, leftPWM);
+  analogWrite(MB2, 0);
+
+}
+
+inline void rightPWM(){
+  
+  analogWrite(MA1, 0);
+  analogWrite(MA2, rightPWM);
+  analogWrite(MB1, 0);
+  analogWrite(MB2, rightPWM);
+
+}
+
+inline void stillPWM(){
+  
+  analogWrite(MA1, 0);
+  analogWrite(MA2, 0);
+  analogWrite(MB1, 0);
+  analogWrite(MB2, 0);
+
+}
+
+inline void backwardsPWM(){
+  
+  analogWrite(MA1, 0);
+  analogWrite(MA2, brakePWM);
+  analogWrite(MB1, brakePWM);
+  analogWrite(MB2, 0);
+
+}
+
+inline void forwardPWM(){
+  
+  analogWrite(MA1, throttlePWM);
+  analogWrite(MA2, 0);
+  analogWrite(MB1, 0);
+  analogWrite(MB2, throttlePWM);
+
+}
+
+GamepadPtr myGamepads[BP32_MAX_GAMEPADS];
+
+void onConnectedGamepad(GamepadPtr gp) {
+  
+  bool foundEmptySlot = false;
+  
+  for (int i = 0; i < BP32_MAX_GAMEPADS; i++) {
+    
+    if (myGamepads[i] == nullptr) {
+      
+      Serial.printf("CALLBACK: Gamepad is connected, index=%d\n", i);
+      
+      GamepadProperties properties = gp->getProperties();
+      
+      Serial.printf(
+        "Gamepad model: %s, VID=0x%04x, PID=0x%04x\n",
+        gp->getModelName().c_str(), properties.vendor_id,
+        properties.product_id
+      );
+      
+      myGamepads[i] = gp;
+      foundEmptySlot = true;
+      
+      break;
+    
+    }
+  
+  }
+  
+  if (!foundEmptySlot) {
+    
+    Serial.println("CALLBACK: Gamepad connected, but could not found empty slot");
+  
+  }
+
+}
+
+void onDisconnectedGamepad(GamepadPtr gp) {
+  
+  bool foundGamepad = false;
+
+  for (int i = 0; i < BP32_MAX_GAMEPADS; i++) {
+    
+    if (myGamepads[i] == gp) {
+    
+      Serial.printf("CALLBACK: Gamepad is disconnected from index=%d\n", i);
+      myGamepads[i] = nullptr;
+      foundGamepad = true;
+      break;
+    
+    }
+  
+  }
+
+  if (!foundGamepad) {
+   
+    Serial.println("CALLBACK: Gamepad disconnected, but not found in myGamepads");
+  
+  }
+
+}
+
+void StartSumoModality(){
+
+  BP32.update();
+
+  for (int i = 0; i < BP32_MAX_GAMEPADS; i++) {
+    
+    GamepadPtr myGamepad = myGamepads[i];
+          
+    if (myGamepad && myGamepad->isConnected()) {
+
+      axisXValue = myGamepad->axisX();
+
+      throttleValue = myGamepad->throttle();
+      brakeValue = myGamepad->brake();
+
+      throttlePWM = map(throttleValue, 0, 1023, 0, 255);
+      brakePWM = map(brakeValue, 0, 1023, 0, 255);
+
+      leftPWM = map(axisXValue, -511, 30, 0, 255);
+      rightPWM = map(axisXValue, 30, 512, 0, 255);
+
+      if (myGamepad->throttle()) {
+       
+        if(axisXValue > 100){
+        
+          right();
+      
+        } else if(axisXValue < -100){
+        
+          left();
+      
+        } else {
+        
+          forward();
+      
+        }
+    
+      } else if (myGamepad->brake()) {
+    
+        backwards();
+    
+      } else if (myGamepad->y()) {
+        
+        still();
+      
+      } else if(axisXValue < -500) {
+        
+        left();
+      
+      } else if(axisXValue > 50) {
+        
+        right();
+      
+      } else {
+       
+        still();
+      
+      }
+
+      Serial.printf(
+        "idx=%d, dpad: 0x%02x, buttons: 0x%04x, axis L: %4d, %4d, axis R: "
+        "%4d, %4d, brake: %4d, throttle: %4d, misc: 0x%02x, gyro x:%6d y:%6d "
+        "z:%6d, accel x:%6d y:%6d z:%6d\n",
+        i,                        // Gamepad Index
+        myGamepad->dpad(),        // DPAD
+        myGamepad->buttons(),     // bitmask of pressed buttons
+        myGamepad->axisX(),       // (-511 - 512) left X Axis
+        myGamepad->axisY(),       // (-511 - 512) left Y axis
+        myGamepad->axisRX(),      // (-511 - 512) right X axis
+        myGamepad->axisRY(),      // (-511 - 512) right Y axis
+        myGamepad->brake(),       // (0 - 1023): brake button
+        myGamepad->throttle(),    // (0 - 1023): throttle (AKA gas) button
+        myGamepad->miscButtons(), // bitmak of pressed "misc" buttons
+        myGamepad->gyroX(),       // Gyro X
+        myGamepad->gyroY(),       // Gyro Y
+        myGamepad->gyroZ(),       // Gyro Z
+        myGamepad->accelX(),      // Accelerometer X
+        myGamepad->accelY(),      // Accelerometer Y
+        myGamepad->accelZ()       // Accelerometer Z
+      );
+
+    }
+  
+  }
+
+  delay(150);
+
+}*/
 
 /* End of sumo section
 --------------------------------------------------------------------------*/
+/* Switches and triggers section*/
 
 // Define display buttons 
 #define PIN_SELECT 18 //18
-#define PIN_DOWN 4 //5
+#define PIN_DOWN 5 //5
+
+inline void switches() {
+
+  // Down button system    
+  if (!digitalRead(PIN_DOWN)) {
+    
+    if (current_screen == selection) {
+
+      selected = static_cast<modalities>(selected + 1);
+    
+      if (selected >= NUM_MODALITIES) {
+    
+        selected = static_cast<modalities>(selected = areaCleaner);
+        
+      }
+      
+    }
+    
+    delay(200);
+    
+  }
+
+  // Select button system
+  if (!digitalRead (PIN_SELECT)) {
+    
+    if (current_screen == selection && selected != sprinter) {current_screen = modality;} // Displays selected screen
+    else if (current_screen == selection && selected == sprinter) {current_screen = calibration;} // Displays calibration screen
+    else if (current_screen == modality) {current_screen = selection;} // Area cleaner screen to menu
+    else if (current_screen == flags || current_screen == calibration) {current_screen = selection;} // Flag and calibration screens to menu
+
+    delay(200);
+  
+  }
+
+}
+
+inline void modalityTriggers() {
+
+  // Calibration trigger
+  if (current_screen == calibration){StartSprinterCalibration();}
+
+  // Sumo trigger
+  if (current_screen == modality && selected == sumo){/*StartSumoModality();*/}
+
+  // Begin serial bluetooth
+  else if (current_screen == modality && selected == sprinter){
+    
+    SerialBT.begin("Alita");
+
+    StartTelemetry();
+
+  }
+
+  else if (current_screen == modality && selected == areaCleaner) {
+
+    SerialBT.begin("Alita");
+
+  }
+
+  // Area cleaner trigger
+  if (current_screen == flags && selected == areaCleaner){
+    
+    //SerialBT.begin("Alita");
+
+    StartAreaCleanerModality();
+
+  }
+
+  // Sprinter trigger
+  else if (current_screen == flags && selected == sprinter){
+
+    StartTelemetry();
+
+    StartSprinterModality();
+
+  }
+
+}
+
+inline void reset() {
+
+  if (current_screen == selection){
+  
+    Standby();
+
+    SerialBT.end(); // Ends bluetooth connection
+
+    firstProgress = 0;
+
+    secondProgress = 0;
+
+  }
+
+}
+
+inline void scrollSystem() {
+
+  previous = static_cast<modalities>(selected - 1);
+
+  if (previous < 0) {previous = NUM_MODALITIES - 1;}
+  
+  next = static_cast<modalities>(selected + 1);
+  
+  if (next >= NUM_MODALITIES) {next = 0;}
+
+}
+
+/* End or Switches and triggers section
+--------------------------------------------------------------------------*/
+/* Setup and loop */
 
 #define PIN_LED 23
 
@@ -1317,122 +1630,14 @@ void setup(){
 
 }
 
-bool release = false;
-
 void loop() {
-
-  // Down button system    
-  if (!digitalRead(PIN_DOWN)) {
-    
-    if (current_screen == selection) {
-
-      selected = static_cast<modalities>(selected + 1);
-    
-      if (selected >= NUM_MODALITIES) {
-    
-        selected = static_cast<modalities>(selected = areaCleaner);
-        
-      }
-      
-    }
-    
-    delay(200);
-    
-  }
-
-  // Select button system
-
-  if (!digitalRead (PIN_SELECT)) {
-    
-    if (current_screen == selection && selected != sprinter) {current_screen = modality;} // Displays selected screen
-    else if (current_screen == selection && selected == sprinter) {current_screen = calibration;} // Displays calibration screen
-    else if (current_screen == modality) {current_screen = selection;} // Area cleaner screen to menu
-    else if (current_screen == flags || current_screen == calibration) {current_screen = selection;} // Flag and calibration screens to menu
-
-    delay(200);
-  
-  }
-
-  bool blink = true;
-
-  if (current_screen == selection){
-  
-    Standby();
-
-    SerialBT.end(); // Ends bluetooth connection
-
-    release = false;
-
-    firstProgress = 0;
-
-    secondProgress = 0;
-
-  }
-
-  if (current_screen == modality && selected == sprinter){
-  
-    if (!digitalRead(PIN_DOWN)){
-
-      release = true;
-
-    }
-
-    if (release == true && digitalRead(PIN_DOWN)){
-
-      current_screen = flags;
-
-    }
-
-  }
-
-  // Scroll system
-  previous = static_cast<modalities>(selected - 1);
-
-  if (previous < 0) {previous = NUM_MODALITIES - 1;}
-  
-  next = static_cast<modalities>(selected + 1);
-  
-  if (next >= NUM_MODALITIES) {next = 0;}
 
   DisplayMenu();
 
-  // Calibration trigger
-  if (current_screen == calibration){StartSprinterCalibration();}
+  scrollSystem();
 
-  // Sumo trigger
-  if (current_screen == modality && selected == sumo){StartSumoModality();}
+  reset();
 
-  // Begin serial bluetooth
-  else if (current_screen == modality && selected == sprinter){
-    
-    SerialBT.begin("Alita");
-
-    StartTelemetry();
-
-  }
-
-  else if (current_screen == modality && selected == areaCleaner) {
-
-    SerialBT.begin("Alita");
-
-  }
-
-  // Area cleaner trigger
-  if (current_screen == flags && selected == areaCleaner){
-    
-    //SerialBT.begin("Alita");
-
-    StartAreaCleanerModality();
-
-  }
-
-  // Sprinter trigger
-  else if (current_screen == flags && selected == sprinter){
-
-    StartTelemetry();
-
-    StartSprinterModality();
-
-  }
+  modalityTriggers();
 
 } 
