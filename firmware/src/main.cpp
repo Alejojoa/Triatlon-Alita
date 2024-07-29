@@ -783,9 +783,11 @@ int derivative = 0;
 int integral = 0;
 int lastError = 0;
 
-int maxSpeed = 125;
-int minSpeed = 85;
-int speed = 105;
+int BTmaxSpeed  = 180;
+int BTspeed = 160;
+int maxSpeed = BTmaxSpeed;
+int minSpeed = 140;
+int speed = BTspeed;
 
 // PID const
 float kp = 0.013;
@@ -839,6 +841,22 @@ void StartSprinterModality(){
     analogWrite(PIN_MA2, 0);
     analogWrite(PIN_MB1, pidLeft);
     analogWrite(PIN_MB2, 0);
+
+  }
+
+  if(position < 2000 && position > 1600) {
+
+    if(maxSpeed <= 255) {
+    
+      maxSpeed += 5;
+      speed += 5; 
+    
+    }
+
+  } else {
+  
+    maxSpeed = BTmaxSpeed;
+    speed += BTspeed;
 
   }
 
@@ -1053,12 +1071,6 @@ void StartTelemetry(){
 /* Area cleaner section */
 
 #define PIN_SIG 34
-#define LOW_SPEED 100
-#define MID_SPEED 150
-#define FULL_SPEED 200
-#define SHARP_ATACK_RANGE 1250
-#define QRE_BLACK 2800
-#define TIMEOUT 750
 
 // Sharp
 int sharp_left;
@@ -1071,47 +1083,51 @@ int qre_right;
 int qre_left;
 int qre_back;
 
+int low_speed = 100;
+int mid_speed = 150;
+int full_speed = 200;
+
 int signal_input;
 
 CD74HC4067 my_mux(4, 25, 33, 32); // s0, s1, s2, s3
 
-inline void MoveLeft() {
+void MoveLeft() {
 
-  analogWrite(PIN_MA1, MID_SPEED);
+  analogWrite(PIN_MA1, mid_speed);
   analogWrite(PIN_MA2, 0);
   analogWrite(PIN_MB1, 0);
-  analogWrite(PIN_MB2, MID_SPEED);
+  analogWrite(PIN_MB2, mid_speed);
 
 }
 
-inline void MoveRight() {
+void MoveRight() {
 
   analogWrite(PIN_MA1, 0);
-  analogWrite(PIN_MA2, MID_SPEED);
-  analogWrite(PIN_MB1, MID_SPEED);
+  analogWrite(PIN_MA2, mid_speed);
+  analogWrite(PIN_MB1, mid_speed);
   analogWrite(PIN_MB2, 0);
 
 }
 
-inline void MoveSoftLeft() {
+void MoveSoftLeft() {
 
-  analogWrite(PIN_MA1, LOW_SPEED);
+  analogWrite(PIN_MA1, low_speed);
   analogWrite(PIN_MA2, 0);
   analogWrite(PIN_MB1, 0);
-  analogWrite(PIN_MB2, LOW_SPEED);
+  analogWrite(PIN_MB2, low_speed);
 
 }
 
-inline void MoveSoftRight() {
+void MoveSoftRight() {
 
   analogWrite(PIN_MA1, 0);
-  analogWrite(PIN_MA2, LOW_SPEED);
-  analogWrite(PIN_MB1, LOW_SPEED);
+  analogWrite(PIN_MA2, low_speed);
+  analogWrite(PIN_MB1, low_speed);
   analogWrite(PIN_MB2, 0);
 
 }
 
-inline void Stop() {
+void MoveStop() {
 
   analogWrite(PIN_MA1, 0);
   analogWrite(PIN_MA2, 0);
@@ -1120,42 +1136,42 @@ inline void Stop() {
 
 }
 
-inline void MoveReverse() {
+void MoveReverse() {
 
   analogWrite(PIN_MA1, 0);
-  analogWrite(PIN_MA2, FULL_SPEED);
+  analogWrite(PIN_MA2, full_speed);
   analogWrite(PIN_MB1, 0);
-  analogWrite(PIN_MB2, FULL_SPEED);
+  analogWrite(PIN_MB2, full_speed);
 
 }
 
-inline void MoveForward() {
+void MoveForward() {
   
-  analogWrite(PIN_MA1, FULL_SPEED);
+  analogWrite(PIN_MA1, full_speed);
   analogWrite(PIN_MA2, 0);
-  analogWrite(PIN_MB1, FULL_SPEED);
+  analogWrite(PIN_MB1, full_speed);
   analogWrite(PIN_MB2, 0);
 
 }
 
-inline void MoveBackwards() {
+void MoveBackwards() {
 
   analogWrite(PIN_MA1, 0);
-  analogWrite(PIN_MA2, FULL_SPEED);
+  analogWrite(PIN_MA2, full_speed);
   analogWrite(PIN_MB1, 0);
-  analogWrite(PIN_MB2, FULL_SPEED);
+  analogWrite(PIN_MB2, full_speed);
 
 }
 
 void ReadCleanerSensors() {
 
-  for (int currentChannel = 8; currentChannel <= 15; currentChannel++) {
+  for (int x = 8; x < 15; x++) {
     
-    my_mux.channel(currentChannel);
+    my_mux.channel(x);
   
     signal_input = analogRead(PIN_SIG);
 
-    switch (currentChannel) {
+    switch (x) {
 
       case 8: {
         
@@ -1197,7 +1213,7 @@ void ReadCleanerSensors() {
         SerialBT.println(signal_input);
         
       }
-      case 13: {
+      /*case 13: {
 
         qre_right = signal_input;
 
@@ -1211,7 +1227,7 @@ void ReadCleanerSensors() {
 
         qre_left = signal_input;
 
-      }
+      }*/
 
     }
   
@@ -1221,47 +1237,96 @@ void ReadCleanerSensors() {
 
 void StartAreaCleanerModality(){
 
+  //Aclaraciones, no se usan los qre Front_Right ni Front_Left por ahora porque es solo para probar que onda
+  //Tampoco se usan los qre de los costados, solo el back
+
+  int Atacar_Forward = 0;  //Para Definir cuando esta atacando y no se frene por estar el objeto muy pegado
+  int Objeto_Derecha = 0;  //Mientras ataca detectar objetos a los costados
+  int Objeto_Derecha_Time;  //Si detecta, que tan lejos estan
+  int Objeto_Izquierda = 0;
+  int Objeto_Izquierda_Time;
+
   ReadCleanerSensors();
 
-  if (sharp_front > SHARP_ATACK_RANGE) {
-    
-    MoveForward();
-  
-  } else if (sharp_front_right > SHARP_ATACK_RANGE) {
-    
-    MoveSoftRight();
-  
-  } else if(sharp_front_left > SHARP_ATACK_RANGE) {
-    
-    MoveSoftLeft();
-  
-  } else if(sharp_right > SHARP_ATACK_RANGE) {
-    
-    MoveRight();
-  
-  } else if(sharp_left > SHARP_ATACK_RANGE) {
-    
-    MoveLeft();
-  
-  } else {
-    
-    Stop();
-  
+while (qre_back > 500) {      //Ataca mientras los qre esten en el blanco
+  if (sharp_front < 1100 && sharp_left > 1100 && sharp_right > 1100) {   //Puede que el signo del qre este mal XD habiria que probarlo
+    Atacar_Forward = 1;
+    Objeto_Izquierda = 0;
+    Objeto_Derecha = 0;
+  } 
+  if (sharp_front > 1100 && sharp_left < 1100 && sharp_right > 1100) {
+    Atacar_Forward = 0;
+    Objeto_Izquierda = 1;
+    Objeto_Derecha = 0;
   }
+  if (sharp_front > 1100 && sharp_left > 1100 && sharp_right < 1100) {
+    Atacar_Forward = 0;
+    Objeto_Izquierda = 0;
+    Objeto_Derecha = 1;
+  }
+  else {
+    MoveStop();
+  }
+}
 
-  if(qre_back < QRE_BLACK || qre_left < QRE_BLACK || qre_right < QRE_BLACK/*2800*/) {
-
-    startingTime = millis();
-
-    while (currentTime < startingTime + TIMEOUT/*750ms*/) {
-      
-      currentTime = millis();
-
-      MoveBackwards();
-
+  while (Atacar_Forward == 1) {   //Mientras atacabas ¿Viste algo a los costados?
+    MoveForward();                //No viste nada, segui en 0
+                                  //¿Viste algo? CHETOOO Comenza a contar los segundos asi volver para atacar
+    if (sharp_left > 900) {
+      Objeto_Izquierda = 1;
+      Objeto_Izquierda = millis();
     }
-
+    if (sharp_right > 900) {
+      Objeto_Derecha = 1;
+      Objeto_Derecha_Time = millis();
+    }
   }
+
+  if (qre_back < 500) {        //Una vez que llegaste al negro retrocede 1seg por las dudas
+    MoveBackwards();
+    delay (1000);
+  }
+
+//LLegamos al negro ¿Que vimos?
+  
+  if (Objeto_Izquierda == 1 && Objeto_Derecha == 0) {  //Si viste algo retrocede lo que contaste
+    MoveBackwards();                                   //Menos el seg que ya retrocediste
+    delay (Objeto_Derecha_Time - 1000);
+    while (sharp_front < 1100) {
+      MoveSoftRight();
+    }
+  }
+  if (Objeto_Derecha == 0 && Objeto_Izquierda == 1) {
+    MoveBackwards();
+    delay (Objeto_Izquierda_Time - 1000);
+    while (sharp_front < 1100) {
+      MoveSoftLeft;
+    }
+  }
+  if (Objeto_Derecha == 1 && Objeto_Izquierda == 1) {      //¿Viste de los dos lados?
+    if (Objeto_Derecha_Time > Objeto_Izquierda_Time) {     //Anda por el que este mas cerca
+      MoveBackwards();
+      delay (Objeto_Izquierda_Time);
+      while (sharp_front < 1100) {
+        MoveSoftLeft();
+      }
+    }
+    else if (Objeto_Derecha_Time < Objeto_Izquierda_Time) {
+      MoveBackwards();
+      delay (Objeto_Derecha_Time);
+      while (sharp_front < 1100) {
+        MoveSoftLeft();
+      }
+    }
+  }
+
+  if (Objeto_Derecha == 1) {
+    MoveSoftRight();
+  }
+  if (Objeto_Izquierda == 1) {
+    MoveSoftLeft();
+  }
+
 
 }
 
