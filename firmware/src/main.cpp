@@ -1154,6 +1154,15 @@ void MoveForward() {
 
 }
 
+void MoveSoftForward() {
+  
+  analogWrite(PIN_MA1, low_speed);
+  analogWrite(PIN_MA2, 0);
+  analogWrite(PIN_MB1, low_speed);
+  analogWrite(PIN_MB2, 0);
+
+}
+
 void MoveBackwards() {
 
   analogWrite(PIN_MA1, 0);
@@ -1212,8 +1221,8 @@ void ReadCleanerSensors() {
         SerialBT.print("Left sharp =");
         SerialBT.println(signal_input);
         
-      }
-      /*case 13: {
+      } 
+      case 13: {
 
         qre_right = signal_input;
 
@@ -1227,105 +1236,145 @@ void ReadCleanerSensors() {
 
         qre_left = signal_input;
 
-      }*/
+      }
 
-    }
+    } 
   
-  }
+  } 
 
 }
+
+#define QRE_BLACK 3000
+#define SHARP_ATAQUE 1000
+
+char Action;
+
+int reverseTime;
+
+bool front;
+bool left;
+bool right;
+bool stop;
 
 void StartAreaCleanerModality(){
-
-  //Aclaraciones, no se usan los qre Front_Right ni Front_Left por ahora porque es solo para probar que onda
-  //Tampoco se usan los qre de los costados, solo el back
-
-  int Atacar_Forward = 0;  //Para Definir cuando esta atacando y no se frene por estar el objeto muy pegado
-  int Objeto_Derecha = 0;  //Mientras ataca detectar objetos a los costados
-  int Objeto_Derecha_Time;  //Si detecta, que tan lejos estan
-  int Objeto_Izquierda = 0;
-  int Objeto_Izquierda_Time;
-
   ReadCleanerSensors();
 
-while (qre_back > 500) {      //Ataca mientras los qre esten en el blanco
-  if (sharp_front < 1100 && sharp_left > 1100 && sharp_right > 1100) {   //Puede que el signo del qre este mal XD habiria que probarlo
-    Atacar_Forward = 1;
-    Objeto_Izquierda = 0;
-    Objeto_Derecha = 0;
+  if (sharp_front > SHARP_ATAQUE) {
+    front= true;
+  } else {
+    front = false;
+  }
+  if (sharp_left > SHARP_ATAQUE) {
+    left = true;
+  } else {
+    left = false;
+  }
+  if (sharp_right > SHARP_ATAQUE) {
+    right = true;
+  } else {
+    right = false;
+  }
+  if (qre_right > QRE_BLACK || qre_left > QRE_BLACK || qre_back > QRE_BLACK) {
+    stop = true;
+  } else {
+    stop = false;
+  }
+
+
+  if (front) {
+    Action = 'F';
   } 
-  if (sharp_front > 1100 && sharp_left < 1100 && sharp_right > 1100) {
-    Atacar_Forward = 0;
-    Objeto_Izquierda = 1;
-    Objeto_Derecha = 0;
+  else if (left) {
+    Action = 'L';
   }
-  if (sharp_front > 1100 && sharp_left > 1100 && sharp_right < 1100) {
-    Atacar_Forward = 0;
-    Objeto_Izquierda = 0;
-    Objeto_Derecha = 1;
+  else if (right) {
+    Action = 'R';
   }
-  else {
-    MoveStop();
+  else if (stop) {
+    Action = 'S';
+  } else {
+    Action = 'N';
   }
-}
 
-  while (Atacar_Forward == 1) {   //Mientras atacabas ¿Viste algo a los costados?
-    MoveForward();                //No viste nada, segui en 0
-                                  //¿Viste algo? CHETOOO Comenza a contar los segundos asi volver para atacar
-    if (sharp_left > 900) {
-      Objeto_Izquierda = 1;
-      Objeto_Izquierda = millis();
+  bool object_left;
+  bool object_right;
+
+  switch (Action) {
+    case 'F': {
+      MoveSoftForward();
+      object_left = false;
+      object_right = false;
+      reverseTime = 0;
+
+      if (sharp_left > SHARP_ATAQUE) {
+        startingTime = millis();
+
+        while (qre_right < QRE_BLACK || qre_left < QRE_BLACK || qre_back < QRE_BLACK) {
+          currentTime = millis();
+          reverseTime = currentTime - startingTime;
+        }
+
+        startingTime = millis();
+
+        while (currentTime < startingTime + reverseTime) {
+          currentTime = millis();
+
+          MoveBackwards();
+        }
+
+        MoveLeft();
+      } 
+      else if (sharp_right > SHARP_ATAQUE) {
+        startingTime = millis();
+
+        while (qre_right < QRE_BLACK || qre_left < QRE_BLACK || qre_back < QRE_BLACK) {
+          currentTime = millis();
+          reverseTime = currentTime - startingTime;
+        }
+
+        startingTime = millis();
+
+        while (currentTime < startingTime + reverseTime) {
+          currentTime = millis();
+
+          MoveBackwards();
+        }
+
+        MoveRight(); 
+      }
+
+      break;
     }
-    if (sharp_right > 900) {
-      Objeto_Derecha = 1;
-      Objeto_Derecha_Time = millis();
+
+    case 'L': {
+      object_left = true;
+      MoveSoftLeft();
+      break;
     }
-  }
 
-  if (qre_back < 500) {        //Una vez que llegaste al negro retrocede 1seg por las dudas
-    MoveBackwards();
-    delay (1000);
-  }
-
-//LLegamos al negro ¿Que vimos?
-  
-  if (Objeto_Izquierda == 1 && Objeto_Derecha == 0) {  //Si viste algo retrocede lo que contaste
-    MoveBackwards();                                   //Menos el seg que ya retrocediste
-    delay (Objeto_Derecha_Time - 1000);
-    while (sharp_front < 1100) {
+    case 'R': {
+      object_right = true;
       MoveSoftRight();
+      break;
     }
-  }
-  if (Objeto_Derecha == 0 && Objeto_Izquierda == 1) {
-    MoveBackwards();
-    delay (Objeto_Izquierda_Time - 1000);
-    while (sharp_front < 1100) {
-      MoveSoftLeft;
+
+    case 'S': {
+      MoveStop();
+      break;
     }
-  }
-  if (Objeto_Derecha == 1 && Objeto_Izquierda == 1) {      //¿Viste de los dos lados?
-    if (Objeto_Derecha_Time > Objeto_Izquierda_Time) {     //Anda por el que este mas cerca
-      MoveBackwards();
-      delay (Objeto_Izquierda_Time);
-      while (sharp_front < 1100) {
+
+    case 'N': {
+      if (object_left) {
         MoveSoftLeft();
       }
-    }
-    else if (Objeto_Derecha_Time < Objeto_Izquierda_Time) {
-      MoveBackwards();
-      delay (Objeto_Derecha_Time);
-      while (sharp_front < 1100) {
-        MoveSoftLeft();
+      else if (object_right) {
+        MoveSoftRight();
       }
+      break;
     }
+    
   }
 
-  if (Objeto_Derecha == 1) {
-    MoveSoftRight();
-  }
-  if (Objeto_Izquierda == 1) {
-    MoveSoftLeft();
-  }
 
 
 }
