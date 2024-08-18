@@ -32,71 +32,23 @@ Motor motorLeft(16, 17);
 #define PIN_SELECT 18 //18
 #define PIN_DOWN 5 //5
 
+#define SPRINTER_SCREEN_MARGIN_X 35
+#define SPRINTER_SCREEN_MARGIN_Y 0
+#define SPRINTER_SCREEN_WIDTH 60
+#define SPRINTER_SCREEN_HEIGHT 64
+
+#define CLEANER_SCREEN_MARGIN_X 0
+#define CLEANER_SCREEN_MARGIN_Y 0
+#define CLEANER_SCREEN_WIDTH 128
+#define CLEANER_SCREEN_HEIGHT 64
+
 #define FIRST_SAFETY_TIMEOUT 3000
 #define SECOND_SAFETY_TIMEOUT 2000
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 U8G2_FOR_ADAFRUIT_GFX u8g2_for_adafruit_gfx;
 
-#define CLEANER_BAR_WIDTH 128
-#define CLEANER_BAR_HEIGHT 64
-
-#define SPRINTER_BAR_WIDTH 65
-#define SPRINTER_BAR_HEIGHT 64
-
 ProgressBar displayPB(display);
-
-//int firstProgress = 0;
-//int secondProgress = 2;
-
-/*void DrawProgressBar() {
-
-  startingTime = millis();
-  currentTime = millis();
-
-  while(currentTime < startingTime + FIRST_SAFETY_TIMEOUT) { 
-    currentTime = millis();
-
-    display.clearDisplay();
-
-    if (current_screen == modality && selected == areaCleaner) {
-      firstProgress = map(currentTime, startingTime, startingTime + FIRST_SAFETY_TIMEOUT, 0, 128);
-    } 
-    else if (current_screen == modality && selected == sprinter) {
-      firstProgress = map(currentTime, startingTime, startingTime + FIRST_SAFETY_TIMEOUT, 30, 95);
-    }
-    
-    display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
-    display.fillRect(firstProgress, 0, 128, 64, BLACK);
-    display.drawRect(0, 0, 128, 64, BLACK);
-    display.display();
-
-    delay(305);
-
-  }
-
-  while(currentTime < startingTime + SECOND_SAFETY_TIMEOUT) {
-
-    currentTime = millis();
-    display.clearDisplay();
-
-    if (current_screen == modality && selected == areaCleaner) {
-      secondProgress = map(currentTime, startingTime, startingTime + SECOND_SAFETY_TIMEOUT, 0, 128);
-    } 
-    else if (current_screen == modality && selected == sprinter) {
-      secondProgress = map(currentTime, startingTime, startingTime + SECOND_SAFETY_TIMEOUT, 30, 95);
-    }
-
-    display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
-    display.fillRect(0, 0, secondProgress, 64, BLACK);
-    display.drawRect(0, 0, 128, 64, BLACK);
-    display.display();
-    
-    delay(125);
-
-  }
-
-}*/
 
 // Prints a menu
 void DisplayMenu(){
@@ -146,8 +98,8 @@ void DisplayMenu(){
     display.clearDisplay();      
     display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
 
-    displayPB.load(35, 0, 60, 64, 3000);
-    displayPB.unload(35, 0, 60, 64, 2000);
+    displayPB.load(SPRINTER_SCREEN_MARGIN_X, SPRINTER_SCREEN_MARGIN_Y, SPRINTER_SCREEN_WIDTH, SPRINTER_SCREEN_HEIGHT, FIRST_SAFETY_TIMEOUT);
+    displayPB.unload(SPRINTER_SCREEN_MARGIN_X, SPRINTER_SCREEN_MARGIN_Y, SPRINTER_SCREEN_WIDTH, SPRINTER_SCREEN_HEIGHT, SECOND_SAFETY_TIMEOUT);
 
     current_screen = flags;
 
@@ -157,8 +109,8 @@ void DisplayMenu(){
     display.clearDisplay();      
     display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
 
-    displayPB.load(0, 0, 128, 64, 3000);
-    displayPB.unload(0, 0, 128, 64, 2000);
+    displayPB.load(CLEANER_SCREEN_MARGIN_X, CLEANER_SCREEN_MARGIN_Y, CLEANER_SCREEN_WIDTH, CLEANER_SCREEN_HEIGHT, FIRST_SAFETY_TIMEOUT);
+    displayPB.unload(CLEANER_SCREEN_MARGIN_X, CLEANER_SCREEN_MARGIN_Y, CLEANER_SCREEN_WIDTH, CLEANER_SCREEN_HEIGHT, SECOND_SAFETY_TIMEOUT);
 
     current_screen = flags;
 
