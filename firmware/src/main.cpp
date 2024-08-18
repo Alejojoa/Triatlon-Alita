@@ -176,10 +176,8 @@ int position;
 
 // Gets line position
 int getPosition() {
-
   position = qtr.readLineWhite(sensorValues);
   return position;
-
 }
 
 // Calibrates sprinters QTR sensors
@@ -189,8 +187,8 @@ void StartSprinterCalibration() {
 
   delay(500);
 
-  display.clearDisplay();
   // Prints calibration big icon
+  display.clearDisplay();
   display.drawXBitmap( 0, 0, bitmap_calibration, 124, 64, WHITE);
   display.display();
 
@@ -212,7 +210,6 @@ int lastError;
 
 int maxSpeed = 180;
 int minSpeed = 140;
-//int defaultSpeed = 160;
 int speed = 160;
 
 // PID const
@@ -286,12 +283,9 @@ void DisplayPositionAndPid() {
 
 // Prints SerialBT menu
 void DisplayMenuBT(){
-  // clean the serial
   for (int i = 0; i < 10; i++) {    
     SerialBT.println("");
   }
-  // hacé lo del ticker para que muestre la posición cada un segundo, vago
-  // cada cinco segundos refrescar el menú si es posible
 
   SerialBT.println("Configuracion Actual:");
 
@@ -446,88 +440,54 @@ int signal_input;
 
 CD74HC4067 my_mux(4, 25, 33, 32); // s0, s1, s2, s3
 
+int getSensorsInput() {
+  signal_input = analogRead(PIN_SIG);
+  return signal_input;
+}
+
 void ReadCleanerSensors() {
+  int datoBT = SerialBT.read();
 
-  int datoBT;
+  signal_input = getSensorsInput();
 
-  datoBT = SerialBT.read();
-
-  for (int x = 8; x < 15; x++) {
-    
+  for (int x = 8; x < 15; x++) {    
     my_mux.channel(x);
-  
-    signal_input = analogRead(PIN_SIG);
 
     switch (x) {
 
       case 8: {
         
         sharp_right = signal_input;
-        
-        //SerialBT.print("Right sharp =");
-        //SerialBT.println(signal_input);
-
       }
       case 9: {
         
         sharp_front_right = signal_input;
-
-        //SerialBT.print("Front Right sharp =");
-        //SerialBT.println(signal_input);
-
       }
       case 10: {
         
         sharp_front = signal_input;
-
-        //SerialBT.print("Front sharp =");
-        //SerialBT.println(signal_input);
-
       }
       case 11: {
         
         sharp_front_left = signal_input;
-        
-        //SerialBT.print("Front Left sharp =");
-        //SerialBT.println(signal_input);
-      
       }
-      case 12: {
-        
+      case 12: {       
         sharp_left = signal_input;
-        
-        //SerialBT.print("Left sharp =");
-        //SerialBT.println(signal_input);
-        
       } 
       case 13: {
 
         qre_right = signal_input;
-
-        SerialBT.print ("Right = ");
-        SerialBT.println (signal_input);
-
       }
       case 14: {
 
         qre_back = signal_input;
-
-        //SerialBT.print ("Back = ");
-       // SerialBT.println (signal_input);
-      
       }
       case 15: {
 
         qre_left = signal_input;
-
-        //SerialBT.print ("Left = ");
-        //SerialBT.println (signal_input);
-
       }
-    } 
-  
+    }  
   } 
-
 }
 
 #define QRE_BLACK   3900
@@ -580,7 +540,6 @@ void StartAreaCleanerModality(){
   } else {
     right = false;
   }
-
   
   if (qre_left > QRE_BLACK) {
     qreL = true;
@@ -662,7 +621,7 @@ void StartAreaCleanerModality(){
 
 switch (offRoad) {
 
-  case 0:
+  case false:
   switch (Action) {
     case 'F': {
       MoveSoftForward();
@@ -708,14 +667,10 @@ switch (offRoad) {
     }
   }
   break;
-
   
-  
-  
-  case 1:
+  case true:
   switch (ActionQRE) {
-    case 'QRELRB': {
-      
+    case 'QRELRB': {      
       time = millis();
       
       while (millis() < time + set_doTime) {
@@ -723,14 +678,12 @@ switch (offRoad) {
       }
 
       MoveSoftLeft();
-
       ReadCleanerSensors();
 
       break;
     }
 
     case 'QRELR': {
-
       time = millis();
 
       while (millis() < time + set_doTime) {
@@ -738,13 +691,12 @@ switch (offRoad) {
       }
 
       MoveSoftLeft();
-
       ReadCleanerSensors();
 
+      break;
     }
 
     case 'QREL': {
-
       time = millis();
 
       while (millis() < time + set_doTime) {
@@ -752,14 +704,12 @@ switch (offRoad) {
       }
 
       MoveSoftRight();
-
       ReadCleanerSensors();
 
       break;
     }
 
     case 'QRER': {
-
       time = millis();
 
       while (millis() < time + set_doTime) {
@@ -767,36 +717,27 @@ switch (offRoad) {
       }
 
       MoveSoftLeft();
-
       ReadCleanerSensors();
 
       break;
     }
 
     case 'QREB': {
-
       MoveSoftForward();
-
       ReadCleanerSensors();
-
     
       break;
     }
 
-    case 'QRELB': {
-      
+    case 'QRELB': {      
       MoveSoftForward();
-
       ReadCleanerSensors();
-
       
       break;
     }
 
-    case 'QRERB': {
-      
+    case 'QRERB': {      
       MoveSoftForward(); 
-
       ReadCleanerSensors();
       
       break;
@@ -812,35 +753,37 @@ switch (offRoad) {
 /* Sumo section */
 
 void ProcessGamepad() {
-  bool brakeRight;
-  bool brakeLeft;
+  //bool brakeRight;
+  //bool brakeLeft;
 
+  // Variables to store the input of each stick
   int yAxisValueR = (Ps3.data.analog.stick.ry);  //Left stick  - y axis - forward/backward car movement
   int yAxisValueL = (Ps3.data.analog.stick.ly);  //Right stick - x axis - left/right car movement
 
+  // Mapping of each stick input to 8bit 
   int rightWheelSpeedF = map(yAxisValueR, 0, -127, 0, 255);
   int rightWheelSpeedB = map(yAxisValueR, 0, 127, 0, 255);
   int leftWheelSpeedF = map(yAxisValueL, 0, -127, 0, 255);
   int leftWheelSpeedB = map(yAxisValueL, 0, 127, 0, 255);
 
-  if (Ps3.event.analog_changed.button.r1) {brakeRight = true;}
+  /*if (Ps3.event.analog_changed.button.r1) {brakeRight = true;}
   else {motorRight.StayStill();}
   if (Ps3.event.analog_changed.button.l1) {brakeLeft = true;}
-  else {motorLeft.StayStill();}
+  else {motorLeft.StayStill();}*/
 
-  if (!brakeRight) {
+  //if (!brakeRight) {
     if (yAxisValueR > 15) {motorRight.MoveForward(rightWheelSpeedF);}
     else if (yAxisValueR < -15) {motorRight.MoveBackwards(rightWheelSpeedB);}
     else {motorRight.StayStill();}
-  }
-  else {motorRight.StayStill();}
+  //}
+  //else {motorRight.StayStill();}
 
-  if (!brakeLeft) {
+  //if (!brakeLeft) {
     if (yAxisValueL > 15) {motorLeft.MoveForward(leftWheelSpeedF);}
     else if (yAxisValueL < -15) {motorLeft.MoveBackwards(leftWheelSpeedB);}
     else {motorLeft.StayStill();}
-  } 
-  else {motorLeft.StayStill();}
+  //} 
+  //else {motorLeft.StayStill();}
 }
 
 void StartSumoModality() {
@@ -876,25 +819,27 @@ void setup(){
   pinMode(PIN_LED, OUTPUT);
   digitalWrite(PIN_LED, HIGH);
 
+  // Begin display connection
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {    
     Serial.println(F("SSD1306 allocation failed"));
     for(;;);  
   }
 
+  u8g2_for_adafruit_gfx.begin(display); // Begins u8g2 for gfx library
+
   pinMode(PIN_SELECT, INPUT_PULLUP);
   pinMode(PIN_DOWN, INPUT_PULLUP);
 
-  Ps3.begin("00:00:00:00:00:04");
-  
-  u8g2_for_adafruit_gfx.begin(display); // Begins u8g2 for gfx library
+  pinMode(signal_input, INPUT);
 
+  Ps3.begin("00:00:00:00:00:04"); // Begins controller search
+
+  // Displays team logo
   display.clearDisplay();
   display.drawBitmap( 0, 0, bitmap_alita, 128, 64, WHITE); // Prints teams logo
   display.display();
 
   delay(3000);
-
-  pinMode(signal_input, INPUT);
 }
 
 void loop() {
