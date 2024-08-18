@@ -1,7 +1,7 @@
 #include <Adafruit_SSD1306.h> 
 #include <Adafruit_GFX.h>
 #include <U8g2_for_Adafruit_GFX.h>
-#include <multiplexedQTR.h>
+#include "multiplexedQTR.h"
 #include <CD74HC4067.h>
 #include <Ticker.h>
 #include <Ps3Controller.h>
@@ -47,6 +47,8 @@ Motor motorLeft(16, 17);
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 U8G2_FOR_ADAFRUIT_GFX u8g2_for_adafruit_gfx;
+const int NUM_MODALITIES = 3; 
+const int MAX_ITEM_LENGTH = 20;
 
 ProgressBar displayPB(display);
 
@@ -138,6 +140,15 @@ void DisplayMenu(){
       display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
       display.display();
     }
+  }
+  else if (current_screen == modality && selected == sprinter){
+
+    display.clearDisplay();
+
+    display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
+
+    display.display();
+
   }
 
   UpdateScreenStatus();
@@ -426,98 +437,138 @@ int qre_right;
 int qre_left;
 int qre_back;
 
-#define TOUCH_SPEED 50
-#define LOW_SPEED 100
-#define MID_SPEED 150
-#define FULL_SPEED 200
+#define touch_speed = 70;
+#define low_speed = 100;
+#define mid_speed = 150;
+#define full_speed = 200;
 
 int signal_input;
 
 CD74HC4067 my_mux(4, 25, 33, 32); // s0, s1, s2, s3
 
 void ReadCleanerSensors() {
-  for (int x = 8; x < 15; x++) {    
+
+  int datoBT;
+
+  datoBT = SerialBT.read();
+
+  for (int x = 8; x < 15; x++) {
+    
     my_mux.channel(x);
   
     signal_input = analogRead(PIN_SIG);
 
     switch (x) {
-      case 8: {        
+
+      case 8: {
+        
         sharp_right = signal_input;
         
         //SerialBT.print("Right sharp =");
         //SerialBT.println(signal_input);
+
       }
-      case 9: {        
+      case 9: {
+        
         sharp_front_right = signal_input;
 
         //SerialBT.print("Front Right sharp =");
         //SerialBT.println(signal_input);
+
       }
-      case 10: {        
+      case 10: {
+        
         sharp_front = signal_input;
 
         //SerialBT.print("Front sharp =");
         //SerialBT.println(signal_input);
+
       }
-      case 11: {        
+      case 11: {
+        
         sharp_front_left = signal_input;
         
         //SerialBT.print("Front Left sharp =");
-        //SerialBT.println(signal_input);      
+        //SerialBT.println(signal_input);
+      
       }
-      case 12: {        
+      case 12: {
+        
         sharp_left = signal_input;
         
         //SerialBT.print("Left sharp =");
-        //SerialBT.println(signal_input);        
+        //SerialBT.println(signal_input);
+        
       } 
       case 13: {
+
         qre_right = signal_input;
 
-        //SerialBT.print ("Right = ");
-        //SerialBT.println (signal_input);
+        SerialBT.print ("Right = ");
+        SerialBT.println (signal_input);
+
       }
       case 14: {
+
         qre_back = signal_input;
 
         //SerialBT.print ("Back = ");
-        //SerialBT.println (signal_input);      
+       // SerialBT.println (signal_input);
+      
       }
       case 15: {
+
         qre_left = signal_input;
 
         //SerialBT.print ("Left = ");
         //SerialBT.println (signal_input);
+
       }
-    }   
+    } 
+  
   } 
+
 }
+
+#define QRE_BLACK   3900
+#define SharpAtaque 1000
+#define set_doTime  2000
 
 void StartAreaCleanerModality(){
   ReadCleanerSensors();
 
-  int QRE_BLACK = 3900;
-  int SharpAtaque = 1000;
   int Action;
   int ActionQRE;
   bool offRoad;
   
   bool front;
+  bool front_left;
+  bool front_right;
   bool left;
   bool right;
- 
+  bool object_left;
+  bool object_right;
+
   bool qreL;
   bool qreR;
   bool qreB;
-  unsigned long qre_time;
-  unsigned long ActionQRE_timeSet;
-  int qre_timeSet = 4000;
+  bool touch_limit = 0;
+  unsigned long time = 0;
 
   if (sharp_front > SharpAtaque) {
     front= true;
   } else {
     front = false;
+  }
+  if (sharp_front_left > SharpAtaque) {
+    front_left = true;
+  } else {
+    front_left = false;
+  }
+  if (sharp_front_right > SharpAtaque) {
+    front_right = true;
+  } else {
+    front_right = false;
   }
   if (sharp_left > SharpAtaque) {
     left = true;
@@ -547,19 +598,16 @@ void StartAreaCleanerModality(){
     qreB = false;
   }
 
-
-
-
-  if (front && sharp_front > sharp_front_left && sharp_front > sharp_front_right) {
+  if (front) {
     Action = 'F';
   } 
   else if (!front && left && !right) {
     Action = 'L';
   }
-  else if (sharp_front < sharp_front_left) {
+  else if (front_left) {
     Action = 'FL';
   }
-  else if (sharp_front < sharp_front_right) {
+  else if (front_right) {
     Action = 'FR';
   }
   else if (!front && !left && right) {
@@ -569,44 +617,55 @@ void StartAreaCleanerModality(){
     Action = 'N';
   }
   
-  
-  if (qreL || qreR || qreB) {
-    ActionQRE = 'QRE';
+  if (qreL && qreR && qreB) {
+    ActionQRE = 'QRELRB';
     offRoad = 1;
   } else {
     offRoad = 0;
   }
-
-  /*if (qreL && qreR && qreB) {
-    ActionQRE = 'QLRB';
+  if (qreL && qreR && !qreB) {
+    ActionQRE = 'QRELR';
+    offRoad = 1;
+  } else {
+    offRoad = 0;
   }
-  else if (qreL) {
-    ActionQRE = 'QL';
+  if (qreL && !qreR && !qreB) {
+    ActionQRE = 'QREL';
+    offRoad = 1;
+  } else {
+    offRoad = 0;
   }
-  else if (qreR) {
-    ActionQRE = 'QR';
+  if (!qreL && qreR && !qreB) {
+    ActionQRE = 'QRER';
+    offRoad = 1;
+  } else {
+    offRoad = 0;
   }
-  else if (qreB) {
-    ActionQRE = 'QB';
+  if (!qreL && !qreR && qreB) {
+    ActionQRE = 'QREB';
+    offRoad = 1;
+  } else {
+    offRoad = 0;
   }
-  else if (qreL && qreR) {
-    ActionQRE = 'QLR';
-  }*/
-
-
-  bool object_left;
-  bool object_right;
-
-  //do {
+  if (qreL && !qreR && qreB) {
+    ActionQRE = 'QRELB';
+    offRoad = 1;
+  } else {
+    offRoad = 0;
+  }
+  if (!qreL && qreR && qreB) {
+    ActionQRE = 'QRERB';
+    offRoad = 1;
+  } else {
+    offRoad = 0;
+  }
 
 switch (offRoad) {
 
   case 0:
   switch (Action) {
     case 'F': {
-      motorRight.MoveForward(LOW_SPEED);
-      motorLeft.MoveForward(LOW_SPEED);
-      
+      MoveSoftForward();
       object_left = false;
       object_right = false;
       break;
@@ -614,42 +673,36 @@ switch (offRoad) {
 
     case 'L': {
       object_left = true;
-      motorRight.MoveForward(LOW_SPEED);
-      motorLeft.MoveBackwards(LOW_SPEED);
-
+      MoveSoftLeft();
       break;
     }
 
     case 'FL': {
-      motorRight.MoveForward(TOUCH_SPEED);
-      motorLeft.MoveBackwards(TOUCH_SPEED);
-
+      MoveSoftForward();
       break;
     }
 
     case 'R': {
       object_right = true;
-      motorRight.MoveBackwards(LOW_SPEED);
-      motorLeft.MoveForward(LOW_SPEED);
-
+      MoveSoftRight();
       break;
     }
 
     case 'FR': {
-      motorRight.MoveBackwards(TOUCH_SPEED);
-      motorLeft.MoveForward(TOUCH_SPEED);
-
+      MoveSoftForward();
       break;
     }
 
     case 'N': {
       if (object_left) {
-        motorRight.MoveForward(LOW_SPEED);
-        motorLeft.MoveBackwards(LOW_SPEED);
+        MoveSoftLeft();
       }
       else if (object_right) {
-        motorRight.MoveBackwards(LOW_SPEED);
-        motorLeft.MoveForward(LOW_SPEED);
+        MoveSoftRight();
+      }
+
+      if (!object_left && !object_right) {
+        MoveSoftForward();
       }
       break;
     }
@@ -661,27 +714,92 @@ switch (offRoad) {
   
   case 1:
   switch (ActionQRE) {
-    case 'QRE': {
-      qre_time = millis();
-
-      while (qre_time > ActionQRE_timeSet + qre_timeSet) {
-        ActionQRE_timeSet = millis();
-        motorRight.MoveBackwards(FULL_SPEED);
-        motorLeft.MoveBackwards(FULL_SPEED);
+    case 'QRELRB': {
+      
+      time = millis();
+      
+      while (millis() < time + set_doTime) {
+        MoveSoftBackwards();
       }
 
-      motorRight.MoveForward(LOW_SPEED);
-      motorLeft.MoveBackwards(LOW_SPEED);
-      
-      break;
+      MoveSoftLeft();
 
       ReadCleanerSensors();
 
-      if (qreL || qreR || qreB) {
-        offRoad = 1;
-      } else {
-        offRoad = 0;
+      break;
+    }
+
+    case 'QRELR': {
+
+      time = millis();
+
+      while (millis() < time + set_doTime) {
+        MoveSoftBackwards();
       }
+
+      MoveSoftLeft();
+
+      ReadCleanerSensors();
+
+    }
+
+    case 'QREL': {
+
+      time = millis();
+
+      while (millis() < time + set_doTime) {
+        MoveSoftBackwards();
+      }
+
+      MoveSoftRight();
+
+      ReadCleanerSensors();
+
+      break;
+    }
+
+    case 'QRER': {
+
+      time = millis();
+
+      while (millis() < time + set_doTime) {
+        MoveSoftBackwards();
+      }
+
+      MoveSoftLeft();
+
+      ReadCleanerSensors();
+
+      break;
+    }
+
+    case 'QREB': {
+
+      MoveSoftForward();
+
+      ReadCleanerSensors();
+
+    
+      break;
+    }
+
+    case 'QRELB': {
+      
+      MoveSoftForward();
+
+      ReadCleanerSensors();
+
+      
+      break;
+    }
+
+    case 'QRERB': {
+      
+      MoveSoftForward(); 
+
+      ReadCleanerSensors();
+      
+      break;
     }
   }
   break;
