@@ -47,14 +47,11 @@ Motor motorLeft(16, 17);
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 U8G2_FOR_ADAFRUIT_GFX u8g2_for_adafruit_gfx;
-const int NUM_MODALITIES = 3; 
-const int MAX_ITEM_LENGTH = 20;
 
 ProgressBar displayPB(display);
 
 // Prints a menu
 void DisplayMenu(){
-
   if (current_screen == selection) {
     display.clearDisplay();
 
@@ -97,26 +94,16 @@ void DisplayMenu(){
     display.display();
   } 
   else if (current_screen == modality && selected == sprinter) {
-    display.clearDisplay();      
-    display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
-
     displayPB.load(SPRINTER_SCREEN_MARGIN_X, SPRINTER_SCREEN_MARGIN_Y, SPRINTER_SCREEN_WIDTH, SPRINTER_SCREEN_HEIGHT, FIRST_SAFETY_TIMEOUT);
     displayPB.unload(SPRINTER_SCREEN_MARGIN_X, SPRINTER_SCREEN_MARGIN_Y, SPRINTER_SCREEN_WIDTH, SPRINTER_SCREEN_HEIGHT, SECOND_SAFETY_TIMEOUT);
 
     current_screen = flags;
-
-    display.display();
   }
   else if (current_screen == modality && selected == areaCleaner) {
-    display.clearDisplay();      
-    display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
-
-    displayPB.load(CLEANER_SCREEN_MARGIN_X, CLEANER_SCREEN_MARGIN_Y, CLEANER_SCREEN_WIDTH, CLEANER_SCREEN_HEIGHT, FIRST_SAFETY_TIMEOUT);
+    displayPB.load(CLEANER_SCREEN_MARGIN_X, CLEANER_SCREEN_MARGIN_Y, CLEANER_SCREEN_WIDTH, CLEANER_SCREEN_HEIGHT, FIRST_SAFETY_TIMEOUT);   
     displayPB.unload(CLEANER_SCREEN_MARGIN_X, CLEANER_SCREEN_MARGIN_Y, CLEANER_SCREEN_WIDTH, CLEANER_SCREEN_HEIGHT, SECOND_SAFETY_TIMEOUT);
 
     current_screen = flags;
-
-    display.display();
   }
   else if (current_screen == flags){
     display.clearDisplay();
@@ -490,264 +477,6 @@ void ReadCleanerSensors() {
   } 
 }
 
-#define QRE_BLACK   3900
-#define SharpAtaque 1000
-#define set_doTime  2000
-
-void StartAreaCleanerModality(){
-  ReadCleanerSensors();
-
-  int Action;
-  int ActionQRE;
-  bool offRoad;
-  
-  bool front;
-  bool front_left;
-  bool front_right;
-  bool left;
-  bool right;
-  bool object_left;
-  bool object_right;
-
-  bool qreL;
-  bool qreR;
-  bool qreB;
-  bool touch_limit = 0;
-  unsigned long time = 0;
-
-  if (sharp_front > SharpAtaque) {
-    front= true;
-  } else {
-    front = false;
-  }
-  if (sharp_front_left > SharpAtaque) {
-    front_left = true;
-  } else {
-    front_left = false;
-  }
-  if (sharp_front_right > SharpAtaque) {
-    front_right = true;
-  } else {
-    front_right = false;
-  }
-  if (sharp_left > SharpAtaque) {
-    left = true;
-  } else {
-    left = false;
-  }
-  if (sharp_right > SharpAtaque) {
-    right = true;
-  } else {
-    right = false;
-  }
-  
-  if (qre_left > QRE_BLACK) {
-    qreL = true;
-  } else {
-    qreL = false;
-  }
-  if (qre_right > QRE_BLACK) {
-    qreR = true;
-  } else {
-    qreR = false;
-  }
-  if (qre_back > QRE_BLACK) {
-    qreB = true;
-  } else {
-    qreB = false;
-  }
-
-  if (front) {
-    Action = 'F';
-  } 
-  else if (!front && left && !right) {
-    Action = 'L';
-  }
-  else if (front_left) {
-    Action = 'FL';
-  }
-  else if (front_right) {
-    Action = 'FR';
-  }
-  else if (!front && !left && right) {
-    Action = 'R';
-  }
-  else if (!front && !left && !right) {
-    Action = 'N';
-  }
-  
-  if (qreL && qreR && qreB) {
-    ActionQRE = 'QRELRB';
-    offRoad = 1;
-  } else {
-    offRoad = 0;
-  }
-  if (qreL && qreR && !qreB) {
-    ActionQRE = 'QRELR';
-    offRoad = 1;
-  } else {
-    offRoad = 0;
-  }
-  if (qreL && !qreR && !qreB) {
-    ActionQRE = 'QREL';
-    offRoad = 1;
-  } else {
-    offRoad = 0;
-  }
-  if (!qreL && qreR && !qreB) {
-    ActionQRE = 'QRER';
-    offRoad = 1;
-  } else {
-    offRoad = 0;
-  }
-  if (!qreL && !qreR && qreB) {
-    ActionQRE = 'QREB';
-    offRoad = 1;
-  } else {
-    offRoad = 0;
-  }
-  if (qreL && !qreR && qreB) {
-    ActionQRE = 'QRELB';
-    offRoad = 1;
-  } else {
-    offRoad = 0;
-  }
-  if (!qreL && qreR && qreB) {
-    ActionQRE = 'QRERB';
-    offRoad = 1;
-  } else {
-    offRoad = 0;
-  }
-
-switch (offRoad) {
-
-  case false:
-  switch (Action) {
-    case 'F': {
-      MoveSoftForward();
-      object_left = false;
-      object_right = false;
-      break;
-    }
-
-    case 'L': {
-      object_left = true;
-      MoveSoftLeft();
-      break;
-    }
-
-    case 'FL': {
-      MoveSoftForward();
-      break;
-    }
-
-    case 'R': {
-      object_right = true;
-      MoveSoftRight();
-      break;
-    }
-
-    case 'FR': {
-      MoveSoftForward();
-      break;
-    }
-
-    case 'N': {
-      if (object_left) {
-        MoveSoftLeft();
-      }
-      else if (object_right) {
-        MoveSoftRight();
-      }
-
-      if (!object_left && !object_right) {
-        MoveSoftForward();
-      }
-      break;
-    }
-  }
-  break;
-  
-  case true:
-  switch (ActionQRE) {
-    case 'QRELRB': {      
-      time = millis();
-      
-      while (millis() < time + set_doTime) {
-        MoveSoftBackwards();
-      }
-
-      MoveSoftLeft();
-      ReadCleanerSensors();
-
-      break;
-    }
-
-    case 'QRELR': {
-      time = millis();
-
-      while (millis() < time + set_doTime) {
-        MoveSoftBackwards();
-      }
-
-      MoveSoftLeft();
-      ReadCleanerSensors();
-
-      break;
-    }
-
-    case 'QREL': {
-      time = millis();
-
-      while (millis() < time + set_doTime) {
-        MoveSoftBackwards();
-      }
-
-      MoveSoftRight();
-      ReadCleanerSensors();
-
-      break;
-    }
-
-    case 'QRER': {
-      time = millis();
-
-      while (millis() < time + set_doTime) {
-        MoveSoftBackwards();
-      }
-
-      MoveSoftLeft();
-      ReadCleanerSensors();
-
-      break;
-    }
-
-    case 'QREB': {
-      MoveSoftForward();
-      ReadCleanerSensors();
-    
-      break;
-    }
-
-    case 'QRELB': {      
-      MoveSoftForward();
-      ReadCleanerSensors();
-      
-      break;
-    }
-
-    case 'QRERB': {      
-      MoveSoftForward(); 
-      ReadCleanerSensors();
-      
-      break;
-    }
-  }
-  break;
-}
-}
-
-
 /* End of area cleaner section
 --------------------------------------------------------------------------*/
 /* Sumo section */
@@ -803,7 +532,7 @@ void StartModalityTriggers() {
   if (current_screen == modality && selected == sumo){StartSumoModality();}
 
   // Area cleaner trigger
-  if (current_screen == flags && selected == areaCleaner){StartAreaCleanerModality();}
+  if (current_screen == flags && selected == areaCleaner){/*StartAreaCleanerModality();*/}
 
   // Sprinter trigger
   else if (current_screen == flags && selected == sprinter){StartSprinterModality();}
@@ -845,4 +574,4 @@ void setup(){
 void loop() {
   DisplayMenu();
   StartModalityTriggers();           
-} 
+}
