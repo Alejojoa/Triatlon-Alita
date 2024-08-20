@@ -1,20 +1,21 @@
 #include <Adafruit_SSD1306.h> 
 #include <Adafruit_GFX.h>
 #include <U8g2_for_Adafruit_GFX.h>
-#include "multiplexedQTR.h"
 #include <CD74HC4067.h>
-#include <Ticker.h>
-#include <Ps3Controller.h>
+#include <Bluepad32.h>
+#include <multiplexedQTR.h>
 #include <locomotion.h>
 #include <bitmaps_triatlon.h>
 #include <progress_bars.h>
-#include "BluetoothSerial.h"
 
 /* Global section
 --------------------------------------------------------------------------*/
 
-int currentTime;
-int startingTime;
+bool ctlConnected = false;
+
+bool dataUpdated;
+
+ControllerPtr myControllers[BP32_MAX_GAMEPADS];
 
 Motor motorRight(26, 27);
 Motor motorLeft(16, 17);
@@ -44,6 +45,9 @@ Motor motorLeft(16, 17);
 
 #define FIRST_SAFETY_TIMEOUT 3000
 #define SECOND_SAFETY_TIMEOUT 2000
+
+#define NUM_MODALITIES 3
+#define MAX_ITEM_LENGTH 20
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 U8G2_FOR_ADAFRUIT_GFX u8g2_for_adafruit_gfx;
@@ -111,7 +115,7 @@ void DisplayMenu(){
     display.display();
   }
   else if (current_screen == modality && selected == sumo){
-    if (!Ps3.isConnected()) {
+    if (!ctlConnected) {
       display.clearDisplay();
       display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
       display.display();
@@ -129,13 +133,9 @@ void DisplayMenu(){
     }
   }
   else if (current_screen == modality && selected == sprinter){
-
     display.clearDisplay();
-
     display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
-
     display.display();
-
   }
 
   UpdateScreenStatus();
@@ -144,9 +144,7 @@ void DisplayMenu(){
     motorRight.StayStill();
     motorLeft.StayStill();
 
-    Ps3.end();
-
-    //SerialBT.end(); // Ends bluetooth connection
+    BP32.enableNewBluetoothConnections(false);
   }
 }
 
@@ -180,12 +178,10 @@ void StartSprinterCalibration() {
   display.display();
 
   for (uint16_t i = 0; i < 350; i++){
-    qtr.calibrate();
-    
+    qtr.calibrate();   
   }
 
   current_screen = modality;
-
 }
 
 int setPoint = 5200; // Sets line position
@@ -206,8 +202,6 @@ float kd = 0;
 float pid;
 float pidRight;
 float pidLeft;
-
-int straightThreshold = 500;
 
 //PID control system code
 void StartSprinterModality(){
@@ -248,276 +242,126 @@ void StartSprinterModality(){
 
 /* End of sprinter section
 --------------------------------------------------------------------------*/
-/* SerialBT section */
-
-bool position_and_pid = false;
-
-BluetoothSerial SerialBT;
-
-char message = SerialBT.read();
-
-#if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
-#error Bluetooth in not enabled! Plese run 'make menuconfig' to and enable it
-#endif
-
-void DisplayPositionAndPid() {
-  SerialBT.print("- position =");
-  SerialBT.println(position);
-
-  SerialBT.print("- pid =");
-  SerialBT.println(pid);
-}
-
-// Prints SerialBT menu
-void DisplayMenuBT(){
-  for (int i = 0; i < 10; i++) {    
-    SerialBT.println("");
-  }
-
-  SerialBT.println("Configuracion Actual:");
-
-  SerialBT.print("- KP = ");
-  SerialBT.println(kp);
-
-  SerialBT.print("- KD = ");
-  SerialBT.println(kd);
-
-  SerialBT.print("- SETPOINT = ");
-  SerialBT.println(setPoint);
-  
-  SerialBT.print("- MAXSPEED = ");
-  SerialBT.println(maxSpeed);
-
-  SerialBT.print("- MINSPEED = ");
-  SerialBT.println(minSpeed);
-
-  SerialBT.print("- SPEED = ");
-  SerialBT.println(speed);
-
-  /*SerialBT.println(" (x) KP + 0.01 / (z) KP - 0.01");
-  SerialBT.println(" (t) KP + 0.001 / (g) KP - 0.001");
-
-  SerialBT.println(" (p) KD + 0.01 / (n) KD - 0.01");
-  SerialBT.println(" (u) KD + 0.001 / (j) KD - 0.001");
-
-  SerialBT.println(" (b) setPoint + 100 / (c) setPoint - 100");
-
-  SerialBT.println(" (q) maxSpeed + 5 / (a) maxSpeed - 5");
-  SerialBT.println(" (w) minSpeed + 5 / (s) minSpeed - 5");
-  SerialBT.println(" (e) speed + 5 / (d) speed - 5");*/
-
-}
-
-void StartTelemetry(){
-  message = SerialBT.read();
-
-  if(position_and_pid) {DisplayPositionAndPid();}
-
-  switch (message) {
-    case 'b': {      
-      setPoint += 100;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'c': {      
-      setPoint -= 100;
-      DisplayMenuBT();
-      break;   
-    }
-    case 'q': {      
-      maxSpeed += 5;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'a': {      
-      maxSpeed -= 5;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'w': {     
-      minSpeed += 5;
-      DisplayMenuBT();
-      break;    
-    }
-    case 's': {      
-      minSpeed -= 5;
-      DisplayMenuBT();
-      break;   
-    }
-    case 'e': {
-      speed += 5;
-      DisplayMenuBT();
-      break;
-    }
-    case 'd': {
-      speed -= 5;
-      DisplayMenuBT();
-      break;
-    }
-    case 't': {      
-      kp += 0.001;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'g': {      
-      kp -= 0.001;
-      DisplayMenuBT();
-      break;   
-    }
-    case 'x': {      
-      kp += 0.01;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'z': {      
-      kp -= 0.01;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'u': {      
-      kd += 0.01;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'j': {      
-      kd -= 0.01;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'p': {      
-      kd += 0.1;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'n': {      
-      kd -= 0.1;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'r': {
-      position_and_pid = !position_and_pid;
-      break;
-    }  
-  }
-}
-
-/* End of SerialBT section
---------------------------------------------------------------------------*/
 /* Area cleaner section */
 
-#define PIN_SIG 34
-
-// Sharp
-int sharp_left;
-int sharp_right;
-int sharp_front_right;
-int sharp_front;
-int sharp_front_left;
-
-int qre_right;
-int qre_left;
-int qre_back;
-
-#define touch_speed = 70;
-#define low_speed = 100;
-#define mid_speed = 150;
-#define full_speed = 200;
-
-int signal_input;
-
-CD74HC4067 my_mux(4, 25, 33, 32); // s0, s1, s2, s3
-
-int getSensorsInput() {
-  signal_input = analogRead(PIN_SIG);
-  return signal_input;
-}
-
-void ReadCleanerSensors() {
-  int datoBT = SerialBT.read();
-
-  signal_input = getSensorsInput();
-
-  for (int x = 8; x < 15; x++) {    
-    my_mux.channel(x);
-
-    switch (x) {
-
-      case 8: {
-        
-        sharp_right = signal_input;
-      }
-      case 9: {
-        
-        sharp_front_right = signal_input;
-      }
-      case 10: {
-        
-        sharp_front = signal_input;
-      }
-      case 11: {
-        
-        sharp_front_left = signal_input;
-      }
-      case 12: {       
-        sharp_left = signal_input;
-      } 
-      case 13: {
-
-        qre_right = signal_input;
-      }
-      case 14: {
-
-        qre_back = signal_input;
-      }
-      case 15: {
-
-        qre_left = signal_input;
-      }
-    }  
-  } 
-}
+// Cuando Iván lo considere listo lo pone
 
 /* End of area cleaner section
 --------------------------------------------------------------------------*/
 /* Sumo section */
 
-void ProcessGamepad() {
-  //bool brakeRight;
-  //bool brakeLeft;
+int axisXValue;
+int throttleValue ;
+int brakeValue;
 
-  // Variables to store the input of each stick
-  int yAxisValueR = (Ps3.data.analog.stick.ry);  //Left stick  - y axis - forward/backward car movement
-  int yAxisValueL = (Ps3.data.analog.stick.ly);  //Right stick - x axis - left/right car movement
+int throttlePWM;
+int brakePWM;
+int leftPWM;
+int rightPWM;
 
-  // Mapping of each stick input to 8bit 
-  int rightWheelSpeedF = map(yAxisValueR, 0, -127, 0, 255);
-  int rightWheelSpeedB = map(yAxisValueR, 0, 127, 0, 255);
-  int leftWheelSpeedF = map(yAxisValueL, 0, -127, 0, 255);
-  int leftWheelSpeedB = map(yAxisValueL, 0, 127, 0, 255);
+// This callback gets called any time a new gamepad is connected.
+void onConnectedController(ControllerPtr ctl) {
+  
+  bool foundEmptySlot = false;
 
-  /*if (Ps3.event.analog_changed.button.r1) {brakeRight = true;}
-  else {motorRight.StayStill();}
-  if (Ps3.event.analog_changed.button.l1) {brakeLeft = true;}
-  else {motorLeft.StayStill();}*/
+  ctlConnected = true;
+  
+  if (myControllers[0] == nullptr) {
+    Serial.printf("CALLBACK: Controller is connected, index=%d\n");
+    ControllerProperties properties = ctl->getProperties();
+    Serial.printf("Controller model: %s, VID=0x%04x, PID=0x%04x\n", ctl->getModelName().c_str(), properties.vendor_id, properties.product_id);
+    myControllers[0] = ctl;
+    foundEmptySlot = true;
+  }
 
-  //if (!brakeRight) {
-    if (yAxisValueR > 15) {motorRight.MoveForward(rightWheelSpeedF);}
-    else if (yAxisValueR < -15) {motorRight.MoveBackwards(rightWheelSpeedB);}
-    else {motorRight.StayStill();}
-  //}
-  //else {motorRight.StayStill();}
-
-  //if (!brakeLeft) {
-    if (yAxisValueL > 15) {motorLeft.MoveForward(leftWheelSpeedF);}
-    else if (yAxisValueL < -15) {motorLeft.MoveBackwards(leftWheelSpeedB);}
-    else {motorLeft.StayStill();}
-  //} 
-  //else {motorLeft.StayStill();}
+  if (!foundEmptySlot) {
+    Serial.println("CALLBACK: Controller connected, but could not found empty slot");
+  }
 }
 
-void StartSumoModality() {
-  if(!Ps3.isConnected()) {Ps3.begin("00:00:00:00:00:04");} 
-  else if (Ps3.isConnected()) {ProcessGamepad();}
+void onDisconnectedController(ControllerPtr ctl) {
+  bool foundController = false;
+
+  ctlConnected = false;
+    
+  if (myControllers[0] == ctl) {
+    Serial.printf("CALLBACK: Controller disconnected from index=%d\n");
+    myControllers[0] = nullptr;
+    foundController = true;
+  } 
+
+  if (!foundController) {
+    Serial.println("CALLBACK: Controller disconnected, but not found in myControllers");
+  }
+}
+
+void processGamepad(ControllerPtr ctl) {
+  bool brakeRight;
+  bool brakeLeft;
+
+  // Variables to store the input of each stick
+  int yAxisValueR = ctl->axisRY();
+  int yAxisValueL = ctl->axisY();
+
+  int RBValue = ctl->throttle();
+  int LBValue = ctl->brake();
+
+  // Mapping of each stick input to 8bit 
+  int rightWheelSpeedF = map(yAxisValueR, 0, -511, 0, 255);
+  int rightWheelSpeedB = map(yAxisValueR, 0, 512, 0, 255);
+  
+  int leftWheelSpeedF = map(yAxisValueL, 0, -511, 0, 255);
+  int leftWheelSpeedB = map(yAxisValueL, 0, 512, 0, 255);
+
+  int turnRightSpeed = map(RBValue, 0, 1023, 0, 255);
+  int turnLeftSpeed = map(LBValue, 0, 1023, 0, 255);
+
+  if (ctl->r1()) {brakeRight = true;}
+  else {brakeRight = false;}
+  if (ctl->l1()) {brakeLeft = true;}
+  else {brakeLeft = false;}
+
+  if (!brakeRight) {
+    if (yAxisValueR < -70) {motorRight.MoveForward(rightWheelSpeedF);}
+    else if (yAxisValueR > 70) {motorRight.MoveBackwards(rightWheelSpeedB);}
+    else {motorRight.StayStill();}
+  }
+  else {motorRight.StayStill();}
+
+  if (!brakeLeft) {
+    if (yAxisValueL < -70) {motorLeft.MoveForward(leftWheelSpeedF);}
+    else if (yAxisValueL > 70) {motorLeft.MoveBackwards(leftWheelSpeedB);}
+    else {motorLeft.StayStill();}
+  } 
+  else {motorLeft.StayStill();}
+
+  if (RBValue > 150) {
+    motorRight.MoveBackwards(turnRightSpeed);
+    motorLeft.MoveForward(turnRightSpeed);
+  }
+
+  if (LBValue > 150) {
+    motorRight.MoveForward(turnLeftSpeed);
+    motorLeft.MoveBackwards(turnLeftSpeed);
+  }
+}
+
+void processControllers() {
+  for (auto myController : myControllers) {
+    if (myController && myController->isConnected() && myController->hasData()) {
+      processGamepad(myController);
+    }
+  }
+}
+
+void StartSumoModality(){
+  BP32.enableNewBluetoothConnections(true);
+
+  dataUpdated = BP32.update();
+  
+  if (dataUpdated) {
+    processControllers();
+  }
 }
 
 /* End of sumo section
@@ -535,7 +379,9 @@ void StartModalityTriggers() {
   if (current_screen == flags && selected == areaCleaner){/*StartAreaCleanerModality();*/}
 
   // Sprinter trigger
-  else if (current_screen == flags && selected == sprinter){StartSprinterModality();}
+  else if (current_screen == flags && selected == sprinter){
+    StartSprinterModality();
+  }
 }
 
 /* End of triggers section
@@ -556,12 +402,10 @@ void setup(){
 
   u8g2_for_adafruit_gfx.begin(display); // Begins u8g2 for gfx library
 
+  BP32.setup(&onConnectedController, &onDisconnectedController);
+
   pinMode(PIN_SELECT, INPUT_PULLUP);
   pinMode(PIN_DOWN, INPUT_PULLUP);
-
-  pinMode(signal_input, INPUT);
-
-  Ps3.begin("00:00:00:00:00:04"); // Begins controller search
 
   // Displays team logo
   display.clearDisplay();
@@ -574,4 +418,4 @@ void setup(){
 void loop() {
   DisplayMenu();
   StartModalityTriggers();           
-}
+} 
