@@ -244,7 +244,266 @@ void StartSprinterModality(){
 --------------------------------------------------------------------------*/
 /* Area cleaner section */
 
-// Cuando Iván lo considere listo lo pone
+#define PIN_SIG 34
+
+// Sharp
+int sharp_left;
+int sharp_right;
+int sharp_front_right;
+int sharp_front;
+int sharp_front_left;
+
+int qre_right;
+int qre_left;
+int qre_back;
+
+#define touch_speed = 70;
+#define low_speed = 100;
+#define mid_speed = 150;
+#define full_speed = 200;
+
+int signal_input;
+
+CD74HC4067 my_mux(4, 25, 33, 32); // s0, s1, s2, s3
+
+int getSensorsInput() {
+  signal_input = analogRead(PIN_SIG);
+  return signal_input;
+}
+
+void ReadCleanerSensors() {
+  int datoBT = SerialBT.read();
+
+  signal_input = getSensorsInput();
+
+  for (int x = 8; x < 15; x++) {    
+    my_mux.channel(x);
+
+    switch (x) {
+
+      case 8: {
+        
+        sharp_right = signal_input;
+      }
+      case 9: {
+        
+        sharp_front_right = signal_input;
+      }
+      case 10: {
+        
+        sharp_front = signal_input;
+      }
+      case 11: {
+        
+        sharp_front_left = signal_input;
+      }
+      case 12: {       
+        sharp_left = signal_input;
+      } 
+      case 13: {
+
+        qre_right = signal_input;
+      }
+      case 14: {
+
+        qre_back = signal_input;
+      }
+      case 15: {
+
+        qre_left = signal_input;
+      }
+    }  
+  } 
+}
+
+#define QRE_BLACK   3900
+#define SharpAtaque 1000
+#define set_doTime  750 
+
+#define touch_speed  75
+#define low_speed   100
+#define mid_speed   150
+#define full_speed  200
+
+
+void StartAreaCleanerModality(){
+  ReadCleanerSensors();
+
+  int Action;    //Casos de Sharp
+  int ActionQRE; //Casos QRE
+  bool offRoad;
+  
+  bool object_left;     //Variables para prevenir angulos ciegos al detectar objetos
+  bool object_right;
+
+  unsigned long time = 0;
+  static bool founded;  //Para retroceder si mientras Action == 'F' detecta un objeto a los costados
+  static bool confirm_founded;
+  
+
+  if (sharp_front > SharpAtaque) {
+    Action = 'F';
+    SerialBT.println ("F");
+  } 
+  else if (sharp_front < SharpAtaque && sharp_left > SharpAtaque && sharp_right < SharpAtaque) {
+    Action = 'L';
+    SerialBT.println ("L");
+  }
+  else if (sharp_front_left > SharpAtaque && !object_left && !object_right) {
+    Action = 'F';
+    SerialBT.println ("FL");
+  }
+  else if (sharp_front_right > SharpAtaque && !object_left && !object_right) {
+    Action = 'F';
+    SerialBT.println ("FR");
+  }
+  else if (sharp_front < SharpAtaque && sharp_left < SharpAtaque && sharp_right > SharpAtaque) {
+    Action = 'R';
+    SerialBT.println ("R");
+  }
+  else if (sharp_front < SharpAtaque && sharp_left < SharpAtaque && sharp_right < SharpAtaque) {
+    Action = 'B';
+    SerialBT.println ("B");
+  }
+  else if (founded) {
+    Action = 'FB';
+    SerialBT.println ("FB");
+  }
+
+
+  if (qre_left > QRE_BLACK || qre_right > QRE_BLACK) {
+    ActionQRE = 'QRE_FRONT';
+    SerialBT.println ("QRE_FRONT");
+  }
+  else if (qre_left < QRE_BLACK && qre_right < QRE_BLACK && qre_back > QRE_BLACK) {
+    ActionQRE = 'QRE_BACK';
+    SerialBT.println ("QRE_BACK");
+  }
+
+  if (qre_left > QRE_BLACK || qre_right > QRE_BLACK || qre_back > QRE_BLACK) {
+    offRoad = 1;
+  } else if (qre_left < QRE_BLACK && qre_right < QRE_BLACK && qre_back < QRE_BLACK) {
+    offRoad = 0;
+  }
+
+switch (offRoad) {
+  
+  case 0: {
+  switch (Action) {
+    case 'F': {
+      motorLeft.MoveForward (low_speed);
+      motorRight.MoveForward (low_speed);
+
+      if (sharp_front > SharpAtaque) {
+        object_left = false;
+        object_right = false;
+        SerialBT.println ("OBJECT SIDES FALSE");
+      }
+
+      if (sharp_left > SharpAtaque || sharp_right > SharpAtaque) {
+        founded = true;
+        SerialBT.println ("Founded");
+      }
+      break;
+    }
+
+    case 'L': {
+      object_left = true;
+      motorLeft.MoveBackwards (low_speed);
+      motorRight.MoveForward (low_speed);
+      break;
+    }
+
+    case 'R': {
+      object_right = true;
+      motorLeft.MoveForward (low_speed);
+      motorRight.MoveBackwards (low_speed);
+      break;
+    }
+
+    case 'B': {
+      if (object_left) {
+        motorLeft.MoveBackwards (touch_speed);
+        motorRight.MoveForward (touch_speed);
+        SerialBT.println ("object_left");
+      }
+      else if (object_right) {
+        motorLeft.MoveForward (touch_speed);
+        motorRight.MoveBackwards (touch_speed);
+        SerialBT.println ("Object_Right");
+      }
+      else {
+        motorLeft.MoveBackwards (touch_speed);
+        motorRight.MoveForward (touch_speed);
+        SerialBT.println ("object_RIGHT_LEFT False");
+      }
+      break;
+    }
+
+    case 'FB': {
+      motorLeft.MoveBackwards (low_speed);
+      motorRight.MoveBackwards (low_speed);
+
+      if (sharp_left > SharpAtaque) {
+        Action = 'L';
+      }
+      else if (sharp_right > SharpAtaque) {
+        Action = 'R';
+      }  
+    }
+  }
+  break;
+}
+
+  case 1: {
+  switch (ActionQRE) {
+
+    case 'QRE_FRONT': {
+
+      time = millis();
+
+      motorLeft.StayStill();
+      motorRight.StayStill();
+      delay (50);
+
+      while (millis() < time + set_doTime) {
+        motorLeft.MoveBackwards (low_speed);
+        motorRight.MoveBackwards (low_speed);
+        delay (10);
+        SerialBT.println ("while Backwards");
+      }
+    
+      SerialBT.println ("OUT");
+
+      break;
+    }
+
+    case 'QRE_BACK': {
+
+      founded = false;   //En el peor de los casos, si al retroceder no vuelve a ver el objeto
+
+      time = millis();
+
+      motorLeft.StayStill();
+      motorRight.StayStill();
+      delay (50);
+
+      while (millis() < time + set_doTime) {
+        motorLeft.MoveForward (low_speed);
+        motorRight.MoveForward (low_speed);
+        delay (10);
+        SerialBT.println ("QRE_BACK Forward");
+      }
+
+      ReadCleanerSensors();
+
+      break;
+    }
+  }
+  break;
+}
+}  //Para offRoad lo convertí en un switch para que no se superpongan acciones
+}
 
 /* End of area cleaner section
 --------------------------------------------------------------------------*/
