@@ -8,7 +8,7 @@
 */
 
 
-uint8_t _g_channel_truth_table[16][4] = {
+uint8_t _g_channel_truth_tableQTR[16][4] = {
   // s0, s1, s2, s3     channel
     {0,  0,  0,  0}, // 0
     {1,  0,  0,  0}, // 1
@@ -28,7 +28,7 @@ uint8_t _g_channel_truth_table[16][4] = {
     {1,  1,  1,  1}  // 15
 };
 
-CD74HC4067::CD74HC4067(uint8_t s0, uint8_t s1, uint8_t s2, uint8_t s3)
+CD74HC4067QTR::CD74HC4067QTR(uint8_t s0, uint8_t s1, uint8_t s2, uint8_t s3)
 {
   if(s0 < 255) { pinMode(s0, OUTPUT); _s0 = s0; bytes++; }
   if(s1 < 255) { pinMode(s1, OUTPUT); _s1 = s1; bytes++; }
@@ -36,17 +36,17 @@ CD74HC4067::CD74HC4067(uint8_t s0, uint8_t s1, uint8_t s2, uint8_t s3)
   if(s3 < 255) { pinMode(s3, OUTPUT); _s3 = s3; bytes++; }
 }
 
-void CD74HC4067::channel(uint8_t channel)
+void CD74HC4067QTR::channelQTR(uint8_t channel)
 {
-  if(bytes > 0) digitalWrite(_s0, _g_channel_truth_table[channel][0]);
-  if(bytes > 1) digitalWrite(_s1, _g_channel_truth_table[channel][1]);
-  if(bytes > 2) digitalWrite(_s2, _g_channel_truth_table[channel][2]);
-  if(bytes > 3) digitalWrite(_s3, _g_channel_truth_table[channel][3]);
+  if(bytes > 0) digitalWrite(_s0, _g_channel_truth_tableQTR[channel][0]);
+  if(bytes > 1) digitalWrite(_s1, _g_channel_truth_tableQTR[channel][1]);
+  if(bytes > 2) digitalWrite(_s2, _g_channel_truth_tableQTR[channel][2]);
+  if(bytes > 3) digitalWrite(_s3, _g_channel_truth_tableQTR[channel][3]);
 }
 
 #define SIG_PIN 34
 
-CD74HC4067 mux(4, 25, 33, 32);  // (S0, S1, S2, S3)
+CD74HC4067QTR mux(4, 25, 33, 32);  // (S0, S1, S2, S3)
 
 void multiplexedQTR::setTypeRC()
 {
@@ -609,7 +609,7 @@ void multiplexedQTR::readPrivate(uint16_t * sensorValues, uint8_t start, uint8_t
         sensorValues[i] = _maxValue;
         // make sensor line an output (drives low briefly, but doesn't matter)
         //pinMode(_sensorPins[i], OUTPUT);
-        mux.channel(_sensorPins[i]);
+        mux.channelQTR(_sensorPins[i]);
         pinMode(SIG_PIN, OUTPUT);
         // drive sensor line high
         //digitalWrite(_sensorPins[i], HIGH);
@@ -633,7 +633,7 @@ void multiplexedQTR::readPrivate(uint16_t * sensorValues, uint8_t start, uint8_t
         {
           // make sensor line an input (should also ensure pull-up is disabled)
           //pinMode(_sensorPins[i], INPUT);
-          mux.channel(_sensorPins[i]);
+          mux.channelQTR(_sensorPins[i]);
           pinMode(SIG_PIN, INPUT);
         }
 
@@ -649,7 +649,7 @@ void multiplexedQTR::readPrivate(uint16_t * sensorValues, uint8_t start, uint8_t
           for (uint8_t i = start; i < _sensorCount; i += step)
           {
             //if ((digitalRead(_sensorPins[i]) == LOW) && (time < sensorValues[i]))
-            mux.channel(_sensorPins[i]);
+            mux.channelQTR(_sensorPins[i]);
             if ((digitalRead(SIG_PIN) == LOW) && (time < sensorValues[i]))
             {
               // record the first time the line reads low
@@ -675,7 +675,7 @@ void multiplexedQTR::readPrivate(uint16_t * sensorValues, uint8_t start, uint8_t
         {
           // add the conversion result
           //sensorValues[i] += analogRead(_sensorPins[i]);
-          mux.channel(_sensorPins[i]);
+          mux.channelQTR(_sensorPins[i]);
           sensorValues[i] += analogRead(SIG_PIN);
         }
       }

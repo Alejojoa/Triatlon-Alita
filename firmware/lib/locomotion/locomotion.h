@@ -1,15 +1,20 @@
 #ifndef LOCOMOTION_H
 #define LOCOMOTION_H
 
-class Motor {
+#include "motor.h"
+
+class Locomotion {
     private:
-        int firstPin, secondPin;
+    Motor motorRight;
+    Motor motorLeft;
 
     public:
-        Motor(int firstPin, int secondPin);
-        void MoveForward(int speed);
-        void MoveBackwards(int speed);
-        void StayStill();
+    Locomotion(int firstPinRight, int secondPinRight, int firstPinLeft, int secondPinLeft);
+    void MoveForward(int speedRight, int speedLeft);
+    void MoveBackwards(int speedRight, int speedLeft);
+    void TurnRight(int speedRight, int speedLeft);
+    void TurnLeft(int speedRight, int speedLeft);
+    void StayStill();
 
 };
 

@@ -1,25 +1,30 @@
 #include <arduino.h>
 #include "locomotion.h"
 
-Motor::Motor(int pin1, int pin2) {
-    firstPin = pin1;
-    secondPin = pin2;
+Locomotion::Locomotion(int firstPinRight, int secondPinRight, int firstPinLeft, int secondPinLeft) 
+    : motorRight(firstPinRight, secondPinRight), motorLeft(firstPinLeft, secondPinLeft) {}
 
-    pinMode(firstPin, OUTPUT);
-    pinMode(secondPin, OUTPUT);
+void Locomotion::MoveForward(int speedRight, int speedLeft) {
+    motorRight._MoveForward(speedRight);
+    motorLeft._MoveForward(speedLeft);
 }
 
-void Motor::MoveForward(int speed) {
-    analogWrite(firstPin, speed);
-    analogWrite(secondPin, LOW);
+void Locomotion::MoveBackwards(int speedRight, int speedLeft) {
+    motorRight._MoveBackwards(speedRight);
+    motorLeft._MoveBackwards(speedLeft);
 }
 
-void Motor::MoveBackwards(int speed) {
-    analogWrite(firstPin, LOW);
-    analogWrite(secondPin, speed);
+void Locomotion::TurnRight(int speedRight, int speedLeft) {
+    motorRight._MoveBackwards(speedRight);
+    motorLeft._MoveForward(speedLeft);
 }
 
-void Motor::StayStill() {
-    analogWrite(firstPin, LOW);
-    analogWrite(secondPin, LOW);
+void Locomotion::TurnLeft(int speedRight, int speedLeft) {
+    motorRight._MoveForward(speedRight);
+    motorLeft._MoveBackwards(speedLeft);
+}
+
+void Locomotion::StayStill() {
+    motorRight._StayStill();
+    motorLeft._StayStill();
 }

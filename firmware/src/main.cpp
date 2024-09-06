@@ -1,23 +1,27 @@
 #include <Adafruit_SSD1306.h> 
 #include <Adafruit_GFX.h>
 #include <U8g2_for_Adafruit_GFX.h>
-#include "multiplexedQTR.h"
 #include <CD74HC4067.h>
-#include <Ticker.h>
 #include <Ps3Controller.h>
 #include <locomotion.h>
 #include <bitmaps_triatlon.h>
 #include <progress_bars.h>
-#include "BluetoothSerial.h"
+#include <multiplexedQTR.h>
+#include <BluetoothSerial.h>
 
 /* Global section
 --------------------------------------------------------------------------*/
 
-int currentTime;
-int startingTime;
+#define PIN_MA1 26
+#define PIN_MA2 27
+#define PIN_MB1 16
+#define PIN_MB2 17
 
-Motor motorRight(26, 27);
-Motor motorLeft(16, 17);
+bool debug = true;
+
+Locomotion motors(PIN_MA1, PIN_MA2, PIN_MB1, PIN_MB2);
+
+BluetoothSerial SerialBT;
 
 /* End of global section
 --------------------------------------------------------------------------*/
@@ -45,16 +49,16 @@ Motor motorLeft(16, 17);
 #define FIRST_SAFETY_TIMEOUT 3000
 #define SECOND_SAFETY_TIMEOUT 2000
 
+#define NUM_MODALITIES 3
+#define MAX_ITEM_LENGTH 20
+
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 U8G2_FOR_ADAFRUIT_GFX u8g2_for_adafruit_gfx;
-const int NUM_MODALITIES = 3; 
-const int MAX_ITEM_LENGTH = 20;
 
 ProgressBar displayPB(display);
 
 // Prints a menu
 void DisplayMenu(){
-
   if (current_screen == selection) {
     display.clearDisplay();
 
@@ -97,26 +101,16 @@ void DisplayMenu(){
     display.display();
   } 
   else if (current_screen == modality && selected == sprinter) {
-    display.clearDisplay();      
-    display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
-
     displayPB.load(SPRINTER_SCREEN_MARGIN_X, SPRINTER_SCREEN_MARGIN_Y, SPRINTER_SCREEN_WIDTH, SPRINTER_SCREEN_HEIGHT, FIRST_SAFETY_TIMEOUT);
     displayPB.unload(SPRINTER_SCREEN_MARGIN_X, SPRINTER_SCREEN_MARGIN_Y, SPRINTER_SCREEN_WIDTH, SPRINTER_SCREEN_HEIGHT, SECOND_SAFETY_TIMEOUT);
 
     current_screen = flags;
-
-    display.display();
   }
   else if (current_screen == modality && selected == areaCleaner) {
-    display.clearDisplay();      
-    display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
-
-    displayPB.load(CLEANER_SCREEN_MARGIN_X, CLEANER_SCREEN_MARGIN_Y, CLEANER_SCREEN_WIDTH, CLEANER_SCREEN_HEIGHT, FIRST_SAFETY_TIMEOUT);
+    displayPB.load(CLEANER_SCREEN_MARGIN_X, CLEANER_SCREEN_MARGIN_Y, CLEANER_SCREEN_WIDTH, CLEANER_SCREEN_HEIGHT, FIRST_SAFETY_TIMEOUT);   
     displayPB.unload(CLEANER_SCREEN_MARGIN_X, CLEANER_SCREEN_MARGIN_Y, CLEANER_SCREEN_WIDTH, CLEANER_SCREEN_HEIGHT, SECOND_SAFETY_TIMEOUT);
 
     current_screen = flags;
-
-    display.display();
   }
   else if (current_screen == flags){
     display.clearDisplay();
@@ -142,20 +136,15 @@ void DisplayMenu(){
     }
   }
   else if (current_screen == modality && selected == sprinter){
-
     display.clearDisplay();
-
     display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
-
     display.display();
-
   }
 
   UpdateScreenStatus();
 
   if (current_screen == selection){  
-    motorRight.StayStill();
-    motorLeft.StayStill();
+    motors.StayStill();
 
     Ps3.end();
 
@@ -193,34 +182,60 @@ void StartSprinterCalibration() {
   display.display();
 
   for (uint16_t i = 0; i < 350; i++){
-    qtr.calibrate();
-    
+    qtr.calibrate();   
   }
 
   current_screen = modality;
-
 }
 
-int setPoint = 5200; // Sets line position
+int setPoint = 1750; // Sets line position
 
 int proportional;
 int derivative;
 int integral;
 int lastError;
 
-int maxSpeed = 180;
-int minSpeed = 140;
-int speed = 160;
+int lastPosition;
+
+int maxSpeed = 255;
+int minSpeed = 130;
+int speed = 255;
 
 // PID const
-float kp = 0.013;
+float kp = 0.087;
 float ki = 0;
-float kd = 0;
+float kd = 0.4;
 float pid;
 float pidRight;
 float pidLeft;
 
-int straightThreshold = 500;
+#define BRAKE_TIMEOUT 100
+#define BRAKE_SPEED 65
+
+#define BLACK_POSITION 7000
+#define WHITE_THRESHOLD_MIN 3400
+#define WHITE_THRESHOLD_MAX 3600
+
+bool brakeCompleted = false;
+
+bool BlackOffRoad(int variable) {
+  return variable == BLACK_POSITION || variable == 0;
+}
+
+bool WhiteOffRoad(int variable) {
+  return variable > WHITE_THRESHOLD_MIN && variable < WHITE_THRESHOLD_MAX;
+}
+
+void Brake() {
+  int startingTime = millis(); 
+
+  while (millis() - startingTime < BRAKE_TIMEOUT) {
+    motors.MoveBackwards(BRAKE_SPEED, BRAKE_SPEED);
+    delay(10);
+  }
+
+  brakeCompleted = true;
+}
 
 //PID control system code
 void StartSprinterModality(){
@@ -230,33 +245,28 @@ void StartSprinterModality(){
   integral += proportional; // Integral of the error
   derivative = proportional - lastError; // Derivative of the error
 
-  // PID aftermath
-  pid = (proportional * kp) + (integral * ki) + (derivative * kd);
+  pid = (proportional * kp) + (integral * ki) + (derivative * kd); // PID aftermath
     
   lastError = proportional; // Saves last error
 
   pidRight = speed + pid;
   pidLeft = speed - pid;
 
-  // Defines speed limits for right motor
-  if (pidRight > maxSpeed){pidRight = maxSpeed;} 
-  else if (pidRight < minSpeed){pidRight = minSpeed;}
-
-  // Defines speed limits for left motor
-  if (pidLeft > maxSpeed){pidLeft = maxSpeed;} 
-  else if (pidLeft < minSpeed){pidLeft = minSpeed;}
-
-  // Defines turning speed
-  if (pidRight <= minSpeed&& pidLeft > minSpeed){ // Turns right 
-    motorRight.MoveBackwards(pidRight);
-    motorLeft.MoveForward(pidLeft);
+  if (pidRight > maxSpeed){pidRight = maxSpeed;} // Defines speed limits for right motor
+  if (pidLeft > maxSpeed){pidLeft = maxSpeed;} // Defines speed limits for left motor
+  if (!BlackOffRoad(position) && !WhiteOffRoad(position)) {brakeCompleted = false;}
+    
+  if (!brakeCompleted && (BlackOffRoad(position) || WhiteOffRoad(position))) {
+    Brake();
+  } else if (pidRight <= minSpeed && pidLeft > minSpeed){ // Turns right 
+    motors.TurnRight(minSpeed + (minSpeed - pidRight), pidLeft);
   } else if (pidLeft <= minSpeed && pidRight > minSpeed){ // Turns left
-    motorRight.MoveForward(pidRight);
-    motorLeft.MoveBackwards(pidLeft);
-  } else { // Goes stright
-    motorRight.MoveForward(pidRight);
-    motorLeft.MoveForward(pidLeft);
+    motors.TurnLeft(pidRight, minSpeed + (minSpeed - pidLeft));
+  } else {
+    motors.MoveForward(pidRight, pidLeft);
   }
+
+  lastPosition = position;
 }
 
 /* End of sprinter section
@@ -265,9 +275,8 @@ void StartSprinterModality(){
 
 bool position_and_pid = false;
 
-BluetoothSerial SerialBT;
-
 char message = SerialBT.read();
+char buffer[16];
 
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth in not enabled! Plese run 'make menuconfig' to and enable it
@@ -277,12 +286,20 @@ void DisplayPositionAndPid() {
   SerialBT.print("- position =");
   SerialBT.println(position);
 
+  SerialBT.print("- derivative = ");
+  SerialBT.println(derivative);
+
   SerialBT.print("- pid =");
   SerialBT.println(pid);
 }
 
+void FloatToString (float value, char* buffer, int bufferSize) {
+  dtostrf(value, 6, 3, buffer);
+}
+
 // Prints SerialBT menu
 void DisplayMenuBT(){
+  
   for (int i = 0; i < 10; i++) {    
     SerialBT.println("");
   }
@@ -290,13 +307,14 @@ void DisplayMenuBT(){
   SerialBT.println("Configuracion Actual:");
 
   SerialBT.print("- KP = ");
-  SerialBT.println(kp);
+  FloatToString(kp, buffer, sizeof(buffer));
+  String kpStr = buffer;
+  SerialBT.println(kpStr);
 
   SerialBT.print("- KD = ");
-  SerialBT.println(kd);
-
-  SerialBT.print("- SETPOINT = ");
-  SerialBT.println(setPoint);
+  FloatToString(kd, buffer, sizeof(buffer));
+  String kdStr = buffer;
+  SerialBT.println(kdStr);
   
   SerialBT.print("- MAXSPEED = ");
   SerialBT.println(maxSpeed);
@@ -388,22 +406,22 @@ void StartTelemetry(){
       break;    
     }
     case 'u': {      
-      kd += 0.01;
+      kd += 0.001;
       DisplayMenuBT();
       break;    
     }
     case 'j': {      
-      kd -= 0.01;
+      kd -= 0.001;
       DisplayMenuBT();
       break;    
     }
     case 'p': {      
-      kd += 0.1;
+      kd += 0.01;
       DisplayMenuBT();
       break;    
     }
     case 'n': {      
-      kd -= 0.1;
+      kd -= 0.01;
       DisplayMenuBT();
       break;    
     }
@@ -418,370 +436,38 @@ void StartTelemetry(){
 --------------------------------------------------------------------------*/
 /* Area cleaner section */
 
-#define PIN_SIG 34
-
-// Sharp
-int sharp_left;
-int sharp_right;
-int sharp_front_right;
-int sharp_front;
-int sharp_front_left;
-
-int qre_right;
-int qre_left;
-int qre_back;
-
-#define touch_speed = 70;
-#define low_speed = 100;
-#define mid_speed = 150;
-#define full_speed = 200;
-
-int signal_input;
-
-CD74HC4067 my_mux(4, 25, 33, 32); // s0, s1, s2, s3
-
-int getSensorsInput() {
-  signal_input = analogRead(PIN_SIG);
-  return signal_input;
-}
-
-void ReadCleanerSensors() {
-  int datoBT = SerialBT.read();
-
-  signal_input = getSensorsInput();
-
-  for (int x = 8; x < 15; x++) {    
-    my_mux.channel(x);
-
-    switch (x) {
-      case 8: {        
-        sharp_right = signal_input;
-      }
-      case 9: {        
-        sharp_front_right = signal_input;
-      }
-      case 10: {        
-        sharp_front = signal_input;
-      }
-      case 11: {        
-        sharp_front_left = signal_input;
-      }
-      case 12: {       
-        sharp_left = signal_input;
-      } 
-      case 13: {
-        qre_right = signal_input;
-      }
-      case 14: {
-        qre_back = signal_input;
-      }
-      case 15: {
-        qre_left = signal_input;
-      }
-    }   
-  } 
-}
-
-#define QRE_BLACK   3900
-#define SharpAtaque 1000
-#define set_doTime  2000
-
-void StartAreaCleanerModality(){
-  ReadCleanerSensors();
-
-  int Action;
-  int ActionQRE;
-  bool offRoad;
-  
-  bool front;
-  bool front_left;
-  bool front_right;
-  bool left;
-  bool right;
-  bool object_left;
-  bool object_right;
-
-  bool qreL;
-  bool qreR;
-  bool qreB;
-  bool touch_limit = 0;
-  unsigned long time = 0;
-
-  if (sharp_front > SharpAtaque) {
-    front= true;
-  } else {
-    front = false;
-  }
-  if (sharp_front_left > SharpAtaque) {
-    front_left = true;
-  } else {
-    front_left = false;
-  }
-  if (sharp_front_right > SharpAtaque) {
-    front_right = true;
-  } else {
-    front_right = false;
-  }
-  if (sharp_left > SharpAtaque) {
-    left = true;
-  } else {
-    left = false;
-  }
-  if (sharp_right > SharpAtaque) {
-    right = true;
-  } else {
-    right = false;
-  }
-  
-  if (qre_left > QRE_BLACK) {
-    qreL = true;
-  } else {
-    qreL = false;
-  }
-  if (qre_right > QRE_BLACK) {
-    qreR = true;
-  } else {
-    qreR = false;
-  }
-  if (qre_back > QRE_BLACK) {
-    qreB = true;
-  } else {
-    qreB = false;
-  }
-
-  if (front) {
-    Action = 'F';
-  } 
-  else if (!front && left && !right) {
-    Action = 'L';
-  }
-  else if (front_left) {
-    Action = 'FL';
-  }
-  else if (front_right) {
-    Action = 'FR';
-  }
-  else if (!front && !left && right) {
-    Action = 'R';
-  }
-  else if (!front && !left && !right) {
-    Action = 'N';
-  }
-  
-  if (qreL && qreR && qreB) {
-    ActionQRE = 'QRELRB';
-    offRoad = 1;
-  } else {
-    offRoad = 0;
-  }
-  if (qreL && qreR && !qreB) {
-    ActionQRE = 'QRELR';
-    offRoad = 1;
-  } else {
-    offRoad = 0;
-  }
-  if (qreL && !qreR && !qreB) {
-    ActionQRE = 'QREL';
-    offRoad = 1;
-  } else {
-    offRoad = 0;
-  }
-  if (!qreL && qreR && !qreB) {
-    ActionQRE = 'QRER';
-    offRoad = 1;
-  } else {
-    offRoad = 0;
-  }
-  if (!qreL && !qreR && qreB) {
-    ActionQRE = 'QREB';
-    offRoad = 1;
-  } else {
-    offRoad = 0;
-  }
-  if (qreL && !qreR && qreB) {
-    ActionQRE = 'QRELB';
-    offRoad = 1;
-  } else {
-    offRoad = 0;
-  }
-  if (!qreL && qreR && qreB) {
-    ActionQRE = 'QRERB';
-    offRoad = 1;
-  } else {
-    offRoad = 0;
-  }
-
-switch (offRoad) {
-
-  case false:
-  switch (Action) {
-    case 'F': {
-      MoveSoftForward();
-      object_left = false;
-      object_right = false;
-      break;
-    }
-
-    case 'L': {
-      object_left = true;
-      MoveSoftLeft();
-      break;
-    }
-
-    case 'FL': {
-      MoveSoftForward();
-      break;
-    }
-
-    case 'R': {
-      object_right = true;
-      MoveSoftRight();
-      break;
-    }
-
-    case 'FR': {
-      MoveSoftForward();
-      break;
-    }
-
-    case 'N': {
-      if (object_left) {
-        MoveSoftLeft();
-      }
-      else if (object_right) {
-        MoveSoftRight();
-      }
-
-      if (!object_left && !object_right) {
-        MoveSoftForward();
-      }
-      break;
-    }
-  }
-  break;
-  
-  case true:
-  switch (ActionQRE) {
-    case 'QRELRB': {      
-      time = millis();
-      
-      while (millis() < time + set_doTime) {
-        MoveSoftBackwards();
-      }
-
-      MoveSoftLeft();
-      ReadCleanerSensors();
-
-      break;
-    }
-
-    case 'QRELR': {
-      time = millis();
-
-      while (millis() < time + set_doTime) {
-        MoveSoftBackwards();
-      }
-
-      MoveSoftLeft();
-      ReadCleanerSensors();
-
-      break;
-    }
-
-    case 'QREL': {
-      time = millis();
-
-      while (millis() < time + set_doTime) {
-        MoveSoftBackwards();
-      }
-
-      MoveSoftRight();
-      ReadCleanerSensors();
-
-      break;
-    }
-
-    case 'QRER': {
-      time = millis();
-
-      while (millis() < time + set_doTime) {
-        MoveSoftBackwards();
-      }
-
-      MoveSoftLeft();
-      ReadCleanerSensors();
-
-      break;
-    }
-
-    case 'QREB': {
-      MoveSoftForward();
-      ReadCleanerSensors();
-    
-      break;
-    }
-
-    case 'QRELB': {      
-      MoveSoftForward();
-      ReadCleanerSensors();
-      
-      break;
-    }
-
-    case 'QRERB': {      
-      MoveSoftForward(); 
-      ReadCleanerSensors();
-      
-      break;
-    }
-  }
-  break;
-}
-}
-
 
 /* End of area cleaner section
 --------------------------------------------------------------------------*/
 /* Sumo section */
 
-void ProcessGamepad() {
-  //bool brakeRight;
-  //bool brakeLeft;
-
+/*void ProcessGamepad() {
   // Variables to store the input of each stick
-  int yAxisValueR = (Ps3.data.analog.stick.ry);  //Left stick  - y axis - forward/backward car movement
-  int yAxisValueL = (Ps3.data.analog.stick.ly);  //Right stick - x axis - left/right car movement
+  int rightTriggerValue = (Ps3.event.analog_changed.button.r2);  //Left stick  - y axis - forward/backward car movement
+  int leftTriggerValue = (Ps3.event.analog_changed.button.l2);  //Right stick - x axis - left/right car movement
 
   // Mapping of each stick input to 8bit 
-  int rightWheelSpeedF = map(yAxisValueR, 0, -127, 0, 255);
-  int rightWheelSpeedB = map(yAxisValueR, 0, 127, 0, 255);
-  int leftWheelSpeedF = map(yAxisValueL, 0, -127, 0, 255);
-  int leftWheelSpeedB = map(yAxisValueL, 0, 127, 0, 255);
+  int forwardSpeed = map(rightTriggerValue, 0, 127, 0, 255);
+  int backwardsSpeed = map(leftTriggerValue, 0, 127, 0, 255);
 
-  /*if (Ps3.event.analog_changed.button.r1) {brakeRight = true;}
-  else {motorRight.StayStill();}
-  if (Ps3.event.analog_changed.button.l1) {brakeLeft = true;}
-  else {motorLeft.StayStill();}*/
-
-  //if (!brakeRight) {
-    if (yAxisValueR > 15) {motorRight.MoveForward(rightWheelSpeedF);}
-    else if (yAxisValueR < -15) {motorRight.MoveBackwards(rightWheelSpeedB);}
-    else {motorRight.StayStill();}
-  //}
-  //else {motorRight.StayStill();}
-
-  //if (!brakeLeft) {
-    if (yAxisValueL > 15) {motorLeft.MoveForward(leftWheelSpeedF);}
-    else if (yAxisValueL < -15) {motorLeft.MoveBackwards(leftWheelSpeedB);}
-    else {motorLeft.StayStill();}
-  //} 
-  //else {motorLeft.StayStill();}
+  if (rightTriggerValue > 0) {
+    motorRight.MoveForward(forwardSpeed);
+    motorLeft.MoveForward(forwardSpeed);
+  }
+  else if (leftTriggerValue > 0) {
+    motorRight.MoveBackwards(backwardsSpeed);
+    motorLeft.MoveBackwards(backwardsSpeed);
+  }
+  else {
+    motorRight.StayStill();
+    motorLeft.StayStill();
+  }
 }
 
 void StartSumoModality() {
   if(!Ps3.isConnected()) {Ps3.begin("00:00:00:00:00:04");} 
   else if (Ps3.isConnected()) {ProcessGamepad();}
-}
+}*/
 
 /* End of sumo section
 --------------------------------------------------------------------------*/
@@ -792,13 +478,20 @@ void StartModalityTriggers() {
   if (current_screen == calibration){StartSprinterCalibration();}
 
   // Sumo trigger
-  if (current_screen == modality && selected == sumo){StartSumoModality();}
+  if (current_screen == modality && selected == sumo){/*StartSumoModality();*/}
 
   // Area cleaner trigger
-  if (current_screen == flags && selected == areaCleaner){StartAreaCleanerModality();}
+  if (current_screen == flags && selected == areaCleaner){/*StartAreaCleanerModality();*/}
 
   // Sprinter trigger
-  else if (current_screen == flags && selected == sprinter){StartSprinterModality();}
+  else if (current_screen == flags && selected == sprinter){
+    StartSprinterModality();
+    
+    if (debug) {
+      SerialBT.begin("Alita");
+      StartTelemetry();
+    }
+  }
 }
 
 /* End of triggers section
@@ -822,7 +515,8 @@ void setup(){
   pinMode(PIN_SELECT, INPUT_PULLUP);
   pinMode(PIN_DOWN, INPUT_PULLUP);
 
-  pinMode(signal_input, INPUT);
+  
+  //pinMode(signal_input, INPUT);
 
   Ps3.begin("00:00:00:00:00:04"); // Begins controller search
 
