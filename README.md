@@ -1,2 +1,2 @@
                                                Robot Triatlon "ALITA" 
-![Screenshot_62](https://github.com/Alejojoa/Space-Angels/assets/53446082/7258ea89-3459-4837-b851-8d281a6f2cc4)
+![WhatsApp Image 2024-08-21 at 12 57 16](https://github.com/user-attachments/assets/21ff14af-58bf-41c9-be56-3c900a373f3e)
