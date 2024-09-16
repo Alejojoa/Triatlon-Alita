@@ -2,24 +2,32 @@
 #include <Adafruit_GFX.h>
 #include <U8g2_for_Adafruit_GFX.h>
 #include <CD74HC4067.h>
-#include <Ps3Controller.h>
-#include <locomotion.h>
+#include <motor.h>
 #include <bitmaps_triatlon.h>
 #include <progress_bars.h>
 #include <multiplexedQTR.h>
-#include <BluetoothSerial.h>
+#include "BluetoothSerial.h"
 
 /* Global section
 --------------------------------------------------------------------------*/
 
-#define PIN_MA1 26
-#define PIN_MA2 27
-#define PIN_MB1 16
-#define PIN_MB2 17
+#define PIN_MR1 26
+#define PIN_MR2 27
+#define PIN_ML1 16
+#define PIN_ML2 17
+
+#define CHANNEL_MR1 0
+#define CHANNEL_MR2 1
+#define CHANNEL_ML1 2
+#define CHANNEL_ML2 3
+
+#define PWM_FREQUENCY 1000
+#define PWM_RESOLUTION 8
 
 bool debug = true;
 
-Locomotion motors(PIN_MA1, PIN_MA2, PIN_MB1, PIN_MB2);
+MotorPair motors(PIN_MR1, PIN_MR2, CHANNEL_MR1, CHANNEL_MR2, PIN_ML1, PIN_ML2, 
+                 CHANNEL_ML1, CHANNEL_ML2, PWM_FREQUENCY, PWM_RESOLUTION);
 
 BluetoothSerial SerialBT;
 
@@ -45,6 +53,8 @@ BluetoothSerial SerialBT;
 #define CLEANER_SCREEN_MARGIN_Y 0
 #define CLEANER_SCREEN_WIDTH 128
 #define CLEANER_SCREEN_HEIGHT 64
+
+
 
 #define FIRST_SAFETY_TIMEOUT 3000
 #define SECOND_SAFETY_TIMEOUT 2000
@@ -118,7 +128,7 @@ void DisplayMenu(){
     display.display();
   }
   else if (current_screen == modality && selected == sumo){
-    if (!Ps3.isConnected()) {
+    /*if (!Ps3.isConnected()) {
       display.clearDisplay();
       display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
       display.display();
@@ -129,11 +139,11 @@ void DisplayMenu(){
       display.display();
 
       delay(250);
-    } else {
+    } else {*/
       display.clearDisplay();
       display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
       display.display();
-    }
+    //}
   }
   else if (current_screen == modality && selected == sprinter){
     display.clearDisplay();
@@ -145,10 +155,6 @@ void DisplayMenu(){
 
   if (current_screen == selection){  
     motors.StayStill();
-
-    Ps3.end();
-
-    //SerialBT.end(); // Ends bluetooth connection
   }
 }
 
@@ -195,8 +201,6 @@ int derivative;
 int integral;
 int lastError;
 
-int lastPosition;
-
 int maxSpeed = 255;
 int minSpeed = 130;
 int speed = 255;
@@ -218,19 +222,19 @@ float pidLeft;
 
 bool brakeCompleted = false;
 
-bool BlackOffRoad(int variable) {
-  return variable == BLACK_POSITION || variable == 0;
+bool BlackOffRoad() {
+  return position == BLACK_POSITION || position == 0;
 }
 
-bool WhiteOffRoad(int variable) {
-  return variable > WHITE_THRESHOLD_MIN && variable < WHITE_THRESHOLD_MAX;
+bool WhiteOffRoad() {
+  return position > WHITE_THRESHOLD_MIN && position < WHITE_THRESHOLD_MAX;
 }
 
 void Brake() {
   int startingTime = millis(); 
 
   while (millis() - startingTime < BRAKE_TIMEOUT) {
-    motors.MoveBackwards(BRAKE_SPEED, BRAKE_SPEED);
+    motors.Brake();
     delay(10);
   }
 
@@ -254,9 +258,9 @@ void StartSprinterModality(){
 
   if (pidRight > maxSpeed){pidRight = maxSpeed;} // Defines speed limits for right motor
   if (pidLeft > maxSpeed){pidLeft = maxSpeed;} // Defines speed limits for left motor
-  if (!BlackOffRoad(position) && !WhiteOffRoad(position)) {brakeCompleted = false;}
+  if (!BlackOffRoad() && !WhiteOffRoad()) {brakeCompleted = false;}
     
-  if (!brakeCompleted && (BlackOffRoad(position) || WhiteOffRoad(position))) {
+  if (!brakeCompleted && (BlackOffRoad() || WhiteOffRoad())) {
     Brake();
   } else if (pidRight <= minSpeed && pidLeft > minSpeed){ // Turns right 
     motors.TurnRight(minSpeed + (minSpeed - pidRight), pidLeft);
@@ -265,8 +269,6 @@ void StartSprinterModality(){
   } else {
     motors.MoveForward(pidRight, pidLeft);
   }
-
-  lastPosition = position;
 }
 
 /* End of sprinter section
@@ -436,7 +438,6 @@ void StartTelemetry(){
 --------------------------------------------------------------------------*/
 /* Area cleaner section */
 
-
 /* End of area cleaner section
 --------------------------------------------------------------------------*/
 /* Sumo section */
@@ -481,7 +482,7 @@ void StartModalityTriggers() {
   if (current_screen == modality && selected == sumo){/*StartSumoModality();*/}
 
   // Area cleaner trigger
-  if (current_screen == flags && selected == areaCleaner){/*StartAreaCleanerModality();*/}
+  if (current_screen == flags && selected == areaCleaner){}
 
   // Sprinter trigger
   else if (current_screen == flags && selected == sprinter){
@@ -501,6 +502,8 @@ void StartModalityTriggers() {
 #define PIN_LED 23
 
 void setup(){    
+  SerialBT.begin("Alita");
+
   pinMode(PIN_LED, OUTPUT);
   digitalWrite(PIN_LED, HIGH);
 
@@ -517,8 +520,6 @@ void setup(){
 
   
   //pinMode(signal_input, INPUT);
-
-  Ps3.begin("00:00:00:00:00:04"); // Begins controller search
 
   // Displays team logo
   display.clearDisplay();
