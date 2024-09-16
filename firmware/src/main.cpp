@@ -8,9 +8,6 @@
 #include <multiplexedQTR.h>
 #include "BluetoothSerial.h"
 
-/* Global section
---------------------------------------------------------------------------*/
-
 #define PIN_MR1 26 //primer pin motor derecho
 #define PIN_MR2 27 //segundo pin motor derecho
 #define PIN_ML1 16 //primer pin motor izquierdo
@@ -31,10 +28,6 @@ MotorPair motors(PIN_MR1, PIN_MR2, CHANNEL_MR1, CHANNEL_MR2, PIN_ML1, PIN_ML2,
                  CHANNEL_ML1, CHANNEL_ML2, PWM_FREQUENCY, PWM_RESOLUTION); 
 
 BluetoothSerial SerialBT;
-
-/* End of global section
---------------------------------------------------------------------------*/
-/* Menu section */
 
 // Define display size in pixels
 #define SCREEN_WIDTH 128
@@ -163,10 +156,6 @@ void StartAreaCleanerSection() {
   if (current_screen == flags && selected == areaCleaner){}
 
 }
-
-/* End of triggers section
---------------------------------------------------------------------------*/
-/* Setup and loop section */
 
 #define PIN_LED 23
 
