@@ -25,6 +25,11 @@ void Motor::MoveBackwards(int speed) {
     ledcWrite(secondChannel, speed);
 }
 
+void Motor::Brake() {
+    ledcWrite(firstChannel, 255);
+    ledcWrite(secondChannel, 255);
+}
+
 void Motor::StayStill() {
     ledcWrite(firstChannel, 0);
     ledcWrite(secondChannel, 0);
@@ -56,6 +61,11 @@ void MotorPair::TurnRight(int speedRight, int speedLeft) {
 void MotorPair::TurnLeft(int speedRight, int speedLeft) {
     motorRight.MoveForward(speedRight);
     motorLeft.MoveBackwards(speedLeft);
+}
+
+void Motor::Brake() {
+    motorRight.Brake();
+    motorLeft.Brake();
 }
 
 void MotorPair::StayStill() {

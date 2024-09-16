@@ -12,6 +12,7 @@ class Motor {
         Motor(int firstPin, int secondPin, int firstChannel, int secondChannel, int frequency, int resolution);
         void MoveForward(int speed);
         void MoveBackwards(int speed);
+        void Brake();
         void StayStill();
 };
 
@@ -29,6 +30,7 @@ class MotorPair {
         void MoveBackwards(int speedRight, int speedLeft);
         void TurnRight(int speedRight, int speedLeft);
         void TurnLeft(int speedRight, int speedLeft);
+        void Brake();
         void StayStill();
 };
 
