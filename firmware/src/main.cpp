@@ -8,10 +8,6 @@
 #include <multiplexedQTR.h>
 #include "BluetoothSerial.h"
 
-//Alita toma mate amargo y dulce mientras esucha a Chaqueño Palavecino
-//Chaqueño Palavecino en realidad no es chaqueño
-// :V Salu2 a la grasa
-
 #define PIN_MR1 26 //primer pin motor derecho
 #define PIN_MR2 27 //segundo pin motor derecho
 #define PIN_ML1 16 //primer pin motor izquierdo
@@ -158,7 +154,10 @@ void DisplayMenu(){
 
 //---------------------------------------------------------------------------------------------   
 
-
+//Para los motores usamos una lirería propia
+//motors.MoveForwards (MID_SPEED , MID_SPEED) se indica la dirección y el PWM de cada rueda
+//motors.StayStill() baja a 0 los PWM de cada rueda
+//motors.Brake() pone en corto los drivers
 
 int datoBT;
 
@@ -183,8 +182,6 @@ int sharp_front_right;
 int sharp_front;
 int sharp_front_left;
 
-int qre_right;
-int qre_left;
 int any_qre_front;
 bool qre_front;
 bool qre_back;
@@ -195,12 +192,7 @@ CD74HC4067 my_mux(4, 25, 33, 32); // s0, s1, s2, s3
 
 #define PIN_SIG 34
 
-/*bool QREBlack (int qre) {
-  return qre > 3800;
-}
-if (QREBlack(qre_left) && QREBlack(qre_right))*/
-
-void ReadCleanerSensors() {
+void ReadCleanerSensors() {   //Lectura del multiplexor
 
   qre_front = false;
   qre_back = false;
@@ -213,8 +205,8 @@ void ReadCleanerSensors() {
 
     switch (x) {
 
-      case 0:
-      case 1:
+      case 0: //Tuvimos problemas con la lectura de los qre laterales, entonces empezamos a usar la regleta completa
+      case 1: //Es temporal igual, en el próximo robot esto sería corregido
       case 2:
       case 3:
       case 4:
@@ -256,7 +248,7 @@ void ReadCleanerSensors() {
     } 
   }
 
-  if (qre_front || qre_back) {
+  if (qre_front || qre_back) {    //Para trabajar más cómodo, lo uní a la lectura de los sensores
     offRoad = true;
   } 
   else {
@@ -265,9 +257,9 @@ void ReadCleanerSensors() {
 }
 
 
-bool object_front;
 
-void Out() {
+
+void Out() {  //Este void se encarga de vovler a la pista cuando offRoad = true;
 
   ReadCleanerSensors();
 
@@ -291,7 +283,13 @@ void Out() {
   }
 
   if (qre_back) {
-    motors.StayStill();
+    
+    time = millis();
+
+    while (millis() < time + SET_BACKWARDS_TIME) {
+      motors.MoveBackwards (FULL_SPEED , FULL_SPEED);
+      delay (10);
+    }
 
     ReadCleanerSensors();
 
@@ -303,26 +301,34 @@ void Out() {
 
 
 
-void SearchObject() {
+void SearchObject() {   //Para encotrar objetos cuando ningúno de los sharps ve nada y no registró nada al avanzar
+
   ReadCleanerSensors();
-  long time_limit;
+  long time_limit;  
+  long time_circle;
 
-  for (int i=0 ; i<50 ; i++) {
-    time_limit = millis();
+  time_circle = millis();
 
-    while (millis() < time_limit + 250) {
-      motors.StayStill(); 
-      delay (10);
-    }
-    while (millis() < time_limit + 500) {
-      motors.TurnRight (0 , MID_SPEED);
-      delay (10);
-    }
+  while (millis() < time_circle + 6000) {  //La idea es que de un círculo completo moviendose de a poco
+  //Por limitaciones de los drivers no puedo hacerlos girar a un PWM menor a 100, por eso los ciclos de acelerar y frenar
 
-    ReadCleanerSensors();
+    for (int i=0 ; i<50 ; i++) {
+      time_limit = millis();
 
-    if (sharp_front) {
-      break;
+      while (millis() < time_limit + 250) {
+        motors.StayStill(); 
+        delay (10);
+      }
+      while (millis() < time_limit + 200) { 
+        motors.TurnRight (0 , FULL_SPEED);
+        delay (10);
+      }
+
+      ReadCleanerSensors();
+
+      if (sharp_front > SHARP_ATAQUE) {
+        break;
+      }
     }
   }
 }
@@ -334,10 +340,12 @@ long time_found_left;
 long time_found_right;
 int total_found_left;
 int total_found_right;
+//Estos "times" son para tomar el tiempo transcurrido desde que vío algún objeto al avanzar y así retroceder hasta quedar a la par
 
 bool state_found_left;
 bool state_found_right;
 bool state_offRoad;
+
 
 void StartAreaCleanerSection() {
 
@@ -354,7 +362,13 @@ void StartAreaCleanerSection() {
 
       SerialBT.println (time_totals);
 
-      if (total_found_right > 1) {
+      if (total_found_left < total_found_right) {            //Al volver offRoad a false, que cumpla con el último resultado
+        while (millis() < time_totals + total_found_left) {  //¿Podría no cumplirse por haber renovado todas las variables al pasar de un case a otro?
+          motors.MoveBackwards (MID_SPEED , MID_SPEED); 
+        }
+        ReadCleanerSensors();
+      }
+      if (total_found_left > total_found_right) {
         while (millis() < time_totals + total_found_right) {
           motors.MoveBackwards (MID_SPEED , MID_SPEED);
           delay (10);
@@ -364,12 +378,10 @@ void StartAreaCleanerSection() {
 
       if ((sharp_front | sharp_front_left | sharp_front_right) > SHARP_ATAQUE) {
 
-        object_front = true;
-
         motors.MoveForward (255 , 255);
-        delay (70);
+        delay (70); //Como los motores de clavaban (Los drivers estaban en las últimas) le daba un golpe antes de avanzar
 
-        for (int i=LOW_SPEED ; i<=MID_SPEED ; i+=INCREASE_SPEED) {
+        for (int i=LOW_SPEED ; i<=MID_SPEED ; i+=INCREASE_SPEED) { //Para acelerar paulatinamente
           
           motors.MoveForward (i , i);
           delay (INCREASE_SPEED_DELAY);
@@ -383,10 +395,15 @@ void StartAreaCleanerSection() {
           delay (10);
         }
 
+
+        if (sharp_left > SHARP_ATAQUE) {
+          state_found_left = true;
+          time_found_left = millis();
+        }
         if (sharp_right > SHARP_ATAQUE) {
           state_found_right = true;
           time_found_right = millis();
-        }
+        } //Para comenzar a tomar el tiempo si ve algo a los costados mientras ataca
 
         ReadCleanerSensors();
       } 
@@ -399,10 +416,16 @@ void StartAreaCleanerSection() {
       if (offRoad) {
         time_totals = millis();
         
+        if (state_found_left) { //Para sacar el total del tiempo transcurrido
+          total_found_left = millis() - time_found_left;
+        }
         if (state_found_right) {
           total_found_right = millis() - time_found_right;
         }
       }
+      //Esta es la parte a la que más le desconfío. Una vez funcionó, pero no más
+      //A lo que le temo es que cuando offRoad = true, pase directo al void Out() antes de sacar los tiempos totales
+      //En caso de que esto pase, ¿Debería solucionarse pasando este ultimo bloque en el case true:?
       break;
     }
   }
