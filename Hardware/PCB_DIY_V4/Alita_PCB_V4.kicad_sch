@@ -14521,7 +14521,7 @@
 			(uuid "d8024f01-146f-4c7b-88e6-95deba2b9582")
 		)
 		(instances
-			(project ""
+			(project "Alita_PCB_V4"
 				(path "/65967704-c20e-4a94-b405-935304512286"
 					(reference "J4")
 					(unit 1)
@@ -14606,7 +14606,7 @@
 			(uuid "bf036ea8-d91a-4d04-9032-cdd4bbdcb35d")
 		)
 		(instances
-			(project ""
+			(project "Alita_PCB_V4"
 				(path "/65967704-c20e-4a94-b405-935304512286"
 					(reference "D1")
 					(unit 1)
@@ -14743,7 +14743,7 @@
 			(uuid "48d285a5-0011-4f5e-a1a1-a9209d943de0")
 		)
 		(instances
-			(project ""
+			(project "Alita_PCB_V4"
 				(path "/65967704-c20e-4a94-b405-935304512286"
 					(reference "JP1")
 					(unit 1)
@@ -15470,7 +15470,7 @@
 			(uuid "155848d4-5af1-40ac-8406-3dc8f33d6a2e")
 		)
 		(instances
-			(project ""
+			(project "Alita_PCB_V4"
 				(path "/65967704-c20e-4a94-b405-935304512286"
 					(reference "R1")
 					(unit 1)
@@ -15845,7 +15845,7 @@
 			(uuid "30df7be6-eea8-4bcd-b9d7-d2f16739361c")
 		)
 		(instances
-			(project ""
+			(project "Alita_PCB_V4"
 				(path "/65967704-c20e-4a94-b405-935304512286"
 					(reference "U2")
 					(unit 1)
@@ -16196,7 +16196,7 @@
 			(uuid "c4192931-ef2b-44ce-b47a-f60479232bd1")
 		)
 		(instances
-			(project ""
+			(project "Alita_PCB_V4"
 				(path "/65967704-c20e-4a94-b405-935304512286"
 					(reference "J2")
 					(unit 1)
@@ -16566,7 +16566,7 @@
 			(uuid "e2063ce5-05ba-4e68-9bb7-55a4e3377d48")
 		)
 		(instances
-			(project ""
+			(project "Alita_PCB_V4"
 				(path "/65967704-c20e-4a94-b405-935304512286"
 					(reference "#PWR021")
 					(unit 1)
@@ -16828,7 +16828,7 @@
 			(uuid "80c5c4c3-b7ee-4605-8de9-c38a1c8efcd3")
 		)
 		(instances
-			(project ""
+			(project "Alita_PCB_V4"
 				(path "/65967704-c20e-4a94-b405-935304512286"
 					(reference "U1")
 					(unit 1)
@@ -17467,7 +17467,7 @@
 			(uuid "44eb644c-a98d-4e1f-bc21-a18f87bbeff7")
 		)
 		(instances
-			(project ""
+			(project "Alita_PCB_V4"
 				(path "/65967704-c20e-4a94-b405-935304512286"
 					(reference "J6")
 					(unit 1)
@@ -17636,7 +17636,7 @@
 			(uuid "c25c9e78-f9c3-443b-bfa5-57b2bc00b97d")
 		)
 		(instances
-			(project ""
+			(project "Alita_PCB_V4"
 				(path "/65967704-c20e-4a94-b405-935304512286"
 					(reference "J5")
 					(unit 1)
@@ -17700,7 +17700,7 @@
 			)
 		)
 		(instances
-			(project ""
+			(project "Alita_PCB_V4"
 				(path "/65967704-c20e-4a94-b405-935304512286"
 					(reference "H1")
 					(unit 1)
