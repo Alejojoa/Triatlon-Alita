@@ -1,6 +1,6 @@
 #include "progress_bars.h"
 
-ProgressBar::ProgressBar(Adafruit_SSD1306 &display) : _display(display){}
+ProgressBar::ProgressBar(Adafruit_SH1106 &display) : _display(display){}
 
 void ProgressBar::load(int x, int y, int width, int height, unsigned long duration) {
   unsigned long startTime = millis();
