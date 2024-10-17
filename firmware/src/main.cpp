@@ -7,9 +7,6 @@
 #include <multiplexedQTR.h>
 #include "BluetoothSerial.h"
 
-/* Global section
---------------------------------------------------------------------------*/
-
 #define PIN_MR1 26
 #define PIN_MR2 27
 #define PIN_ML1 16
@@ -127,11 +124,9 @@ void StartSprinterModality(){
   if (pidLeft > maxSpeed){pidLeft = maxSpeed;} // Defines speed limits for left motor
   if (!BlackOffRoad() && !WhiteOffRoad()) {brakeCompleted = false;}
 
-  if (!brakeCompleted && (BlackOffRoad() || WhiteOffRoad())) {  
+  if (!brakeCompleted && (BlackOffRoad() || WhiteOffRoad())) {
     Brake();
-  }
-  
-  if (pidRight <= minSpeed && pidLeft > minSpeed){ // Turns right 
+  } else if (pidRight <= minSpeed && pidLeft > minSpeed){ // Turns right 
     motors.TurnRight(minSpeed + (minSpeed - pidRight), pidLeft);
   } else if (pidLeft <= minSpeed && pidRight > minSpeed){ // Turns left
     motors.TurnLeft(pidRight, minSpeed + (minSpeed - pidLeft));
@@ -139,10 +134,6 @@ void StartSprinterModality(){
     motors.MoveForward(pidRight, pidLeft);
   }
 }
-
-/* End of sprinter section
---------------------------------------------------------------------------*/
-/* SerialBT section */
 
 bool position_and_pid = false;
 
@@ -302,29 +293,6 @@ void StartTelemetry(){
   }
 }
 
-void StartModalityTriggers() {
-  // Calibration trigger
-  if (current_screen == calibration){StartSprinterCalibration();}
-
-  // Sumo trigger
-  if (current_screen == modality && selected == sumo){/*StartSumoModality();*/}
-
-  // Area cleaner trigger
-  if (current_screen == flags && selected == areaCleaner){
-    motors.MoveForward(maxSpeed, maxSpeed);
-  }
-
-  // Sprinter trigger
-  else if (current_screen == flags && selected == sprinter){
-    StartSprinterModality();
-    
-    if (debug) {
-      SerialBT.begin("Alita");
-      StartTelemetry();
-    }
-  }
-}
-
 #define PIN_LED 23
 
 void setup(){    
@@ -332,27 +300,9 @@ void setup(){
 
   pinMode(PIN_LED, OUTPUT);
   digitalWrite(PIN_LED, HIGH);
-
-  // Begin display connection
-  display.begin(SH1106_SWITCHCAPVCC, 0x3C);
-
-  u8g2_for_adafruit_gfx.begin(display); // Begins u8g2 for gfx library
-
-  pinMode(PIN_SELECT, INPUT_PULLUP);
-  pinMode(PIN_DOWN, INPUT_PULLUP);
-
-  
-  //pinMode(signal_input, INPUT);
-
-  // Displays team logo
-  display.clearDisplay();
-  display.drawBitmap( 0, 0, bitmap_alita, 128, 64, WHITE); // Prints teams logo
-  display.display();
-
-  delay(3000);
 }
 
 void loop() {
-  DisplayMenu();
-  StartModalityTriggers();
+  StartSprinterCalibration();
+  StartSprinterModality();
 } 
