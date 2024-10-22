@@ -10,10 +10,10 @@
 /* Global section
 --------------------------------------------------------------------------*/
 
-#define PIN_MR1 26
-#define PIN_MR2 27
-#define PIN_ML1 16
-#define PIN_ML2 17
+#define PIN_MR1 25
+#define PIN_MR2 26
+#define PIN_ML1 27
+#define PIN_ML2 14
 
 #define CHANNEL_MR1 0
 #define CHANNEL_MR2 1
@@ -40,8 +40,8 @@ BluetoothSerial SerialBT;
 #define OLED_RESET -1
 
 // Define display buttons 
-#define PIN_SELECT 10 //18
-#define PIN_DOWN 5 //5
+#define PIN_SELECT 5
+#define PIN_DOWN 15
 
 #define SPRINTER_SCREEN_MARGIN_X 35
 #define SPRINTER_SCREEN_MARGIN_Y 0
@@ -52,6 +52,8 @@ BluetoothSerial SerialBT;
 #define CLEANER_SCREEN_MARGIN_Y 0
 #define CLEANER_SCREEN_WIDTH 128
 #define CLEANER_SCREEN_HEIGHT 64
+
+
 
 #define FIRST_SAFETY_TIMEOUT 3000
 #define SECOND_SAFETY_TIMEOUT 2000
@@ -193,13 +195,13 @@ void StartSprinterCalibration() {
 
 int setPoint = 1750; // Sets line position
 
-int proportional = 0;
-int derivative = 0;
-int integral = 0;
-int lastError = 0;
+int proportional;
+int derivative;
+int integral;
+int lastError;
 
 int maxSpeed = 255;
-int minSpeed = 150;
+int minSpeed = 130;
 int speed = 255;
 
 // PID const
@@ -210,7 +212,8 @@ float pid;
 float pidRight;
 float pidLeft;
 
-#define BRAKE_TIMEOUT 66
+#define BRAKE_TIMEOUT 100
+#define BRAKE_SPEED 65
 
 #define BLACK_POSITION 7000
 #define WHITE_THRESHOLD_MIN 3400
@@ -245,7 +248,7 @@ void StartSprinterModality(){
   integral += proportional; // Integral of the error
   derivative = proportional - lastError; // Derivative of the error
 
-  pid = (proportional * kp) + (derivative * kd); // PID aftermath
+  pid = (proportional * kp) + (integral * ki) + (derivative * kd); // PID aftermath
     
   lastError = proportional; // Saves last error
 
@@ -255,12 +258,10 @@ void StartSprinterModality(){
   if (pidRight > maxSpeed){pidRight = maxSpeed;} // Defines speed limits for right motor
   if (pidLeft > maxSpeed){pidLeft = maxSpeed;} // Defines speed limits for left motor
   if (!BlackOffRoad() && !WhiteOffRoad()) {brakeCompleted = false;}
-
-  if (!brakeCompleted && (BlackOffRoad() || WhiteOffRoad())) {  
+    
+  if (!brakeCompleted && (BlackOffRoad() || WhiteOffRoad())) {
     Brake();
-  }
-  
-  if (pidRight <= minSpeed && pidLeft > minSpeed){ // Turns right 
+  } else if (pidRight <= minSpeed && pidLeft > minSpeed){ // Turns right 
     motors.TurnRight(minSpeed + (minSpeed - pidRight), pidLeft);
   } else if (pidLeft <= minSpeed && pidRight > minSpeed){ // Turns left
     motors.TurnLeft(pidRight, minSpeed + (minSpeed - pidLeft));
@@ -324,18 +325,6 @@ void DisplayMenuBT(){
 
   SerialBT.print("- SPEED = ");
   SerialBT.println(speed);
-
-  /*SerialBT.println(" (x) KP + 0.01 / (z) KP - 0.01");
-  SerialBT.println(" (t) KP + 0.001 / (g) KP - 0.001");
-
-  SerialBT.println(" (p) KD + 0.01 / (n) KD - 0.01");
-  SerialBT.println(" (u) KD + 0.001 / (j) KD - 0.001");
-
-  SerialBT.println(" (b) setPoint + 100 / (c) setPoint - 100");
-
-  SerialBT.println(" (q) maxSpeed + 5 / (a) maxSpeed - 5");
-  SerialBT.println(" (w) minSpeed + 5 / (s) minSpeed - 5");
-  SerialBT.println(" (e) speed + 5 / (d) speed - 5");*/
 
 }
 
@@ -440,34 +429,6 @@ void StartTelemetry(){
 --------------------------------------------------------------------------*/
 /* Sumo section */
 
-/*void ProcessGamepad() {
-  // Variables to store the input of each stick
-  int rightTriggerValue = (Ps3.event.analog_changed.button.r2);  //Left stick  - y axis - forward/backward car movement
-  int leftTriggerValue = (Ps3.event.analog_changed.button.l2);  //Right stick - x axis - left/right car movement
-
-  // Mapping of each stick input to 8bit 
-  int forwardSpeed = map(rightTriggerValue, 0, 127, 0, 255);
-  int backwardsSpeed = map(leftTriggerValue, 0, 127, 0, 255);
-
-  if (rightTriggerValue > 0) {
-    motorRight.MoveForward(forwardSpeed);
-    motorLeft.MoveForward(forwardSpeed);
-  }
-  else if (leftTriggerValue > 0) {
-    motorRight.MoveBackwards(backwardsSpeed);
-    motorLeft.MoveBackwards(backwardsSpeed);
-  }
-  else {
-    motorRight.StayStill();
-    motorLeft.StayStill();
-  }
-}
-
-void StartSumoModality() {
-  if(!Ps3.isConnected()) {Ps3.begin("00:00:00:00:00:04");} 
-  else if (Ps3.isConnected()) {ProcessGamepad();}
-}*/
-
 /* End of sumo section
 --------------------------------------------------------------------------*/
 /* Triggers section*/
@@ -480,9 +441,7 @@ void StartModalityTriggers() {
   if (current_screen == modality && selected == sumo){/*StartSumoModality();*/}
 
   // Area cleaner trigger
-  if (current_screen == flags && selected == areaCleaner){
-    motors.MoveForward(maxSpeed, maxSpeed);
-  }
+  if (current_screen == flags && selected == areaCleaner){}
 
   // Sprinter trigger
   else if (current_screen == flags && selected == sprinter){
@@ -499,13 +458,8 @@ void StartModalityTriggers() {
 --------------------------------------------------------------------------*/
 /* Setup and loop section */
 
-#define PIN_LED 23
-
 void setup(){    
   SerialBT.begin("Alita");
-
-  pinMode(PIN_LED, OUTPUT);
-  digitalWrite(PIN_LED, HIGH);
 
   // Begin display connection
   display.begin(SH1106_SWITCHCAPVCC, 0x3C);
@@ -515,6 +469,8 @@ void setup(){
   pinMode(PIN_SELECT, INPUT_PULLUP);
   pinMode(PIN_DOWN, INPUT_PULLUP);
 
+  digitalWrite(PIN_SELECT, HIGH);
+  digitalWrite(PIN_DOWN, HIGH);
   
   //pinMode(signal_input, INPUT);
 
@@ -528,5 +484,5 @@ void setup(){
 
 void loop() {
   DisplayMenu();
-  StartModalityTriggers();    
+  StartModalityTriggers();
 } 

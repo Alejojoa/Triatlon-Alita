@@ -25,8 +25,8 @@ extern const unsigned char* bitmap_icons[3];
 #define NUM_ITEMS 3
 #define MAX_ITEM_LENGTH 20
 
-#define PIN_SELECT 18
-#define PIN_DOWN 5
+#define PIN_SELECT 5
+#define PIN_DOWN 15
 
 // Menu order
 extern char menu_items[NUM_ITEMS][MAX_ITEM_LENGTH];
