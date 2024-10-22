@@ -44,9 +44,9 @@ void CD74HC4067QTR::channelQTR(uint8_t channel)
   if(bytes > 3) digitalWrite(_s3, _g_channel_truth_tableQTR[channel][3]);
 }
 
-#define SIG_PIN 34
+#define SIG_PIN 4
 
-CD74HC4067QTR mux(4, 25, 33, 32);  // (S0, S1, S2, S3)
+CD74HC4067QTR mux(23, 19, 18, 17);  // (S0, S1, S2, S3)
 
 void multiplexedQTR::setTypeRC()
 {
