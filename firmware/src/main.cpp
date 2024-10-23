@@ -10,10 +10,10 @@
 /* Global section
 --------------------------------------------------------------------------*/
 
-#define PIN_MR1 25
-#define PIN_MR2 26
-#define PIN_ML1 27
-#define PIN_ML2 14
+#define PIN_MR1 26
+#define PIN_MR2 27
+#define PIN_ML1 16
+#define PIN_ML2 17
 
 #define CHANNEL_MR1 0
 #define CHANNEL_MR2 1
@@ -40,8 +40,8 @@ BluetoothSerial SerialBT;
 #define OLED_RESET -1
 
 // Define display buttons 
-#define PIN_SELECT 5
-#define PIN_DOWN 15
+#define PIN_SELECT 18
+#define PIN_DOWN 5
 
 #define SPRINTER_SCREEN_MARGIN_X 35
 #define SPRINTER_SCREEN_MARGIN_Y 0
@@ -52,8 +52,6 @@ BluetoothSerial SerialBT;
 #define CLEANER_SCREEN_MARGIN_Y 0
 #define CLEANER_SCREEN_WIDTH 128
 #define CLEANER_SCREEN_HEIGHT 64
-
-
 
 #define FIRST_SAFETY_TIMEOUT 3000
 #define SECOND_SAFETY_TIMEOUT 2000
@@ -458,6 +456,8 @@ void StartModalityTriggers() {
 --------------------------------------------------------------------------*/
 /* Setup and loop section */
 
+#define PIN_LED 23
+
 void setup(){    
   SerialBT.begin("Alita");
 
@@ -466,13 +466,12 @@ void setup(){
 
   u8g2_for_adafruit_gfx.begin(display); // Begins u8g2 for gfx library
 
+  pinMode(PIN_LED, OUTPUT);
+  
+  digitalWrite(PIN_LED, HIGH);
+
   pinMode(PIN_SELECT, INPUT_PULLUP);
   pinMode(PIN_DOWN, INPUT_PULLUP);
-
-  digitalWrite(PIN_SELECT, HIGH);
-  digitalWrite(PIN_DOWN, HIGH);
-  
-  //pinMode(signal_input, INPUT);
 
   // Displays team logo
   display.clearDisplay();
