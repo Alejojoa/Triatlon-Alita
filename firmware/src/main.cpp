@@ -563,7 +563,7 @@ void CheckOffRoad() {
 
 
 bool out_lastMovment;
-int BarzolaTurn = 200;
+int BarzolaTurn = 1000;
 
 
 void Out() { 
@@ -588,7 +588,7 @@ void Out() {
       delay (10);
     }
 
-    while (millis() < CurrentTime_OUT + 100) {
+    while (millis() < CurrentTime_OUT + 500) {
       motors.Brake();
       delay (10);
     }
@@ -612,13 +612,18 @@ void Out() {
     }*/
 
     if (out_lastMovment) {
-      while (millis() < CurrentTime_OUT + 100) {
+      while (millis() < CurrentTime_OUT + 200) {
         motors.MoveForward (MID_SPEED , MID_SPEED);
         delay (10);
       }
     } else if (!out_lastMovment) {
       while (millis() < CurrentTime_OUT + SET_OUT_BACKWARDS_TIME) {
         motors.MoveBackwards (FULL_SPEED , FULL_SPEED);
+        delay (10);
+      }
+
+      while (millis() < CurrentTime_OUT + 500) {
+        motors.Brake();
         delay (10);
       }
     }
@@ -688,9 +693,11 @@ void SearchAllTheTrack() {
   ReadCleanerSensors();
   CheckOffRoad();
   long CurrentTime_SearchAllTheTrack;
-  int turn_time = 100;
 
   for (int i=0 ; i<20 ; i++) {
+    ReadCleanerSensors();
+    CheckOffRoad();
+
     CurrentTime_SearchAllTheTrack = millis();
 
     if (!offRoad) {
@@ -699,7 +706,7 @@ void SearchAllTheTrack() {
       motors.TurnRight (LOW_SPEED , MID_SPEED);
     }
 
-    if (sharp_front_left > SHARP_ATTACK || sharp_front > SHARP_ATTACK || sharp_front_right > SHARP_ATTACK) {
+    /*if (sharp_front_left > SHARP_ATTACK || sharp_front > SHARP_ATTACK || sharp_front_right > SHARP_ATTACK) {
       break;
     }
     else if (sharp_right < SHARP_ATTACK) {
@@ -707,8 +714,7 @@ void SearchAllTheTrack() {
       if (sharp_front_left > SHARP_ATTACK || sharp_front > SHARP_ATTACK || sharp_front_right > SHARP_ATTACK) {
         break;
       }
-    }
-
+    }*/
 
     i = i+1;
   }
@@ -796,13 +802,30 @@ void StartAreaCleanerSection() {
       out_lastMovment = false;
 
       if (sharp_front_left > sharp_front) {
-        motors.TurnLeft (MID_SPEED , 0);
+        motors.TurnLeft (0 , MID_SPEED);
       }
       else if (sharp_front_right > sharp_front) {
-        motors.TurnRight (0 , MID_SPEED);
+        motors.TurnRight (MID_SPEED , 0);
       } 
       else {
-        motors.MoveForward (FULL_SPEED , FULL_SPEED);
+        //motors.MoveForward (FULL_SPEED , FULL_SPEED);
+
+        for (int x=95 ; x<130 ; x++) {
+          ReadCleanerSensors();
+          CheckOffRoad();
+          long CurrentTime_Aceleration = millis(); 
+
+          while (millis() < CurrentTime_Aceleration + 50) {
+            motors.MoveForward (x , x);
+            ReadCleanerSensors();
+            CheckOffRoad();
+            delay (10);
+          }
+
+          if (offRoad) {
+            break;
+          }
+        }
       }
     } 
       
