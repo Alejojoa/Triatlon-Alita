@@ -191,52 +191,24 @@ void StartSprinterCalibration() {
   current_screen = modality;
 }
 
-int setPoint = 1750; // Sets line position
+int setPoint = 1500; // Sets line position
 
 int proportional;
 int derivative;
 int integral;
 int lastError;
 
-int maxSpeed = 255;
-int minSpeed = 130;
-int speed = 255;
+int maxSpeed = 110;
+int minSpeed = 40;
+int speed = 75;
 
 // PID const
-float kp = 0.087;
+float kp = 0.033;
 float ki = 0;
-float kd = 0.4;
+float kd = 0.047;
 float pid;
 float pidRight;
 float pidLeft;
-
-#define BRAKE_TIMEOUT 100
-#define BRAKE_SPEED 65
-
-#define BLACK_POSITION 7000
-#define WHITE_THRESHOLD_MIN 3400
-#define WHITE_THRESHOLD_MAX 3600
-
-bool brakeCompleted = false;
-
-bool BlackOffRoad() {
-  return position == BLACK_POSITION || position == 0;
-}
-
-bool WhiteOffRoad() {
-  return position > WHITE_THRESHOLD_MIN && position < WHITE_THRESHOLD_MAX;
-}
-
-void Brake() {
-  int startingTime = millis(); 
-
-  while (millis() - startingTime < BRAKE_TIMEOUT) {
-    motors.Brake();
-    delay(10);
-  }
-
-  brakeCompleted = true;
-}
 
 //PID control system code
 void StartSprinterModality(){
@@ -255,14 +227,11 @@ void StartSprinterModality(){
 
   if (pidRight > maxSpeed){pidRight = maxSpeed;} // Defines speed limits for right motor
   if (pidLeft > maxSpeed){pidLeft = maxSpeed;} // Defines speed limits for left motor
-  if (!BlackOffRoad() && !WhiteOffRoad()) {brakeCompleted = false;}
     
-  if (!brakeCompleted && (BlackOffRoad() || WhiteOffRoad())) {
-    Brake();
-  } else if (pidRight <= minSpeed && pidLeft > minSpeed){ // Turns right 
-    motors.TurnRight(minSpeed + (minSpeed - pidRight), pidLeft);
+  if (pidRight <= minSpeed && pidLeft > minSpeed){ // Turns right 
+    motors.TurnRight(pidRight, pidLeft);
   } else if (pidLeft <= minSpeed && pidRight > minSpeed){ // Turns left
-    motors.TurnLeft(pidRight, minSpeed + (minSpeed - pidLeft));
+    motors.TurnLeft(pidRight, pidLeft);
   } else {
     motors.MoveForward(pidRight, pidLeft);
   }
@@ -430,9 +399,9 @@ void StartTelemetry(){
 #define MID_SPEED   150
 #define FULL_SPEED  200*/
 
-int LOW_SPEED =  65;
-int MID_SPEED =  85;
-int FULL_SPEED = 130;
+int LOW_SPEED =  85;
+int MID_SPEED =  95;
+int FULL_SPEED = 110;
 
 bool offRoad;
 //bool object_front;
@@ -563,7 +532,8 @@ void CheckOffRoad() {
 
 
 bool out_lastMovment;
-int BarzolaTurn = 1000;
+#define BarzolaTurn  1000
+#define SafetyStop 700
 
 
 void Out() { 
@@ -580,21 +550,32 @@ void Out() {
     }*/
 
     while (millis() < CurrentTime_OUT + SET_OUT_BACKWARDS_TIME) {
+      ReadCleanerSensors();
+      CheckOffRoad();
       motors.MoveBackwards (FULL_SPEED , FULL_SPEED);
-
       if (qre_back > QRE_BLACK) {
         break;
       }
       delay (10);
     }
 
-    while (millis() < CurrentTime_OUT + 500) {
+    /*while (millis() < CurrentTime_OUT + SafetyStop) {
+      ReadCleanerSensors();
+      CheckOffRoad();
       motors.Brake();
       delay (10);
-    }
+    }*/
 
     while (millis() < CurrentTime_OUT + BarzolaTurn) {
-      motors.TurnRight (MID_SPEED , MID_SPEED);
+      ReadCleanerSensors();
+      CheckOffRoad();
+      motors.TurnRight (LOW_SPEED , LOW_SPEED);
+      if (sharp_front_left > SHARP_ATTACK || sharp_front > SHARP_ATTACK || sharp_front_right > SHARP_ATTACK) {
+        break;
+      }
+      if (offRoad) {
+        break;
+      }
       delay (10);
     }
 
@@ -613,16 +594,22 @@ void Out() {
 
     if (out_lastMovment) {
       while (millis() < CurrentTime_OUT + 200) {
+        ReadCleanerSensors();
+        CheckOffRoad();
         motors.MoveForward (MID_SPEED , MID_SPEED);
         delay (10);
       }
     } else if (!out_lastMovment) {
       while (millis() < CurrentTime_OUT + SET_OUT_BACKWARDS_TIME) {
+        ReadCleanerSensors();
+        CheckOffRoad();
         motors.MoveBackwards (FULL_SPEED , FULL_SPEED);
         delay (10);
       }
 
-      while (millis() < CurrentTime_OUT + 500) {
+      while (millis() < CurrentTime_OUT + SafetyStop) {
+        ReadCleanerSensors();
+        CheckOffRoad();
         motors.Brake();
         delay (10);
       }
@@ -694,10 +681,6 @@ void SearchAllTheTrack() {
   CheckOffRoad();
   long CurrentTime_SearchAllTheTrack;
 
-  for (int i=0 ; i<20 ; i++) {
-    ReadCleanerSensors();
-    CheckOffRoad();
-
     CurrentTime_SearchAllTheTrack = millis();
 
     if (!offRoad) {
@@ -706,18 +689,21 @@ void SearchAllTheTrack() {
       motors.TurnRight (LOW_SPEED , MID_SPEED);
     }
 
-    /*if (sharp_front_left > SHARP_ATTACK || sharp_front > SHARP_ATTACK || sharp_front_right > SHARP_ATTACK) {
-      break;
-    }
-    else if (sharp_right < SHARP_ATTACK) {
-      motors.TurnLeft (LOW_SPEED , LOW_SPEED);
-      if (sharp_front_left > SHARP_ATTACK || sharp_front > SHARP_ATTACK || sharp_front_right > SHARP_ATTACK) {
-        break;
-      }
+    /*if (sharp_right < SHARP_ATTACK) {
+      while (millis() < CurrentTime_SearchAllTheTrack + 5000) {
+        ReadCleanerSensors();
+        CheckOffRoad();
+        motors.TurnRight (0 , LOW_SPEED);
+        if (sharp_front_left > SHARP_ATTACK || sharp_front > SHARP_ATTACK || sharp_front_right > SHARP_ATTACK) {
+          break;
+        }
+        if (offRoad) {
+          break;
+        }
+        delay (10);
+      } 
     }*/
 
-    i = i+1;
-  }
 }
 
 void SearchObject() {  
@@ -729,25 +715,57 @@ void SearchObject() {
 
   long CurrentTime_SearchObject = millis();
     
-  for (int i=0 ; i<10 ; i++) {
+  for (int i=0 ; i<18 ; i++) {
     long CurrentTime_Brake = millis() + 200;
     long CurrentTime_TurnRight = millis() + 100;
 
     while (millis() < CurrentTime_TurnRight) { 
-      motors.TurnRight (0 , MID_SPEED);
+      motors.TurnRight (MID_SPEED , MID_SPEED);
       ReadCleanerSensors();
+      if (sharp_front_left > SHARP_ATTACK || sharp_front > SHARP_ATTACK || sharp_front_right > SHARP_ATTACK) {
+        break;
+      }
+      /*if (sharp_right > SHARP_ATTACK) {
+        break;
+      }*/
+      if (offRoad) {
+          break;
+      }
     }
     while (millis() < CurrentTime_Brake) {
       motors.Brake(); 
       ReadCleanerSensors();
+      if (sharp_front_left > SHARP_ATTACK || sharp_front > SHARP_ATTACK || sharp_front_right > SHARP_ATTACK) {
+        break;
+      }
+      if (sharp_right > SHARP_ATTACK) {
+        break;
+      }
+      if (offRoad) {
+        break;
+      }
     }
 
     //motors.TurnRight (0 , TURN_SPEED);
 
+    /*if (sharp_right > SHARP_ATTACK) {
+      while (millis() < CurrentTime_SearchObject + 500) {
+        ReadCleanerSensors();
+        CheckOffRoad();
+        motors.TurnRight (LOW_SPEED , LOW_SPEED);
+        if (offRoad) {
+          break;
+        }
+        if (sharp_front_left > SHARP_ATTACK || sharp_front > SHARP_ATTACK || sharp_front_right > SHARP_ATTACK) {
+          break;
+        }
+        delay (10);
+      }
+    }*/
+
     if (sharp_front_left > SHARP_ATTACK || sharp_front > SHARP_ATTACK || sharp_front_right > SHARP_ATTACK) {
       break;
     }
-
     if (offRoad) {
       break;
     }
@@ -802,18 +820,20 @@ void StartAreaCleanerSection() {
       out_lastMovment = false;
 
       if (sharp_front_left > sharp_front) {
-        motors.TurnLeft (0 , MID_SPEED);
+        motors.TurnLeft (MID_SPEED , 0);
       }
       else if (sharp_front_right > sharp_front) {
-        motors.TurnRight (MID_SPEED , 0);
+        motors.TurnRight (0 , MID_SPEED);
       } 
       else {
+        ReadCleanerSensors();
+        CheckOffRoad();
         //motors.MoveForward (FULL_SPEED , FULL_SPEED);
 
-        for (int x=95 ; x<130 ; x++) {
+        /*for (int x=95 ; x<130 ; x++) {
           ReadCleanerSensors();
           CheckOffRoad();
-          long CurrentTime_Aceleration = millis(); 
+          /*long CurrentTime_Aceleration = millis(); 
 
           while (millis() < CurrentTime_Aceleration + 50) {
             motors.MoveForward (x , x);
@@ -825,7 +845,11 @@ void StartAreaCleanerSection() {
           if (offRoad) {
             break;
           }
-        }
+
+          motors.MoveForward (FULL_SPEED , FULL_SPEED);
+        }*/
+        motors.MoveForward (FULL_SPEED , FULL_SPEED);
+
       }
     } 
       
@@ -895,9 +919,9 @@ void setup(){
 }
 
 void loop() {
-  //DisplayMenu();
-  //StartModalityTriggers();
-  StartAreaCleanerSection();
+  DisplayMenu();
+  StartModalityTriggers();
+  //StartAreaCleanerSection();
   //Telemetry();
   //SearchAllTheTrack();
 
