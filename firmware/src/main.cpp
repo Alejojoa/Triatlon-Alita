@@ -110,7 +110,6 @@ void StartSprinterModality(){
   position = getPosition();
 
   proportional = position - setPoint; // Newest error
-  integral += proportional; // Integral of the error
   derivative = proportional - lastError; // Derivative of the error
 
   pid = (proportional * kp) + (derivative * kd); // PID aftermath
@@ -122,11 +121,8 @@ void StartSprinterModality(){
 
   if (pidRight > maxSpeed){pidRight = maxSpeed;} // Defines speed limits for right motor
   if (pidLeft > maxSpeed){pidLeft = maxSpeed;} // Defines speed limits for left motor
-  if (!BlackOffRoad() && !WhiteOffRoad()) {brakeCompleted = false;}
 
-  if (!brakeCompleted && (BlackOffRoad() || WhiteOffRoad())) {
-    Brake();
-  } else if (pidRight <= minSpeed && pidLeft > minSpeed){ // Turns right 
+  if (pidRight <= minSpeed && pidLeft > minSpeed){ // Turns right 
     motors.TurnRight(minSpeed + (minSpeed - pidRight), pidLeft);
   } else if (pidLeft <= minSpeed && pidRight > minSpeed){ // Turns left
     motors.TurnLeft(pidRight, minSpeed + (minSpeed - pidLeft));
@@ -185,19 +181,6 @@ void DisplayMenuBT(){
 
   SerialBT.print("- SPEED = ");
   SerialBT.println(speed);
-
-  /*SerialBT.println(" (x) KP + 0.01 / (z) KP - 0.01");
-  SerialBT.println(" (t) KP + 0.001 / (g) KP - 0.001");
-
-  SerialBT.println(" (p) KD + 0.01 / (n) KD - 0.01");
-  SerialBT.println(" (u) KD + 0.001 / (j) KD - 0.001");
-
-  SerialBT.println(" (b) setPoint + 100 / (c) setPoint - 100");
-
-  SerialBT.println(" (q) maxSpeed + 5 / (a) maxSpeed - 5");
-  SerialBT.println(" (w) minSpeed + 5 / (s) minSpeed - 5");
-  SerialBT.println(" (e) speed + 5 / (d) speed - 5");*/
-
 }
 
 void StartTelemetry(){
