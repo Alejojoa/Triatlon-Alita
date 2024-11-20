@@ -1,45 +1,13 @@
 #include <Adafruit_GFX.h>
 #include <U8g2_for_Adafruit_GFX.h>
-#include <CD74HC4067.h>
-#include <motor.h>
 #include <bitmaps_triatlon.h>
 #include <progress_bars.h>
-#include <multiplexedQTR.h>
-#include "BluetoothSerial.h"
 
-/* Global section
---------------------------------------------------------------------------*/
-
-#define PIN_MR1 26
-#define PIN_MR2 27
-#define PIN_ML1 16
-#define PIN_ML2 17
-
-#define CHANNEL_MR1 0
-#define CHANNEL_MR2 1
-#define CHANNEL_ML1 2
-#define CHANNEL_ML2 3
-
-#define PWM_FREQUENCY 1000
-#define PWM_RESOLUTION 8
-
-bool debug = true;
-
-MotorPair motors(PIN_MR1, PIN_MR2, CHANNEL_MR1, CHANNEL_MR2, PIN_ML1, PIN_ML2, 
-                 CHANNEL_ML1, CHANNEL_ML2, PWM_FREQUENCY, PWM_RESOLUTION);
-
-BluetoothSerial SerialBT;
-
-/* End of global section
---------------------------------------------------------------------------*/
-/* Menu section */
-
-// Define display size in pixels
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
 #define OLED_RESET -1
+#define SCREEN_ADDRESS 0x3C
 
-// Define display buttons 
 #define PIN_SELECT 18
 #define PIN_DOWN 5
 
@@ -53,6 +21,34 @@ BluetoothSerial SerialBT;
 #define CLEANER_SCREEN_WIDTH 128
 #define CLEANER_SCREEN_HEIGHT 64
 
+#define SUMO_SCREEN_MARGIN_X 0
+#define SUMO_SCREEN_MARGIN_Y 0
+#define SUMO_SCREEN_WIDTH 128
+#define SUMO_SCREEN_HEIGHT 64
+
+#define FLAG_SCREEN_MARGIN_X 0
+#define FLAG_SCREEN_MARGIN_Y 0
+#define FLAG_SCREEN_WIDTH 128
+#define FLAG_SCREEN_HEIGHT 64
+
+#define SELECTED_BACKROUND_MARGIN_X 0
+#define SELECTED_BACKROUND_MARGIN_Y 22
+#define SELECTED_BACKROUND_WIDTH 128
+#define SELECTED_BACKROUND_HEIGHT 20
+
+#define ALITA_BITMAP_MARGIN_X 0
+#define ALITA_BITMAP_MARGIN_Y 0
+#define ALITA_BITMAP_WIDTH 128
+#define ALITA_BITMAP_HEIGHT 64
+
+#define ICON_SCREEN_MARGIN_X 4
+#define ICON_SCREEN_WIDTH 16
+#define ICON_SCREEN_HEIGHT 16
+
+#define PREVIOUS_ICON_SCREEN_MARGIN_Y 2
+#define SELECTED_ICON_SCREEN_MARGIN_Y 24
+#define NEXT_ICON_SCREEN_MARGIN_Y 46
+
 #define FIRST_SAFETY_TIMEOUT 3000
 #define SECOND_SAFETY_TIMEOUT 2000
 
@@ -64,70 +60,67 @@ U8G2_FOR_ADAFRUIT_GFX u8g2_for_adafruit_gfx;
 
 ProgressBar displayPB(display);
 
-// Prints a menu
-void DisplayMenu(){
-  if (current_screen == selection) {
+void DisplayMenu()
+{
+  if (current_screen == selection)
+  {
     display.clearDisplay();
 
-    // Prints previous item name
     u8g2_for_adafruit_gfx.setFontMode(1);
     u8g2_for_adafruit_gfx.setFontDirection(0);
     u8g2_for_adafruit_gfx.setForegroundColor(WHITE);
     u8g2_for_adafruit_gfx.setFont(u8g2_font_7x14_mf);
     u8g2_for_adafruit_gfx.setCursor(25, 15);
-    u8g2_for_adafruit_gfx.print(F(menu_items [previous]));
+    u8g2_for_adafruit_gfx.print(F(menu_items[previous]));
 
-    // Prints selected item name
     u8g2_for_adafruit_gfx.setFontMode(1);
     u8g2_for_adafruit_gfx.setFontDirection(0);
     u8g2_for_adafruit_gfx.setForegroundColor(WHITE);
     u8g2_for_adafruit_gfx.setFont(u8g2_font_7x14B_mf);
     u8g2_for_adafruit_gfx.setCursor(30, 37);
-    u8g2_for_adafruit_gfx.print(F(menu_items [selected]));
-  
-    // Prints next item name
+    u8g2_for_adafruit_gfx.print(F(menu_items[selected]));
+
     u8g2_for_adafruit_gfx.setFontMode(1);
     u8g2_for_adafruit_gfx.setFontDirection(0);
     u8g2_for_adafruit_gfx.setForegroundColor(WHITE);
     u8g2_for_adafruit_gfx.setFont(u8g2_font_7x14_mf);
     u8g2_for_adafruit_gfx.setCursor(25, 59);
-    u8g2_for_adafruit_gfx.print(F(menu_items [next]));
-    
-    // Prints selection frame
-    display.drawXBitmap ( 0, 22, epd_bitmap_selected_background, 128, 20, WHITE);
-    
-    // Prints previous item icon
-    display.drawXBitmap ( 4, 2, bitmap_icons[previous], 16, 16, WHITE);
+    u8g2_for_adafruit_gfx.print(F(menu_items[next]));
 
-    // Prints selected item icon
-    display.drawXBitmap ( 4, 24, bitmap_icons[selected], 16, 16, WHITE);
+    display.drawXBitmap(SELECTED_BACKROUND_MARGIN_X, SELECTED_BACKROUND_MARGIN_Y, epd_bitmap_selected_background, SELECTED_BACKROUND_WIDTH, SELECTED_BACKROUND_HEIGHT, WHITE);
 
-    // Prints next item icon
-    display.drawXBitmap ( 4, 46, bitmap_icons[next], 16, 16, WHITE);
+    display.drawXBitmap(ICON_SCREEN_MARGIN_X, PREVIOUS_ICON_SCREEN_MARGIN_Y, bitmap_icons[previous], ICON_SCREEN_WIDTH, ICON_SCREEN_HEIGHT, WHITE);
+    display.drawXBitmap(ICON_SCREEN_MARGIN_X, SELECTED_ICON_SCREEN_MARGIN_Y, bitmap_icons[selected], ICON_SCREEN_WIDTH, ICON_SCREEN_HEIGHT, WHITE);
+    display.drawXBitmap(ICON_SCREEN_MARGIN_X, NEXT_ICON_SCREEN_MARGIN_Y, bitmap_icons[next], ICON_SCREEN_WIDTH, ICON_SCREEN_HEIGHT, WHITE);
 
     display.display();
-  } 
-  else if (current_screen == modality && selected == sprinter) {
+  }
+  else if (current_screen == modality && selected == sprinter)
+  {
     displayPB.load(SPRINTER_SCREEN_MARGIN_X, SPRINTER_SCREEN_MARGIN_Y, SPRINTER_SCREEN_WIDTH, SPRINTER_SCREEN_HEIGHT, FIRST_SAFETY_TIMEOUT);
     displayPB.unload(SPRINTER_SCREEN_MARGIN_X, SPRINTER_SCREEN_MARGIN_Y, SPRINTER_SCREEN_WIDTH, SPRINTER_SCREEN_HEIGHT, SECOND_SAFETY_TIMEOUT);
 
     current_screen = flags;
   }
-  else if (current_screen == modality && selected == areaCleaner) {
-    displayPB.load(CLEANER_SCREEN_MARGIN_X, CLEANER_SCREEN_MARGIN_Y, CLEANER_SCREEN_WIDTH, CLEANER_SCREEN_HEIGHT, FIRST_SAFETY_TIMEOUT);   
+  else if (current_screen == modality && selected == areaCleaner)
+  {
+    displayPB.load(CLEANER_SCREEN_MARGIN_X, CLEANER_SCREEN_MARGIN_Y, CLEANER_SCREEN_WIDTH, CLEANER_SCREEN_HEIGHT, FIRST_SAFETY_TIMEOUT);
     displayPB.unload(CLEANER_SCREEN_MARGIN_X, CLEANER_SCREEN_MARGIN_Y, CLEANER_SCREEN_WIDTH, CLEANER_SCREEN_HEIGHT, SECOND_SAFETY_TIMEOUT);
 
     current_screen = flags;
   }
-  else if (current_screen == flags){
+  else if (current_screen == flags)
+  {
     display.clearDisplay();
-    display.drawXBitmap( 0, 0, epd_bitmap_flag, 128, 64, WHITE);
+    display.drawXBitmap(FLAG_SCREEN_MARGIN_X, FLAG_SCREEN_MARGIN_Y, epd_bitmap_flag, FLAG_SCREEN_WIDTH, FLAG_SCREEN_HEIGHT, WHITE);
     display.display();
   }
-  else if (current_screen == modality && selected == sumo){
-    /*if (!Ps3.isConnected()) {
+  else if (current_screen == modality && selected == sumo)
+  {
+    if (!Ps3.isConnected())
+    {
       display.clearDisplay();
-      display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
+      display.drawXBitmap(SUMO_SCREEN_MARGIN_X, SUMO_SCREEN_MARGIN_Y, bitmap_screens[selected], SUMO_SCREEN_WIDTH, SUMO_SCREEN_HEIGHT, WHITE);
       display.display();
 
       delay(250);
@@ -136,352 +129,52 @@ void DisplayMenu(){
       display.display();
 
       delay(250);
-    } else {*/
+    }
+    else
+    {
       display.clearDisplay();
-      display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
+      display.drawXBitmap(SUMO_SCREEN_MARGIN_X, SUMO_SCREEN_MARGIN_Y, bitmap_screens[selected], SUMO_SCREEN_WIDTH, SUMO_SCREEN_HEIGHT, WHITE);
       display.display();
-    //}
+    }
   }
-  else if (current_screen == modality && selected == sprinter){
+  else if (current_screen == modality && selected == sprinter)
+  {
     display.clearDisplay();
-    display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
+    display.drawXBitmap(SPRINTER_SCREEN_MARGIN_X, SPRINTER_SCREEN_MARGIN_Y, bitmap_screens[selected], SPRINTER_SCREEN_WIDTH, SPRINTER_SCREEN_HEIGHT, WHITE);
     display.display();
   }
 
   UpdateScreenStatus();
 
-  if (current_screen == selection){  
+  if (current_screen == selection)
+  {
     motors.StayStill();
   }
 }
 
-/* End of menu section
---------------------------------------------------------------------------*/
-/* Sprinter section */
-
-multiplexedQTR qtr;
-
-const uint8_t SensorCount = 8;
-uint16_t sensorValues[SensorCount];
-
-int position;
-
-// Gets line position
-int getPosition() {
-  position = qtr.readLineWhite(sensorValues);
-  return position;
-}
-
-// Calibrates sprinters QTR sensors
-void StartSprinterCalibration() {
-  qtr.setTypeAnalog();
-  qtr.setSensorPins((const uint8_t[]){0, 1, 2, 3, 4, 5, 6, 7}, SensorCount); 
-
-  delay(500);
-
-  // Prints calibration big icon
-  display.clearDisplay();
-  display.drawXBitmap( 0, 0, bitmap_calibration, 124, 64, WHITE);
-  display.display();
-
-  for (uint16_t i = 0; i < 350; i++){
-    qtr.calibrate();   
-  }
-
-  current_screen = modality;
-}
-
-int setPoint = 1750; // Sets line position
-
-int proportional;
-int derivative;
-int integral;
-int lastError;
-
-int maxSpeed = 255;
-int minSpeed = 130;
-int speed = 255;
-
-// PID const
-float kp = 0.087;
-float ki = 0;
-float kd = 0.4;
-float pid;
-float pidRight;
-float pidLeft;
-
-#define BRAKE_TIMEOUT 100
-#define BRAKE_SPEED 65
-
-#define BLACK_POSITION 7000
-#define WHITE_THRESHOLD_MIN 3400
-#define WHITE_THRESHOLD_MAX 3600
-
-bool brakeCompleted = false;
-
-bool BlackOffRoad() {
-  return position == BLACK_POSITION || position == 0;
-}
-
-bool WhiteOffRoad() {
-  return position > WHITE_THRESHOLD_MIN && position < WHITE_THRESHOLD_MAX;
-}
-
-void Brake() {
-  int startingTime = millis(); 
-
-  while (millis() - startingTime < BRAKE_TIMEOUT) {
-    motors.Brake();
-    delay(10);
-  }
-
-  brakeCompleted = true;
-}
-
-//PID control system code
-void StartSprinterModality(){
-  position = getPosition();
-
-  proportional = position - setPoint; // Newest error
-  integral += proportional; // Integral of the error
-  derivative = proportional - lastError; // Derivative of the error
-
-  pid = (proportional * kp) + (integral * ki) + (derivative * kd); // PID aftermath
-    
-  lastError = proportional; // Saves last error
-
-  pidRight = speed + pid;
-  pidLeft = speed - pid;
-
-  if (pidRight > maxSpeed){pidRight = maxSpeed;} // Defines speed limits for right motor
-  if (pidLeft > maxSpeed){pidLeft = maxSpeed;} // Defines speed limits for left motor
-  if (!BlackOffRoad() && !WhiteOffRoad()) {brakeCompleted = false;}
-    
-  if (!brakeCompleted && (BlackOffRoad() || WhiteOffRoad())) {
-    Brake();
-  } else if (pidRight <= minSpeed && pidLeft > minSpeed){ // Turns right 
-    motors.TurnRight(minSpeed + (minSpeed - pidRight), pidLeft);
-  } else if (pidLeft <= minSpeed && pidRight > minSpeed){ // Turns left
-    motors.TurnLeft(pidRight, minSpeed + (minSpeed - pidLeft));
-  } else {
-    motors.MoveForward(pidRight, pidLeft);
-  }
-}
-
-/* End of sprinter section
---------------------------------------------------------------------------*/
-/* SerialBT section */
-
-bool position_and_pid = false;
-
-char message = SerialBT.read();
-char buffer[16];
-
-#if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
-#error Bluetooth in not enabled! Plese run 'make menuconfig' to and enable it
-#endif
-
-void DisplayPositionAndPid() {
-  SerialBT.print("- position =");
-  SerialBT.println(position);
-
-  SerialBT.print("- derivative = ");
-  SerialBT.println(derivative);
-
-  SerialBT.print("- pid =");
-  SerialBT.println(pid);
-}
-
-void FloatToString (float value, char* buffer, int bufferSize) {
-  dtostrf(value, 6, 3, buffer);
-}
-
-// Prints SerialBT menu
-void DisplayMenuBT(){
-  
-  for (int i = 0; i < 10; i++) {    
-    SerialBT.println("");
-  }
-
-  SerialBT.println("Configuracion Actual:");
-
-  SerialBT.print("- KP = ");
-  FloatToString(kp, buffer, sizeof(buffer));
-  String kpStr = buffer;
-  SerialBT.println(kpStr);
-
-  SerialBT.print("- KD = ");
-  FloatToString(kd, buffer, sizeof(buffer));
-  String kdStr = buffer;
-  SerialBT.println(kdStr);
-  
-  SerialBT.print("- MAXSPEED = ");
-  SerialBT.println(maxSpeed);
-
-  SerialBT.print("- MINSPEED = ");
-  SerialBT.println(minSpeed);
-
-  SerialBT.print("- SPEED = ");
-  SerialBT.println(speed);
-
-}
-
-void StartTelemetry(){
-  message = SerialBT.read();
-
-  if(position_and_pid) {DisplayPositionAndPid();}
-
-  switch (message) {
-    case 'b': {      
-      setPoint += 100;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'c': {      
-      setPoint -= 100;
-      DisplayMenuBT();
-      break;   
-    }
-    case 'q': {      
-      maxSpeed += 5;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'a': {      
-      maxSpeed -= 5;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'w': {     
-      minSpeed += 5;
-      DisplayMenuBT();
-      break;    
-    }
-    case 's': {      
-      minSpeed -= 5;
-      DisplayMenuBT();
-      break;   
-    }
-    case 'e': {
-      speed += 5;
-      DisplayMenuBT();
-      break;
-    }
-    case 'd': {
-      speed -= 5;
-      DisplayMenuBT();
-      break;
-    }
-    case 't': {      
-      kp += 0.001;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'g': {      
-      kp -= 0.001;
-      DisplayMenuBT();
-      break;   
-    }
-    case 'x': {      
-      kp += 0.01;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'z': {      
-      kp -= 0.01;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'u': {      
-      kd += 0.001;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'j': {      
-      kd -= 0.001;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'p': {      
-      kd += 0.01;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'n': {      
-      kd -= 0.01;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'r': {
-      position_and_pid = !position_and_pid;
-      break;
-    }  
-  }
-}
-
-/* End of SerialBT section
---------------------------------------------------------------------------*/
-/* Area cleaner section */
-
-/* End of area cleaner section
---------------------------------------------------------------------------*/
-/* Sumo section */
-
-/* End of sumo section
---------------------------------------------------------------------------*/
-/* Triggers section*/
-
-void StartModalityTriggers() {
-  // Calibration trigger
-  if (current_screen == calibration){StartSprinterCalibration();}
-
-  // Sumo trigger
-  if (current_screen == modality && selected == sumo){/*StartSumoModality();*/}
-
-  // Area cleaner trigger
-  if (current_screen == flags && selected == areaCleaner){}
-
-  // Sprinter trigger
-  else if (current_screen == flags && selected == sprinter){
-    StartSprinterModality();
-    
-    if (debug) {
-      SerialBT.begin("Alita");
-      StartTelemetry();
-    }
-  }
-}
-
-/* End of triggers section
---------------------------------------------------------------------------*/
-/* Setup and loop section */
-
 #define PIN_LED 23
 
-void setup(){    
-  SerialBT.begin("Alita");
+void setup()
+{
+  display.begin(SH1106_SWITCHCAPVCC, SCREEN_ADDRESS);
 
-  // Begin display connection
-  display.begin(SH1106_SWITCHCAPVCC, 0x3C);
-
-  u8g2_for_adafruit_gfx.begin(display); // Begins u8g2 for gfx library
+  u8g2_for_adafruit_gfx.begin(display);
 
   pinMode(PIN_LED, OUTPUT);
-  
   digitalWrite(PIN_LED, HIGH);
 
   pinMode(PIN_SELECT, INPUT_PULLUP);
   pinMode(PIN_DOWN, INPUT_PULLUP);
 
-  // Displays team logo
   display.clearDisplay();
-  display.drawBitmap( 0, 0, bitmap_alita, 128, 64, WHITE); // Prints teams logo
+  display.drawBitmap(ALITA_BITMAP_MARGIN_X, ALITA_BITMAP_MARGIN_Y, bitmap_alita, ALITA_BITMAP_WIDTH, ALITA_BITMAP_HEIGHT, WHITE); // Prints teams logo
   display.display();
 
   delay(3000);
 }
 
-void loop() {
+void loop()
+{
   DisplayMenu();
   StartModalityTriggers();
-} 
+}
