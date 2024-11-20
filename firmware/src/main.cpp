@@ -137,20 +137,24 @@ void DisplayMenu()
       display.display();
     }
   }
-}
-else if (current_screen == modality && selected == sprinter)
-{
-  display.clearDisplay();
-  display.drawXBitmap(SPRINTER_SCREEN_MARGIN_X, SPRINTER_SCREEN_MARGIN_Y, bitmap_screens[selected], SPRINTER_SCREEN_WIDTH, SPRINTER_SCREEN_HEIGHT, WHITE);
-  display.display();
-}
+  else if (current_screen == modality && selected == sprinter)
+  {
+    display.clearDisplay();
+    display.drawXBitmap(0, 0, bitmap_screens[selected], 128, 64, WHITE);
+    display.display();
+  }
 
-UpdateScreenStatus();
+  UpdateScreenStatus();
 
-if (current_screen == selection)
-{
-  motors.StayStill();
-}
+  if (current_screen == selection)
+  {
+    motors.StayStill();
+
+    motorRight.StayStill();
+    motorLeft.StayStill();
+
+    BP32.enableNewBluetoothConnections(false);
+  }
 }
 
 #define PIN_LED 23
