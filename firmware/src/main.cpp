@@ -5,7 +5,6 @@
 #include <bitmaps_triatlon.h>
 #include <progress_bars.h>
 #include <multiplexedQTR.h>
-#include "BluetoothSerial.h"
 
 #define PIN_MR1 26
 #define PIN_MR2 27
@@ -22,7 +21,7 @@
 
 bool debug = true;
 
-MotorPair motors(PIN_MR1, PIN_MR2, CHANNEL_MR1, CHANNEL_MR2, PIN_ML1, PIN_ML2, 
+MotorPair motors(PIN_MR1, PIN_MR2, CHANNEL_MR1, CHANNEL_MR2, PIN_ML1, PIN_ML2,
                  CHANNEL_ML1, CHANNEL_ML2, PWM_FREQUENCY, PWM_RESOLUTION);
 
 BluetoothSerial SerialBT;
@@ -34,32 +33,32 @@ uint16_t sensorValues[SensorCount];
 
 int position;
 
-// Gets line position
-int getPosition() {
+int getPosition()
+{
   position = qtr.readLineWhite(sensorValues);
   return position;
 }
 
-// Calibrates sprinters QTR sensors
-void StartSprinterCalibration() {
+void StartSprinterCalibration()
+{
   qtr.setTypeAnalog();
-  qtr.setSensorPins((const uint8_t[]){0, 1, 2, 3, 4, 5, 6, 7}, SensorCount); 
+  qtr.setSensorPins((const uint8_t[]){0, 1, 2, 3, 4, 5, 6, 7}, SensorCount);
 
   delay(500);
 
-  // Prints calibration big icon
   display.clearDisplay();
-  display.drawXBitmap( 0, 0, bitmap_calibration, 124, 64, WHITE);
+  display.drawXBitmap(0, 0, bitmap_calibration, 124, 64, WHITE);
   display.display();
 
-  for (uint16_t i = 0; i < 350; i++){
-    qtr.calibrate();   
+  for (uint16_t i = 0; i < 350; i++)
+  {
+    qtr.calibrate();
   }
 
   current_screen = modality;
 }
 
-int setPoint = 1750; // Sets line position
+int setPoint = 1750;
 
 int proportional = 0;
 int derivative = 0;
@@ -78,214 +77,55 @@ float pid;
 float pidRight;
 float pidLeft;
 
-#define BRAKE_TIMEOUT 66
-
-#define BLACK_POSITION 7000
-#define WHITE_THRESHOLD_MIN 3400
-#define WHITE_THRESHOLD_MAX 3600
-
-bool brakeCompleted = false;
-
-bool BlackOffRoad() {
-  return position == BLACK_POSITION || position == 0;
-}
-
-bool WhiteOffRoad() {
-  return position > WHITE_THRESHOLD_MIN && position < WHITE_THRESHOLD_MAX;
-}
-
-void Brake() {
-  int startingTime = millis(); 
-
-  while (millis() - startingTime < BRAKE_TIMEOUT) {
-    motors.Brake();
-    delay(10);
-  }
-
-  brakeCompleted = true;
-}
-
-//PID control system code
-void StartSprinterModality(){
+void StartSprinterModality()
+{
   position = getPosition();
 
-  proportional = position - setPoint; // Newest error
-  derivative = proportional - lastError; // Derivative of the error
+  proportional = position - setPoint;
+  derivative = proportional - lastError;
 
-  pid = (proportional * kp) + (derivative * kd); // PID aftermath
-    
-  lastError = proportional; // Saves last error
+  pid = (proportional * kp) + (derivative * kd);
+
+  lastError = proportional;
 
   pidRight = speed + pid;
   pidLeft = speed - pid;
 
-  if (pidRight > maxSpeed){pidRight = maxSpeed;} // Defines speed limits for right motor
-  if (pidLeft > maxSpeed){pidLeft = maxSpeed;} // Defines speed limits for left motor
+  if (pidRight > maxSpeed)
+  {
+    pidRight = maxSpeed;
+  }
+  if (pidLeft > maxSpeed)
+  {
+    pidLeft = maxSpeed;
+  }
 
-  if (pidRight <= minSpeed && pidLeft > minSpeed){ // Turns right 
+  if (pidRight <= minSpeed && pidLeft > minSpeed)
+  {
     motors.TurnRight(minSpeed + (minSpeed - pidRight), pidLeft);
-  } else if (pidLeft <= minSpeed && pidRight > minSpeed){ // Turns left
+  }
+  else if (pidLeft <= minSpeed && pidRight > minSpeed)
+  {
     motors.TurnLeft(pidRight, minSpeed + (minSpeed - pidLeft));
-  } else {
+  }
+  else
+  {
     motors.MoveForward(pidRight, pidLeft);
-  }
-}
-
-bool position_and_pid = false;
-
-char message = SerialBT.read();
-char buffer[16];
-
-#if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
-#error Bluetooth in not enabled! Plese run 'make menuconfig' to and enable it
-#endif
-
-void DisplayPositionAndPid() {
-  SerialBT.print("- position =");
-  SerialBT.println(position);
-
-  SerialBT.print("- derivative = ");
-  SerialBT.println(derivative);
-
-  SerialBT.print("- pid =");
-  SerialBT.println(pid);
-}
-
-void FloatToString (float value, char* buffer, int bufferSize) {
-  dtostrf(value, 6, 3, buffer);
-}
-
-// Prints SerialBT menu
-void DisplayMenuBT(){
-  for (int i = 0; i < 10; i++) {    
-    SerialBT.println("");
-  }
-
-  SerialBT.println("Configuracion Actual:");
-
-  SerialBT.print("- KP = ");
-  FloatToString(kp, buffer, sizeof(buffer));
-  String kpStr = buffer;
-  SerialBT.println(kpStr);
-
-  SerialBT.print("- KD = ");
-  FloatToString(kd, buffer, sizeof(buffer));
-  String kdStr = buffer;
-  SerialBT.println(kdStr);
-  
-  SerialBT.print("- MAXSPEED = ");
-  SerialBT.println(maxSpeed);
-
-  SerialBT.print("- MINSPEED = ");
-  SerialBT.println(minSpeed);
-
-  SerialBT.print("- SPEED = ");
-  SerialBT.println(speed);
-}
-
-void StartTelemetry(){
-  message = SerialBT.read();
-
-  if(position_and_pid) {DisplayPositionAndPid();}
-
-  switch (message) {
-    case 'b': {      
-      setPoint += 100;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'c': {      
-      setPoint -= 100;
-      DisplayMenuBT();
-      break;   
-    }
-    case 'q': {      
-      maxSpeed += 5;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'a': {      
-      maxSpeed -= 5;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'w': {     
-      minSpeed += 5;
-      DisplayMenuBT();
-      break;    
-    }
-    case 's': {      
-      minSpeed -= 5;
-      DisplayMenuBT();
-      break;   
-    }
-    case 'e': {
-      speed += 5;
-      DisplayMenuBT();
-      break;
-    }
-    case 'd': {
-      speed -= 5;
-      DisplayMenuBT();
-      break;
-    }
-    case 't': {      
-      kp += 0.001;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'g': {      
-      kp -= 0.001;
-      DisplayMenuBT();
-      break;   
-    }
-    case 'x': {      
-      kp += 0.01;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'z': {      
-      kp -= 0.01;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'u': {      
-      kd += 0.001;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'j': {      
-      kd -= 0.001;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'p': {      
-      kd += 0.01;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'n': {      
-      kd -= 0.01;
-      DisplayMenuBT();
-      break;    
-    }
-    case 'r': {
-      position_and_pid = !position_and_pid;
-      break;
-    }  
   }
 }
 
 #define PIN_LED 23
 
-void setup(){    
+void setup()
+{
   SerialBT.begin("Alita");
 
   pinMode(PIN_LED, OUTPUT);
   digitalWrite(PIN_LED, HIGH);
 }
 
-void loop() {
+void loop()
+{
   StartSprinterCalibration();
   StartSprinterModality();
-} 
+}
