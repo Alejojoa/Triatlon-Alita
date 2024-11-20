@@ -24,8 +24,6 @@ bool debug = true;
 MotorPair motors(PIN_MR1, PIN_MR2, CHANNEL_MR1, CHANNEL_MR2, PIN_ML1, PIN_ML2,
                  CHANNEL_ML1, CHANNEL_ML2, PWM_FREQUENCY, PWM_RESOLUTION);
 
-BluetoothSerial SerialBT;
-
 multiplexedQTR qtr;
 
 const uint8_t SensorCount = 8;
@@ -114,18 +112,25 @@ void StartSprinterModality()
   }
 }
 
+void StartModalityTriggers()
+{
+  if (current_screen == flags && selected == calibration)
+  {
+    StartSprinterCalibration();
+  }
+  else if (current_screen == flags && selected == sprinter)
+  {
+    StartSprinterModality();
+  }
+}
+
 #define PIN_LED 23
 
 void setup()
 {
-  SerialBT.begin("Alita");
-
-  pinMode(PIN_LED, OUTPUT);
-  digitalWrite(PIN_LED, HIGH);
 }
 
 void loop()
 {
-  StartSprinterCalibration();
-  StartSprinterModality();
+  StartModalityTriggers();
 }
