@@ -1,10 +1,5 @@
-#include <Adafruit_GFX.h>
-#include <U8g2_for_Adafruit_GFX.h>
 #include <CD74HC4067.h>
 #include <motor.h>
-#include <bitmaps_triatlon.h>
-#include <progress_bars.h>
-#include <multiplexedQTR.h>
 
 /* Global section
 --------------------------------------------------------------------------*/
