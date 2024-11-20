@@ -1,4 +1,3 @@
-#include <Adafruit_SSD1306.h> 
 #include <Adafruit_GFX.h>
 #include <U8g2_for_Adafruit_GFX.h>
 #include <CD74HC4067.h>
@@ -28,10 +27,10 @@ Motor motorLeft(16, 17);
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
 #define OLED_RESET -1
+#define SCREEN_ADDRESS 0x3C
 
-// Define display buttons 
-#define PIN_SELECT 18 //18
-#define PIN_DOWN 5 //5
+#define PIN_SELECT 18
+#define PIN_DOWN 5
 
 #define SPRINTER_SCREEN_MARGIN_X 35
 #define SPRINTER_SCREEN_MARGIN_Y 0
@@ -43,81 +42,106 @@ Motor motorLeft(16, 17);
 #define CLEANER_SCREEN_WIDTH 128
 #define CLEANER_SCREEN_HEIGHT 64
 
+#define SUMO_SCREEN_MARGIN_X 0
+#define SUMO_SCREEN_MARGIN_Y 0
+#define SUMO_SCREEN_WIDTH 128
+#define SUMO_SCREEN_HEIGHT 64
+
+#define FLAG_SCREEN_MARGIN_X 0
+#define FLAG_SCREEN_MARGIN_Y 0
+#define FLAG_SCREEN_WIDTH 128
+#define FLAG_SCREEN_HEIGHT 64
+
+#define SELECTED_BACKROUND_MARGIN_X 0
+#define SELECTED_BACKROUND_MARGIN_Y 22
+#define SELECTED_BACKROUND_WIDTH 128
+#define SELECTED_BACKROUND_HEIGHT 20
+
+#define ALITA_BITMAP_MARGIN_X 0
+#define ALITA_BITMAP_MARGIN_Y 0
+#define ALITA_BITMAP_WIDTH 128
+#define ALITA_BITMAP_HEIGHT 64
+
+#define ICON_SCREEN_MARGIN_X 4
+#define ICON_SCREEN_WIDTH 16
+#define ICON_SCREEN_HEIGHT 16
+
+#define PREVIOUS_ICON_SCREEN_MARGIN_Y 2
+#define SELECTED_ICON_SCREEN_MARGIN_Y 24
+#define NEXT_ICON_SCREEN_MARGIN_Y 46
+
 #define FIRST_SAFETY_TIMEOUT 3000
 #define SECOND_SAFETY_TIMEOUT 2000
 
 #define NUM_MODALITIES 3
 #define MAX_ITEM_LENGTH 20
 
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+Adafruit_SH1106 display(OLED_RESET);
 U8G2_FOR_ADAFRUIT_GFX u8g2_for_adafruit_gfx;
 
 ProgressBar displayPB(display);
 
-// Prints a menu
-void DisplayMenu(){
-  if (current_screen == selection) {
+void DisplayMenu()
+{
+  if (current_screen == selection)
+  {
     display.clearDisplay();
 
-    // Prints previous item name
     u8g2_for_adafruit_gfx.setFontMode(1);
     u8g2_for_adafruit_gfx.setFontDirection(0);
     u8g2_for_adafruit_gfx.setForegroundColor(WHITE);
     u8g2_for_adafruit_gfx.setFont(u8g2_font_7x14_mf);
     u8g2_for_adafruit_gfx.setCursor(25, 15);
-    u8g2_for_adafruit_gfx.print(F(menu_items [previous]));
+    u8g2_for_adafruit_gfx.print(F(menu_items[previous]));
 
-    // Prints selected item name
     u8g2_for_adafruit_gfx.setFontMode(1);
     u8g2_for_adafruit_gfx.setFontDirection(0);
     u8g2_for_adafruit_gfx.setForegroundColor(WHITE);
     u8g2_for_adafruit_gfx.setFont(u8g2_font_7x14B_mf);
     u8g2_for_adafruit_gfx.setCursor(30, 37);
-    u8g2_for_adafruit_gfx.print(F(menu_items [selected]));
-  
-    // Prints next item name
+    u8g2_for_adafruit_gfx.print(F(menu_items[selected]));
+
     u8g2_for_adafruit_gfx.setFontMode(1);
     u8g2_for_adafruit_gfx.setFontDirection(0);
     u8g2_for_adafruit_gfx.setForegroundColor(WHITE);
     u8g2_for_adafruit_gfx.setFont(u8g2_font_7x14_mf);
     u8g2_for_adafruit_gfx.setCursor(25, 59);
-    u8g2_for_adafruit_gfx.print(F(menu_items [next]));
-    
-    // Prints selection frame
-    display.drawXBitmap ( 0, 22, epd_bitmap_selected_background, 128, 20, WHITE);
-    
-    // Prints previous item icon
-    display.drawXBitmap ( 4, 2, bitmap_icons[previous], 16, 16, WHITE);
+    u8g2_for_adafruit_gfx.print(F(menu_items[next]));
 
-    // Prints selected item icon
-    display.drawXBitmap ( 4, 24, bitmap_icons[selected], 16, 16, WHITE);
+    display.drawXBitmap(SELECTED_BACKROUND_MARGIN_X, SELECTED_BACKROUND_MARGIN_Y, epd_bitmap_selected_background, SELECTED_BACKROUND_WIDTH, SELECTED_BACKROUND_HEIGHT, WHITE);
 
-    // Prints next item icon
-    display.drawXBitmap ( 4, 46, bitmap_icons[next], 16, 16, WHITE);
+    display.drawXBitmap(ICON_SCREEN_MARGIN_X, PREVIOUS_ICON_SCREEN_MARGIN_Y, bitmap_icons[previous], ICON_SCREEN_WIDTH, ICON_SCREEN_HEIGHT, WHITE);
+    display.drawXBitmap(ICON_SCREEN_MARGIN_X, SELECTED_ICON_SCREEN_MARGIN_Y, bitmap_icons[selected], ICON_SCREEN_WIDTH, ICON_SCREEN_HEIGHT, WHITE);
+    display.drawXBitmap(ICON_SCREEN_MARGIN_X, NEXT_ICON_SCREEN_MARGIN_Y, bitmap_icons[next], ICON_SCREEN_WIDTH, ICON_SCREEN_HEIGHT, WHITE);
 
     display.display();
-  } 
-  else if (current_screen == modality && selected == sprinter) {
+  }
+  else if (current_screen == modality && selected == sprinter)
+  {
     displayPB.load(SPRINTER_SCREEN_MARGIN_X, SPRINTER_SCREEN_MARGIN_Y, SPRINTER_SCREEN_WIDTH, SPRINTER_SCREEN_HEIGHT, FIRST_SAFETY_TIMEOUT);
     displayPB.unload(SPRINTER_SCREEN_MARGIN_X, SPRINTER_SCREEN_MARGIN_Y, SPRINTER_SCREEN_WIDTH, SPRINTER_SCREEN_HEIGHT, SECOND_SAFETY_TIMEOUT);
 
     current_screen = flags;
   }
-  else if (current_screen == modality && selected == areaCleaner) {
-    displayPB.load(CLEANER_SCREEN_MARGIN_X, CLEANER_SCREEN_MARGIN_Y, CLEANER_SCREEN_WIDTH, CLEANER_SCREEN_HEIGHT, FIRST_SAFETY_TIMEOUT);   
+  else if (current_screen == modality && selected == areaCleaner)
+  {
+    displayPB.load(CLEANER_SCREEN_MARGIN_X, CLEANER_SCREEN_MARGIN_Y, CLEANER_SCREEN_WIDTH, CLEANER_SCREEN_HEIGHT, FIRST_SAFETY_TIMEOUT);
     displayPB.unload(CLEANER_SCREEN_MARGIN_X, CLEANER_SCREEN_MARGIN_Y, CLEANER_SCREEN_WIDTH, CLEANER_SCREEN_HEIGHT, SECOND_SAFETY_TIMEOUT);
 
     current_screen = flags;
   }
-  else if (current_screen == flags){
+  else if (current_screen == flags)
+  {
     display.clearDisplay();
-    display.drawXBitmap( 0, 0, epd_bitmap_flag, 128, 64, WHITE);
+    display.drawXBitmap(FLAG_SCREEN_MARGIN_X, FLAG_SCREEN_MARGIN_Y, epd_bitmap_flag, FLAG_SCREEN_WIDTH, FLAG_SCREEN_HEIGHT, WHITE);
     display.display();
   }
-  else if (current_screen == modality && selected == sumo){
-    if (!ctlConnected) {
+  else if (current_screen == modality && selected == sumo)
+  {
+    if (!ctlConnected)
+    {
       display.clearDisplay();
-      display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
+      display.drawXBitmap(SUMO_SCREEN_MARGIN_X, SUMO_SCREEN_MARGIN_Y, bitmap_screens[selected], SUMO_SCREEN_WIDTH, SUMO_SCREEN_HEIGHT, WHITE);
       display.display();
 
       delay(250);
@@ -126,21 +150,27 @@ void DisplayMenu(){
       display.display();
 
       delay(250);
-    } else {
+    }
+    else
+    {
       display.clearDisplay();
-      display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
+      display.drawXBitmap(SUMO_SCREEN_MARGIN_X, SUMO_SCREEN_MARGIN_Y, bitmap_screens[selected], SUMO_SCREEN_WIDTH, SUMO_SCREEN_HEIGHT, WHITE);
       display.display();
     }
   }
-  else if (current_screen == modality && selected == sprinter){
+  else if (current_screen == modality && selected == sprinter)
+  {
     display.clearDisplay();
-    display.drawXBitmap( 0, 0, bitmap_screens[selected], 128, 64, WHITE);
+    display.drawXBitmap(0, 0, bitmap_screens[selected], 128, 64, WHITE);
     display.display();
   }
 
   UpdateScreenStatus();
 
-  if (current_screen == selection){  
+  if (current_screen == selection)
+  {
+    motors.StayStill();
+
     motorRight.StayStill();
     motorLeft.StayStill();
 
@@ -160,25 +190,28 @@ uint16_t sensorValues[SensorCount];
 int position;
 
 // Gets line position
-int getPosition() {
+int getPosition()
+{
   position = qtr.readLineWhite(sensorValues);
   return position;
 }
 
 // Calibrates sprinters QTR sensors
-void StartSprinterCalibration() {
+void StartSprinterCalibration()
+{
   qtr.setTypeAnalog();
-  qtr.setSensorPins((const uint8_t[]){0, 1, 2, 3, 4, 5, 6, 7}, SensorCount); 
+  qtr.setSensorPins((const uint8_t[]){0, 1, 2, 3, 4, 5, 6, 7}, SensorCount);
 
   delay(500);
 
   // Prints calibration big icon
   display.clearDisplay();
-  display.drawXBitmap( 0, 0, bitmap_calibration, 124, 64, WHITE);
+  display.drawXBitmap(0, 0, bitmap_calibration, 124, 64, WHITE);
   display.display();
 
-  for (uint16_t i = 0; i < 350; i++){
-    qtr.calibrate();   
+  for (uint16_t i = 0; i < 350; i++)
+  {
+    qtr.calibrate();
   }
 
   current_screen = modality;
@@ -203,38 +236,56 @@ float pid;
 float pidRight;
 float pidLeft;
 
-//PID control system code
-void StartSprinterModality(){
+// PID control system code
+void StartSprinterModality()
+{
   position = getPosition();
 
-  proportional = position - setPoint; // Newest error
-  integral += proportional; // Integral of the error
+  proportional = position - setPoint;    // Newest error
+  integral += proportional;              // Integral of the error
   derivative = proportional - lastError; // Derivative of the error
 
   // PID aftermath
   pid = (proportional * kp) + (integral * ki) + (derivative * kd);
-    
+
   lastError = proportional; // Saves last error
 
   pidRight = speed + pid;
   pidLeft = speed - pid;
 
   // Defines speed limits for right motor
-  if (pidRight > maxSpeed){pidRight = maxSpeed;} 
-  else if (pidRight < minSpeed){pidRight = minSpeed;}
+  if (pidRight > maxSpeed)
+  {
+    pidRight = maxSpeed;
+  }
+  else if (pidRight < minSpeed)
+  {
+    pidRight = minSpeed;
+  }
 
   // Defines speed limits for left motor
-  if (pidLeft > maxSpeed){pidLeft = maxSpeed;} 
-  else if (pidLeft < minSpeed){pidLeft = minSpeed;}
+  if (pidLeft > maxSpeed)
+  {
+    pidLeft = maxSpeed;
+  }
+  else if (pidLeft < minSpeed)
+  {
+    pidLeft = minSpeed;
+  }
 
   // Defines turning speed
-  if (pidRight <= minSpeed&& pidLeft > minSpeed){ // Turns right 
+  if (pidRight <= minSpeed && pidLeft > minSpeed)
+  { // Turns right
     motorRight.MoveBackwards(pidRight);
     motorLeft.MoveForward(pidLeft);
-  } else if (pidLeft <= minSpeed && pidRight > minSpeed){ // Turns left
+  }
+  else if (pidLeft <= minSpeed && pidRight > minSpeed)
+  { // Turns left
     motorRight.MoveForward(pidRight);
     motorLeft.MoveBackwards(pidLeft);
-  } else { // Goes stright
+  }
+  else
+  { // Goes stright
     motorRight.MoveForward(pidRight);
     motorLeft.MoveForward(pidLeft);
   }
@@ -266,243 +317,286 @@ int signal_input;
 
 CD74HC4067 my_mux(4, 25, 33, 32); // s0, s1, s2, s3
 
-int getSensorsInput() {
+int getSensorsInput()
+{
   signal_input = analogRead(PIN_SIG);
   return signal_input;
 }
 
-void ReadCleanerSensors() {
+void ReadCleanerSensors()
+{
   int datoBT = SerialBT.read();
 
   signal_input = getSensorsInput();
 
-  for (int x = 8; x < 15; x++) {    
+  for (int x = 8; x < 15; x++)
+  {
     my_mux.channel(x);
 
-    switch (x) {
+    switch (x)
+    {
 
-      case 8: {
-        
-        sharp_right = signal_input;
-      }
-      case 9: {
-        
-        sharp_front_right = signal_input;
-      }
-      case 10: {
-        
-        sharp_front = signal_input;
-      }
-      case 11: {
-        
-        sharp_front_left = signal_input;
-      }
-      case 12: {       
-        sharp_left = signal_input;
-      } 
-      case 13: {
+    case 8:
+    {
 
-        qre_right = signal_input;
-      }
-      case 14: {
+      sharp_right = signal_input;
+    }
+    case 9:
+    {
 
-        qre_back = signal_input;
-      }
-      case 15: {
+      sharp_front_right = signal_input;
+    }
+    case 10:
+    {
 
-        qre_left = signal_input;
-      }
-    }  
-  } 
+      sharp_front = signal_input;
+    }
+    case 11:
+    {
+
+      sharp_front_left = signal_input;
+    }
+    case 12:
+    {
+      sharp_left = signal_input;
+    }
+    case 13:
+    {
+
+      qre_right = signal_input;
+    }
+    case 14:
+    {
+
+      qre_back = signal_input;
+    }
+    case 15:
+    {
+
+      qre_left = signal_input;
+    }
+    }
+  }
 }
 
-#define QRE_BLACK   3900
+#define QRE_BLACK 3900
 #define SharpAtaque 1000
-#define set_doTime  750 
+#define set_doTime 750
 
-#define touch_speed  75
-#define low_speed   100
-#define mid_speed   150
-#define full_speed  200
+#define touch_speed 75
+#define low_speed 100
+#define mid_speed 150
+#define full_speed 200
 
-
-void StartAreaCleanerModality(){
+void StartAreaCleanerModality()
+{
   ReadCleanerSensors();
 
-  int Action;    //Casos de Sharp
-  int ActionQRE; //Casos QRE
+  int Action;    // Casos de Sharp
+  int ActionQRE; // Casos QRE
   bool offRoad;
-  
-  bool object_left;     //Variables para prevenir angulos ciegos al detectar objetos
+
+  bool object_left; // Variables para prevenir angulos ciegos al detectar objetos
   bool object_right;
 
   unsigned long time = 0;
-  static bool founded;  //Para retroceder si mientras Action == 'F' detecta un objeto a los costados
+  static bool founded; // Para retroceder si mientras Action == 'F' detecta un objeto a los costados
   static bool confirm_founded;
-  
 
-  if (sharp_front > SharpAtaque) {
+  if (sharp_front > SharpAtaque)
+  {
     Action = 'F';
-    SerialBT.println ("F");
-  } 
-  else if (sharp_front < SharpAtaque && sharp_left > SharpAtaque && sharp_right < SharpAtaque) {
+    SerialBT.println("F");
+  }
+  else if (sharp_front < SharpAtaque && sharp_left > SharpAtaque && sharp_right < SharpAtaque)
+  {
     Action = 'L';
-    SerialBT.println ("L");
+    SerialBT.println("L");
   }
-  else if (sharp_front_left > SharpAtaque && !object_left && !object_right) {
+  else if (sharp_front_left > SharpAtaque && !object_left && !object_right)
+  {
     Action = 'F';
-    SerialBT.println ("FL");
+    SerialBT.println("FL");
   }
-  else if (sharp_front_right > SharpAtaque && !object_left && !object_right) {
+  else if (sharp_front_right > SharpAtaque && !object_left && !object_right)
+  {
     Action = 'F';
-    SerialBT.println ("FR");
+    SerialBT.println("FR");
   }
-  else if (sharp_front < SharpAtaque && sharp_left < SharpAtaque && sharp_right > SharpAtaque) {
+  else if (sharp_front < SharpAtaque && sharp_left < SharpAtaque && sharp_right > SharpAtaque)
+  {
     Action = 'R';
-    SerialBT.println ("R");
+    SerialBT.println("R");
   }
-  else if (sharp_front < SharpAtaque && sharp_left < SharpAtaque && sharp_right < SharpAtaque) {
+  else if (sharp_front < SharpAtaque && sharp_left < SharpAtaque && sharp_right < SharpAtaque)
+  {
     Action = 'B';
-    SerialBT.println ("B");
+    SerialBT.println("B");
   }
-  else if (founded) {
+  else if (founded)
+  {
     Action = 'FB';
-    SerialBT.println ("FB");
+    SerialBT.println("FB");
   }
 
-
-  if (qre_left > QRE_BLACK || qre_right > QRE_BLACK) {
+  if (qre_left > QRE_BLACK || qre_right > QRE_BLACK)
+  {
     ActionQRE = 'QRE_FRONT';
-    SerialBT.println ("QRE_FRONT");
+    SerialBT.println("QRE_FRONT");
   }
-  else if (qre_left < QRE_BLACK && qre_right < QRE_BLACK && qre_back > QRE_BLACK) {
+  else if (qre_left < QRE_BLACK && qre_right < QRE_BLACK && qre_back > QRE_BLACK)
+  {
     ActionQRE = 'QRE_BACK';
-    SerialBT.println ("QRE_BACK");
+    SerialBT.println("QRE_BACK");
   }
 
-  if (qre_left > QRE_BLACK || qre_right > QRE_BLACK || qre_back > QRE_BLACK) {
+  if (qre_left > QRE_BLACK || qre_right > QRE_BLACK || qre_back > QRE_BLACK)
+  {
     offRoad = 1;
-  } else if (qre_left < QRE_BLACK && qre_right < QRE_BLACK && qre_back < QRE_BLACK) {
+  }
+  else if (qre_left < QRE_BLACK && qre_right < QRE_BLACK && qre_back < QRE_BLACK)
+  {
     offRoad = 0;
   }
 
-switch (offRoad) {
-  
-  case 0: {
-  switch (Action) {
-    case 'F': {
-      motorLeft.MoveForward (low_speed);
-      motorRight.MoveForward (low_speed);
+  switch (offRoad)
+  {
 
-      if (sharp_front > SharpAtaque) {
+  case 0:
+  {
+    switch (Action)
+    {
+    case 'F':
+    {
+      motorLeft.MoveForward(low_speed);
+      motorRight.MoveForward(low_speed);
+
+      if (sharp_front > SharpAtaque)
+      {
         object_left = false;
         object_right = false;
-        SerialBT.println ("OBJECT SIDES FALSE");
+        SerialBT.println("OBJECT SIDES FALSE");
       }
 
-      if (sharp_left > SharpAtaque || sharp_right > SharpAtaque) {
+      if (sharp_left > SharpAtaque || sharp_right > SharpAtaque)
+      {
         founded = true;
-        SerialBT.println ("Founded");
+        SerialBT.println("Founded");
       }
       break;
     }
 
-    case 'L': {
+    case 'L':
+    {
       object_left = true;
-      motorLeft.MoveBackwards (low_speed);
-      motorRight.MoveForward (low_speed);
+      motorLeft.MoveBackwards(low_speed);
+      motorRight.MoveForward(low_speed);
       break;
     }
 
-    case 'R': {
+    case 'R':
+    {
       object_right = true;
-      motorLeft.MoveForward (low_speed);
-      motorRight.MoveBackwards (low_speed);
+      motorLeft.MoveForward(low_speed);
+      motorRight.MoveBackwards(low_speed);
       break;
     }
 
-    case 'B': {
-      if (object_left) {
-        motorLeft.MoveBackwards (touch_speed);
-        motorRight.MoveForward (touch_speed);
-        SerialBT.println ("object_left");
+    case 'B':
+    {
+      if (object_left)
+      {
+        motorLeft.MoveBackwards(touch_speed);
+        motorRight.MoveForward(touch_speed);
+        SerialBT.println("object_left");
       }
-      else if (object_right) {
-        motorLeft.MoveForward (touch_speed);
-        motorRight.MoveBackwards (touch_speed);
-        SerialBT.println ("Object_Right");
+      else if (object_right)
+      {
+        motorLeft.MoveForward(touch_speed);
+        motorRight.MoveBackwards(touch_speed);
+        SerialBT.println("Object_Right");
       }
-      else {
-        motorLeft.MoveBackwards (touch_speed);
-        motorRight.MoveForward (touch_speed);
-        SerialBT.println ("object_RIGHT_LEFT False");
+      else
+      {
+        motorLeft.MoveBackwards(touch_speed);
+        motorRight.MoveForward(touch_speed);
+        SerialBT.println("object_RIGHT_LEFT False");
       }
       break;
     }
 
-    case 'FB': {
-      motorLeft.MoveBackwards (low_speed);
-      motorRight.MoveBackwards (low_speed);
+    case 'FB':
+    {
+      motorLeft.MoveBackwards(low_speed);
+      motorRight.MoveBackwards(low_speed);
 
-      if (sharp_left > SharpAtaque) {
+      if (sharp_left > SharpAtaque)
+      {
         Action = 'L';
       }
-      else if (sharp_right > SharpAtaque) {
+      else if (sharp_right > SharpAtaque)
+      {
         Action = 'R';
-      }  
+      }
     }
+    }
+    break;
   }
-  break;
-}
 
-  case 1: {
-  switch (ActionQRE) {
+  case 1:
+  {
+    switch (ActionQRE)
+    {
 
-    case 'QRE_FRONT': {
+    case 'QRE_FRONT':
+    {
 
       time = millis();
 
       motorLeft.StayStill();
       motorRight.StayStill();
-      delay (50);
+      delay(50);
 
-      while (millis() < time + set_doTime) {
-        motorLeft.MoveBackwards (low_speed);
-        motorRight.MoveBackwards (low_speed);
-        delay (10);
-        SerialBT.println ("while Backwards");
+      while (millis() < time + set_doTime)
+      {
+        motorLeft.MoveBackwards(low_speed);
+        motorRight.MoveBackwards(low_speed);
+        delay(10);
+        SerialBT.println("while Backwards");
       }
-    
-      SerialBT.println ("OUT");
+
+      SerialBT.println("OUT");
 
       break;
     }
 
-    case 'QRE_BACK': {
+    case 'QRE_BACK':
+    {
 
-      founded = false;   //En el peor de los casos, si al retroceder no vuelve a ver el objeto
+      founded = false; // En el peor de los casos, si al retroceder no vuelve a ver el objeto
 
       time = millis();
 
       motorLeft.StayStill();
       motorRight.StayStill();
-      delay (50);
+      delay(50);
 
-      while (millis() < time + set_doTime) {
-        motorLeft.MoveForward (low_speed);
-        motorRight.MoveForward (low_speed);
-        delay (10);
-        SerialBT.println ("QRE_BACK Forward");
+      while (millis() < time + set_doTime)
+      {
+        motorLeft.MoveForward(low_speed);
+        motorRight.MoveForward(low_speed);
+        delay(10);
+        SerialBT.println("QRE_BACK Forward");
       }
 
       ReadCleanerSensors();
 
       break;
     }
+    }
+    break;
   }
-  break;
-}
-}  //Para offRoad lo convertí en un switch para que no se superpongan acciones
+  } // Para offRoad lo convertí en un switch para que no se superpongan acciones
 }
 
 /* End of area cleaner section
@@ -510,7 +604,7 @@ switch (offRoad) {
 /* Sumo section */
 
 int axisXValue;
-int throttleValue ;
+int throttleValue;
 int brakeValue;
 
 int throttlePWM;
@@ -519,13 +613,15 @@ int leftPWM;
 int rightPWM;
 
 // This callback gets called any time a new gamepad is connected.
-void onConnectedController(ControllerPtr ctl) {
-  
+void onConnectedController(ControllerPtr ctl)
+{
+
   bool foundEmptySlot = false;
 
   ctlConnected = true;
-  
-  if (myControllers[0] == nullptr) {
+
+  if (myControllers[0] == nullptr)
+  {
     Serial.printf("CALLBACK: Controller is connected, index=%d\n");
     ControllerProperties properties = ctl->getProperties();
     Serial.printf("Controller model: %s, VID=0x%04x, PID=0x%04x\n", ctl->getModelName().c_str(), properties.vendor_id, properties.product_id);
@@ -533,28 +629,33 @@ void onConnectedController(ControllerPtr ctl) {
     foundEmptySlot = true;
   }
 
-  if (!foundEmptySlot) {
+  if (!foundEmptySlot)
+  {
     Serial.println("CALLBACK: Controller connected, but could not found empty slot");
   }
 }
 
-void onDisconnectedController(ControllerPtr ctl) {
+void onDisconnectedController(ControllerPtr ctl)
+{
   bool foundController = false;
 
   ctlConnected = false;
-    
-  if (myControllers[0] == ctl) {
+
+  if (myControllers[0] == ctl)
+  {
     Serial.printf("CALLBACK: Controller disconnected from index=%d\n");
     myControllers[0] = nullptr;
     foundController = true;
-  } 
+  }
 
-  if (!foundController) {
+  if (!foundController)
+  {
     Serial.println("CALLBACK: Controller disconnected, but not found in myControllers");
   }
 }
 
-void processGamepad(ControllerPtr ctl) {
+void processGamepad(ControllerPtr ctl)
+{
   bool brakeRight;
   bool brakeLeft;
 
@@ -565,60 +666,105 @@ void processGamepad(ControllerPtr ctl) {
   int RBValue = ctl->throttle();
   int LBValue = ctl->brake();
 
-  // Mapping of each stick input to 8bit 
+  // Mapping of each stick input to 8bit
   int rightWheelSpeedF = map(yAxisValueR, 0, -511, 0, 255);
   int rightWheelSpeedB = map(yAxisValueR, 0, 512, 0, 255);
-  
+
   int leftWheelSpeedF = map(yAxisValueL, 0, -511, 0, 255);
   int leftWheelSpeedB = map(yAxisValueL, 0, 512, 0, 255);
 
   int turnRightSpeed = map(RBValue, 0, 1023, 0, 255);
   int turnLeftSpeed = map(LBValue, 0, 1023, 0, 255);
 
-  if (ctl->r1()) {brakeRight = true;}
-  else {brakeRight = false;}
-  if (ctl->l1()) {brakeLeft = true;}
-  else {brakeLeft = false;}
-
-  if (!brakeRight) {
-    if (yAxisValueR < -70) {motorRight.MoveForward(rightWheelSpeedF);}
-    else if (yAxisValueR > 70) {motorRight.MoveBackwards(rightWheelSpeedB);}
-    else {motorRight.StayStill();}
+  if (ctl->r1())
+  {
+    brakeRight = true;
   }
-  else {motorRight.StayStill();}
+  else
+  {
+    brakeRight = false;
+  }
+  if (ctl->l1())
+  {
+    brakeLeft = true;
+  }
+  else
+  {
+    brakeLeft = false;
+  }
 
-  if (!brakeLeft) {
-    if (yAxisValueL < -70) {motorLeft.MoveForward(leftWheelSpeedF);}
-    else if (yAxisValueL > 70) {motorLeft.MoveBackwards(leftWheelSpeedB);}
-    else {motorLeft.StayStill();}
-  } 
-  else {motorLeft.StayStill();}
+  if (!brakeRight)
+  {
+    if (yAxisValueR < -70)
+    {
+      motorRight.MoveForward(rightWheelSpeedF);
+    }
+    else if (yAxisValueR > 70)
+    {
+      motorRight.MoveBackwards(rightWheelSpeedB);
+    }
+    else
+    {
+      motorRight.StayStill();
+    }
+  }
+  else
+  {
+    motorRight.StayStill();
+  }
 
-  if (RBValue > 150) {
+  if (!brakeLeft)
+  {
+    if (yAxisValueL < -70)
+    {
+      motorLeft.MoveForward(leftWheelSpeedF);
+    }
+    else if (yAxisValueL > 70)
+    {
+      motorLeft.MoveBackwards(leftWheelSpeedB);
+    }
+    else
+    {
+      motorLeft.StayStill();
+    }
+  }
+  else
+  {
+    motorLeft.StayStill();
+  }
+
+  if (RBValue > 150)
+  {
     motorRight.MoveBackwards(turnRightSpeed);
     motorLeft.MoveForward(turnRightSpeed);
   }
 
-  if (LBValue > 150) {
+  if (LBValue > 150)
+  {
     motorRight.MoveForward(turnLeftSpeed);
     motorLeft.MoveBackwards(turnLeftSpeed);
   }
 }
 
-void processControllers() {
-  for (auto myController : myControllers) {
-    if (myController && myController->isConnected() && myController->hasData()) {
+void processControllers()
+{
+  for (auto myController : myControllers)
+  {
+    if (myController && myController->isConnected() && myController->hasData())
+    {
       processGamepad(myController);
     }
   }
 }
 
-void StartSumoModality(){
+void StartSumoModality()
+{
   BP32.enableNewBluetoothConnections(true);
 
   dataUpdated = BP32.update();
-  
-  if (dataUpdated) {
+
+  if (dataUpdated)
+  {
     processControllers();
   }
 }
@@ -627,18 +773,28 @@ void StartSumoModality(){
 --------------------------------------------------------------------------*/
 /* Triggers section*/
 
-void StartModalityTriggers() {
+void StartModalityTriggers()
+{
   // Calibration trigger
-  if (current_screen == calibration){StartSprinterCalibration();}
+  if (current_screen == calibration)
+  {
+    StartSprinterCalibration();
+  }
 
   // Sumo trigger
-  if (current_screen == modality && selected == sumo){StartSumoModality();}
+  if (current_screen == modality && selected == sumo)
+  {
+    StartSumoModality();
+  }
 
   // Area cleaner trigger
-  if (current_screen == flags && selected == areaCleaner){/*StartAreaCleanerModality();*/}
+  if (current_screen == flags && selected == areaCleaner)
+  { /*StartAreaCleanerModality();*/
+  }
 
   // Sprinter trigger
-  else if (current_screen == flags && selected == sprinter){
+  else if (current_screen == flags && selected == sprinter)
+  {
     StartSprinterModality();
   }
 }
@@ -649,14 +805,21 @@ void StartModalityTriggers() {
 
 #define PIN_LED 23
 
-void setup(){    
+void setup()
+{
+  display.begin(SH1106_SWITCHCAPVCC, SCREEN_ADDRESS);
+
+  u8g2_for_adafruit_gfx.begin(display);
+
   pinMode(PIN_LED, OUTPUT);
   digitalWrite(PIN_LED, HIGH);
 
   // Begin display connection
-  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {    
+  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C))
+  {
     Serial.println(F("SSD1306 allocation failed"));
-    for(;;);  
+    for (;;)
+      ;
   }
 
   u8g2_for_adafruit_gfx.begin(display); // Begins u8g2 for gfx library
@@ -666,15 +829,15 @@ void setup(){
   pinMode(PIN_SELECT, INPUT_PULLUP);
   pinMode(PIN_DOWN, INPUT_PULLUP);
 
-  // Displays team logo
   display.clearDisplay();
-  display.drawBitmap( 0, 0, bitmap_alita, 128, 64, WHITE); // Prints teams logo
+  display.drawBitmap(ALITA_BITMAP_MARGIN_X, ALITA_BITMAP_MARGIN_Y, bitmap_alita, ALITA_BITMAP_WIDTH, ALITA_BITMAP_HEIGHT, WHITE); // Prints teams logo
   display.display();
 
   delay(3000);
 }
 
-void loop() {
+void loop()
+{
   DisplayMenu();
-  StartModalityTriggers();           
-} 
+  StartModalityTriggers();
+}

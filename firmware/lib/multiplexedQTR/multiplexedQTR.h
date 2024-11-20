@@ -11,18 +11,15 @@
   LGPL 3.0
 */
 
-#ifndef CD74HC4067_h
-#define CD74HC4067_h
-
 #include "Arduino.h"
 
 extern uint8_t _g_channel_truth_table[16][4];
 
-class CD74HC4067
+class CD74HC4067QTR
 {
   public:
-    CD74HC4067(uint8_t s0, uint8_t s1, uint8_t s2, uint8_t s3);
-    void channel(uint8_t channel);
+    CD74HC4067QTR(uint8_t s0, uint8_t s1, uint8_t s2, uint8_t s3);
+    void channelQTR(uint8_t channel);
   private:
   	uint8_t _s0;
   	uint8_t _s1;
@@ -31,10 +28,6 @@ class CD74HC4067
   	uint8_t _channel;
 	uint8_t bytes;
 };
-
-#endif
-
-
 
 /// \brief Emitter behavior when taking readings.
 ///
