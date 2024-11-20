@@ -117,7 +117,7 @@ void DisplayMenu()
   }
   else if (current_screen == modality && selected == sumo)
   {
-    if (!Ps3.isConnected())
+    if (!ctlConnected)
     {
       display.clearDisplay();
       display.drawXBitmap(SUMO_SCREEN_MARGIN_X, SUMO_SCREEN_MARGIN_Y, bitmap_screens[selected], SUMO_SCREEN_WIDTH, SUMO_SCREEN_HEIGHT, WHITE);
@@ -137,19 +137,20 @@ void DisplayMenu()
       display.display();
     }
   }
-  else if (current_screen == modality && selected == sprinter)
-  {
-    display.clearDisplay();
-    display.drawXBitmap(SPRINTER_SCREEN_MARGIN_X, SPRINTER_SCREEN_MARGIN_Y, bitmap_screens[selected], SPRINTER_SCREEN_WIDTH, SPRINTER_SCREEN_HEIGHT, WHITE);
-    display.display();
-  }
+}
+else if (current_screen == modality && selected == sprinter)
+{
+  display.clearDisplay();
+  display.drawXBitmap(SPRINTER_SCREEN_MARGIN_X, SPRINTER_SCREEN_MARGIN_Y, bitmap_screens[selected], SPRINTER_SCREEN_WIDTH, SPRINTER_SCREEN_HEIGHT, WHITE);
+  display.display();
+}
 
-  UpdateScreenStatus();
+UpdateScreenStatus();
 
-  if (current_screen == selection)
-  {
-    motors.StayStill();
-  }
+if (current_screen == selection)
+{
+  motors.StayStill();
+}
 }
 
 #define PIN_LED 23
