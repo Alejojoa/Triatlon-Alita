@@ -8,9 +8,6 @@
 #include <motor.h>
 #include <Bluepad32.h>
 
-/* Global section
---------------------------------------------------------------------------*/
-
 bool ctlConnected = false;
 
 bool dataUpdated;
@@ -37,10 +34,6 @@ MotorPair motors(PIN_MR1, PIN_MR2, CHANNEL_MR1, CHANNEL_MR2, PIN_ML1, PIN_ML2,
 
 Motor motorRight(26, 27, 0, 1, 1000, 8);
 Motor motorLeft(16, 17, 2, 3, 1000, 8);
-
-/* End of global section
---------------------------------------------------------------------------*/
-/* Menu section */
 
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
@@ -196,9 +189,6 @@ void DisplayMenu()
   }
 }
 
-/* End of menu section
---------------------------------------------------------------------------*/
-/* Sprinter section */
 multiplexedQTR qtr;
 
 const uint8_t SensorCount = 8;
