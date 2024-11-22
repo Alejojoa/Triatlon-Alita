@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 24263803833462911
+========
+23577627221006567
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -1533,6 +1537,7 @@ SPST Button Switch
 4
 2
 Button_Switch_SMD
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 SW_SPST_PTS647_Sx38
 C&K Components SPST SMD PTS647 Series 4.5mm Tact Switch, 3.8mm Height, see https://www.ckswitches.com/media/2567/pts647.pdf
 SPST Button Switch
@@ -1554,6 +1559,8 @@ SPST Button Switch
 4
 2
 Button_Switch_SMD
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 SW_SPST_PTS810
 C&K Components, PTS 810 Series, Microminiature SMT Top Actuated, http://www.ckswitches.com/media/1476/pts810.pdf
 SPST Button Switch
@@ -2305,7 +2312,11 @@ tactile switch Omron B3F right angle through hole
 Button_Switch_THT
 SW_Slide-03_Wuerth-WS-SLTV_10x2.5x6.4_P2.54mm
 Wuerth, WS-SLTV, 450301014042, https://www.we-online.com/components/products/datasheet/450301014042.pdf
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 switch single-pole opposite-side-connection double-throw SPDT würth wurth
+========
+switch single-pole double-throw SPDT würth wurth
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 0
 3
 3
@@ -2379,6 +2390,7 @@ SW PUSH SMALL Tactile C&K
 0
 4
 2
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Button_Switch_THT
 SW_XKB_DM1-16UC-1
 1A 30V SPDT Micro Switch rated for one million cycles, W12.7xD5.7xH6.6, https://www.helloxkb.com/public/images/pdf/DMX-XXXC-X.pdf
@@ -2400,6 +2412,8 @@ SPDT endstop limit switch vertical hook lever XKB DM1-16UP-1
 0
 3
 3
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Buzzer_Beeper
 Buzzer_12x9.5RM7.6
 Generic Buzzer, D12mm height 9.5mm with RM7.6mm
@@ -8281,6 +8295,7 @@ barreljack switchcraftconxall dc power
 2
 2
 Connector_BarrelJack
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 BarrelJack_Wuerth_694102107102_1.0x3.9mm
 Wuerth Elektronik barrel jack connector, SMD, 3.9mm OD, 1.0mm ID, with switch, 18V, 5A, dimensions: 9.3 x 8 x 5.3 mm (L x W x H), datasheet: https://www.farnell.com/datasheets/2130962.pdf
 barrel jack Wuerth Elektronik 694102107102
@@ -8295,6 +8310,8 @@ barrel jack Wuerth Elektronik 694103107102
 4
 3
 Connector_BarrelJack
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 BarrelJack_Wuerth_694106106102_2.0x5.5mm
 Wuerth Elektronik 694106106102 Barrel Jack, 2.0x5.5mm, https://www.we-online.com/components/products/datasheet/694106106102.pdf
 barrel jack Wuerth Elektronik 694106106102
@@ -8337,6 +8354,7 @@ Combo Connector microSD and microSIM
 25
 18
 Connector_Card
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 SD_Card_Device_16mm_SlotDepth
 SD card device PCB layout, contacts and mechanicalm, 16mm slot depth. Manufacture with PCB thickness of 1.4mm, http://www.convict.lu/pdf/ProdManualSDCardv1.9.pdf
 SD Card
@@ -8344,6 +8362,8 @@ SD Card
 9
 9
 Connector_Card
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 SD_Hirose_DM1AA_SF_PEJ82
 SD, SMD, top-mount, push-push (https://www.hirose.com/product/document?clcode=CL0609-0004-8-82&productname=DM1AA-SF-PEJ(82)&series=DM1&documenttype=2DDrawing&lang=en&documentid=0000915301)
 SD card connector
@@ -8596,6 +8616,7 @@ SMA THT Female Jack Vertical Bulkhead
 5
 2
 Connector_Coaxial
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 SMA_BAT_Wireless_BWSMA-KWE-Z001
 BAT Wireless BWSMA-KWE-Z00 https://www.lcsc.com/datasheet/lcsc_datasheet_2310171703_BAT-WIRELESS-BWSMA-KWE-Z001_C496551.pdf
 SMA THT Female Jack Horizontal
@@ -8603,6 +8624,8 @@ SMA THT Female Jack Horizontal
 5
 2
 Connector_Coaxial
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 SMA_Molex_73251-1153_EdgeMount_Horizontal
 Molex SMA RF Connectors, Edge Mount, (http://www.molex.com/pdm_docs/sd/732511150_sd.pdf)
 sma edge
@@ -8624,7 +8647,11 @@ SMA THT Female Jack Horizontal
 5
 2
 Connector_Coaxial
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 SMA_Samtec_SMA-J-P-H-ST-EM1_EdgeMount
+========
+SMA_Samtec_SMA-J-P-X-ST-EM1_EdgeMount
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Connector SMA, 0Hz to 20GHz, 50Ohm, Edge Mount (http://suddendocs.samtec.com/prints/sma-j-p-x-st-em1-mkt.pdf)
 SMA Straight Samtec Edge Mount
 0
@@ -11458,6 +11485,58 @@ Wuerth FPC 68611214422 connector 12 bottom-side contacts 1.0mm pitch 1.0mm heigh
 0
 14
 13
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
+========
+Connector_HDMI
+HDMI_A_Amphenol_10029449-x01xLF_Horizontal
+HDMI Type A connector, Amphenol 10029449-001TLF 10029449-001RLF 10029449-101TLF 10029449-101RLF, Right Angle(https://cdn.amphenol-icc.com/media/wysiwyg/files/drawing/10029449.pdf)
+hdmi right angle
+0
+23
+20
+Connector_HDMI
+HDMI_A_Contact_Technology_HDMI-19APL2_Horizontal
+HDMI Contact Technology Type A http://www.contactswitch.com/en/download.aspx?id=1449
+HDMI Contact Technology Type A
+0
+23
+20
+Connector_HDMI
+HDMI_A_Kycon_KDMIX-SL1-NS-WS-B15_VerticalRightAngle
+HDMI, Type A, Kycon KDMIX-SL1-NS-WS-B15, Vertical Right Angle, http://www.kycon.com/Pub_Eng_Draw/KDMIX-SL1-NS-WS-B15.pdf
+hdmi type a
+0
+23
+20
+Connector_HDMI
+HDMI_A_Molex_208658-1001_Horizontal
+HDMI Molex Type A https://www.molex.com/pdm_docs/sd/2086581001_sd.pdf
+HDMI Molex Type A
+0
+23
+20
+Connector_HDMI
+HDMI_Micro-D_Molex_46765-0x01
+HDMI, Micro, Type D, SMD, 0.4mm pitch, 19 ckt, right angle (http://www.molex.com/pdm_docs/sd/467651301_sd.pdf)
+hdmi micro type d right angle smd
+0
+23
+20
+Connector_HDMI
+HDMI_Micro-D_Molex_46765-1x01
+HDMI, Micro, Type D, THT, 0.4mm pitch, 19 ckt, right angle (http://www.molex.com/pdm_docs/sd/467651301_sd.pdf)
+hdmi micro type d right angle tht
+0
+23
+20
+Connector_HDMI
+HDMI_Micro-D_Molex_46765-2x0x
+HDMI, Micro, Type D, THT/SMD hybrid, 0.4mm pitch, 19 ckt, right angle (http://www.molex.com/pdm_docs/sd/467651301_sd.pdf)
+hdmi micro type d right angle tht smd hybrid 
+0
+23
+20
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Connector_Harting
 Harting_har-flexicon_14110213001xxx_1x02-MP_P2.54mm_Vertical
 Harting har-flexicon series connector, 14110213001xxx (https://b2b.harting.com/files/download/PRD/PDF_TS/1411XX13001XXX_100228421DRW046C.pdf), generated with kicad-footprint-generator
@@ -12348,6 +12427,7 @@ connector Harwin M20 side entry
 40
 40
 Connector_Hirose
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Hirose_BM23FR0.6-16DP-0.35V_2x08_1MP_Vertical
 Hirose BM23 series connector, BM23FR0.6-16DP-0.35V (https://www.hirose.com/fr/product/document?clcode=CL0480-0290-0-95&productname=BM23FR0.6-16DP-0.35V(895)&series=BM23FR&documenttype=2DDrawing&lang=fr&documentid=D164551_en)
 connector Hirose BM23 16pin header
@@ -12362,6 +12442,8 @@ connector Hirose 16pin receptacle vertical
 20
 17
 Connector_Hirose
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Hirose_BM24_BM24-40DP-2-0.35V_2x20_P0.35mm_PowerPin2_Vertical
 Hirose BM24 series connector, BM24-40DP/2-0.35V (https://www.hirose.com/product/en/download_file/key_name/BM24/category/Catalog/doc_file_id/47680/?file_category_id=4&item_id=50&is_series=1)
 connector Hirose  BM24 40pin header
@@ -13573,6 +13655,7 @@ SMD vertical IDC box header  2x08 2.54mm double row
 16
 16
 Connector_IDC
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 IDC-Header_2x09_P2.54mm_Horizontal
 Through hole IDC box header, 2x09, 2.54mm pitch, DIN 41651 / IEC 60603-13, double rows, https://docs.google.com/spreadsheets/d/16SsEcesNF15N3Lb4niX7dcUr-NY5_MFPQhobNuNppn4/edit#gid=0
 Through hole horizontal IDC box header THT 2x09 2.54mm double row
@@ -13594,6 +13677,8 @@ SMD vertical IDC box header  2x09 2.54mm double row
 18
 18
 Connector_IDC
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 IDC-Header_2x10-1MP_P2.54mm_Latch6.5mm_Vertical
 Through hole IDC header, 2x10, 2.54mm pitch, DIN 41651 / IEC 60603-13, double rows, 6.5mm latches, mounting holes, https://docs.google.com/spreadsheets/d/16SsEcesNF15N3Lb4niX7dcUr-NY5_MFPQhobNuNppn4/edit#gid=0
 Through hole vertical IDC header THT 2x10 2.54mm double row
@@ -13685,6 +13770,7 @@ SMD vertical IDC box header  2x10 2.54mm double row
 20
 20
 Connector_IDC
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 IDC-Header_2x11_P2.54mm_Horizontal
 Through hole IDC box header, 2x11, 2.54mm pitch, DIN 41651 / IEC 60603-13, double rows, https://docs.google.com/spreadsheets/d/16SsEcesNF15N3Lb4niX7dcUr-NY5_MFPQhobNuNppn4/edit#gid=0
 Through hole horizontal IDC box header THT 2x11 2.54mm double row
@@ -13706,6 +13792,8 @@ SMD vertical IDC box header  2x11 2.54mm double row
 22
 22
 Connector_IDC
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 IDC-Header_2x12-1MP_P2.54mm_Latch6.5mm_Vertical
 Through hole IDC header, 2x12, 2.54mm pitch, DIN 41651 / IEC 60603-13, double rows, 6.5mm latches, mounting holes, https://docs.google.com/spreadsheets/d/16SsEcesNF15N3Lb4niX7dcUr-NY5_MFPQhobNuNppn4/edit#gid=0
 Through hole vertical IDC header THT 2x12 2.54mm double row
@@ -14147,6 +14235,7 @@ SMD vertical IDC box header  2x20 2.54mm double row
 40
 40
 Connector_IDC
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 IDC-Header_2x22_P2.54mm_Horizontal
 Through hole IDC box header, 2x22, 2.54mm pitch, DIN 41651 / IEC 60603-13, double rows, https://docs.google.com/spreadsheets/d/16SsEcesNF15N3Lb4niX7dcUr-NY5_MFPQhobNuNppn4/edit#gid=0
 Through hole horizontal IDC box header THT 2x22 2.54mm double row
@@ -14168,6 +14257,8 @@ SMD vertical IDC box header  2x22 2.54mm double row
 44
 44
 Connector_IDC
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 IDC-Header_2x25-1MP_P2.54mm_Latch6.5mm_Vertical
 Through hole IDC header, 2x25, 2.54mm pitch, DIN 41651 / IEC 60603-13, double rows, 6.5mm latches, mounting holes, https://docs.google.com/spreadsheets/d/16SsEcesNF15N3Lb4niX7dcUr-NY5_MFPQhobNuNppn4/edit#gid=0
 Through hole vertical IDC header THT 2x25 2.54mm double row
@@ -18297,6 +18388,7 @@ connector JST ZE horizontal
 0
 18
 17
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Connector_JST
 JST_ZH_B2B-ZR-SM4-TF_1x02-1MP_P1.50mm_Vertical
 JST ZH series connector, B2B-ZR-SM4-TF (http://www.jst-mfg.com/product/pdf/eng/eZH.pdf), generated with kicad-footprint-generator
@@ -18542,6 +18634,8 @@ connector JST ZH horizontal
 0
 15
 14
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Connector_Molex
 Molex_CLIK-Mate_502382-0270_1x02-1MP_P1.25mm_Vertical
 Molex CLIK-Mate series connector, 502382-0270 (http://www.molex.com/pdm_docs/sd/5023820270_sd.pdf), generated with kicad-footprint-generator
@@ -22260,6 +22354,7 @@ connector Molex Pico-EZmate_Slim side entry
 4
 3
 Connector_Molex
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Molex_Pico-Lock_205338-0002_1x02-1MP_P2.00mm_Horizontal
 Molex Pico-Lock series connector, 205338-0002 (https://www.molex.com/pdm_docs/sd/2053380002_sd.pdf), generated with kicad-footprint-generator
 connector Molex Pico-Lock horizontal
@@ -22309,6 +22404,8 @@ connector Molex Pico-Lock horizontal
 5
 4
 Connector_Molex
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Molex_Pico-Lock_504050-0491_1x04-1MP_P1.50mm_Horizontal
 Molex Pico-Lock series connector, 504050-0491 (http://www.molex.com/pdm_docs/sd/5040500891_sd.pdf), generated with kicad-footprint-generator
 connector Molex Pico-Lock horizontal
@@ -22344,6 +22441,7 @@ connector Molex Pico-Lock horizontal
 10
 9
 Connector_Molex
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Molex_Pico-Lock_504050-0991_1x09-1MP_P1.50mm_Horizontal
 Molex Pico-Lock series connector, 504050-0991 (http://www.molex.com/pdm_docs/sd/5040500891_sd.pdf), generated with kicad-footprint-generator
 connector Molex Pico-Lock horizontal
@@ -22351,6 +22449,8 @@ connector Molex Pico-Lock horizontal
 11
 10
 Connector_Molex
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Molex_Pico-Lock_504050-1091_1x10-1MP_P1.50mm_Horizontal
 Molex Pico-Lock series connector, 504050-1091 (http://www.molex.com/pdm_docs/sd/5040500891_sd.pdf), generated with kicad-footprint-generator
 connector Molex Pico-Lock horizontal
@@ -22358,6 +22458,7 @@ connector Molex Pico-Lock horizontal
 12
 11
 Connector_Molex
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Molex_Pico-Lock_504050-1191_1x11-1MP_P1.50mm_Horizontal
 Molex Pico-Lock series connector, 504050-1191 (http://www.molex.com/pdm_docs/sd/5040500891_sd.pdf), generated with kicad-footprint-generator
 connector Molex Pico-Lock horizontal
@@ -22365,6 +22466,8 @@ connector Molex Pico-Lock horizontal
 13
 12
 Connector_Molex
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Molex_Pico-Lock_504050-1291_1x12-1MP_P1.50mm_Horizontal
 Molex Pico-Lock series connector, 504050-1291 (http://www.molex.com/pdm_docs/sd/5040500891_sd.pdf), generated with kicad-footprint-generator
 connector Molex Pico-Lock horizontal
@@ -48523,6 +48626,7 @@ conn samtec discrete wire terminal
 0
 22
 21
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Connector_Samtec_MicroPower
 Samtec_UMPS-02-XX.X-X-V-S-W_1x02-1MP_P2.0mm_Socket_WeldTab
 2.00 mm mPOWER Ultra Micro Power Socket (source: https://suddendocs.samtec.com/prints/umps-xx-xx.x-xx-v-x-x-xr-footprint.pdf)
@@ -48775,6 +48879,8 @@ conn samtec ultra-mirco-power terminal
 0
 10
 10
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Connector_Stocko
 Stocko_MKS_1651-6-0-202_1x2_P2.50mm_Vertical
 Stocko MKS 16xx series connector, (https://www.stocko-contact.com/downloads/steckverbindersystem-raster-2,5-mm.pdf#page=15), generated with kicad-footprint-generator
@@ -49574,6 +49680,7 @@ USB C Type-C Receptacle SMD
 20
 17
 Connector_USB
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 USB_C_Receptacle_G-Switch_GT-USB-7025
 USB Type C, right-angle, SMT, https://www.lcsc.com/datasheet/lcsc_datasheet_2312191005_G-Switch-GT-USB-7025_C963213.pdf
 USB C Type-C Receptacle SMD
@@ -49581,6 +49688,8 @@ USB C Type-C Receptacle SMD
 22
 18
 Connector_USB
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 USB_C_Receptacle_G-Switch_GT-USB-7051x
 USB Type C, vertical, SMT, https://datasheet.lcsc.com/lcsc/2108072030_G-Switch-GT-USB-7051A_C2843970.pdf
 USB C Type-C Receptacle SMD GT-USB-7051A GT-USB-7051B
@@ -49651,6 +49760,7 @@ usb usb-c 2.0 pd
 20
 17
 Connector_USB
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 USB_C_Receptacle_HRO_TYPE-C-31-M-17
 USB Type-C receptacle for USB 2.0, 6 pin, https://omo-oss-file.thefastfile.com/portal-saas/new2023011311465142457/cms/file/134891b2-9b01-4104-89d3-96207243f692.pdf
 usb usb-c 2.0 pd
@@ -49658,6 +49768,8 @@ usb usb-c 2.0 pd
 10
 7
 Connector_USB
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 USB_C_Receptacle_JAE_DX07S016JA1R1500
 USB TYPE C, USB 2.0, SMT, https://www.jae.com/en/connectors/series/detail/product/id=91780
 USB C Type-C Receptacle SMD USB 2.0
@@ -49735,6 +49847,7 @@ USB Micro-B horizontal SMD
 11
 6
 Connector_USB
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 USB_Micro-B_Amphenol_10118194-0001LF_Horizontal
 USB Micro-B receptacle, horizontal, SMD, 10118194, 10118194-0001LF, 10118194-0002LF, 10118194-0101LF, 10118194-1001LF, https://cdn.amphenol-icc.com/media/wysiwyg/files/drawing/10118194.pdf
 USB Micro B horizontal SMD
@@ -49744,6 +49857,10 @@ USB Micro B horizontal SMD
 Connector_USB
 USB_Micro-B_Amphenol_10118194_Horizontal
 USB Micro-B receptacle, horizontal, SMD, 10118194, 10118194-0011LF, 10118194-0012LF, https://cdn.amphenol-icc.com/media/wysiwyg/files/drawing/10118194.pdf
+========
+USB_Micro-B_Amphenol_10118194_Horizontal
+USB Micro-B receptacle, horizontal, SMD, 10118194, https://cdn.amphenol-icc.com/media/wysiwyg/files/drawing/10118194.pdf
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 USB Micro B horizontal SMD
 0
 17
@@ -49860,6 +49977,7 @@ Mini USB 2.0 Type B
 0
 9
 6
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Connector_Video
 DVI-D_Molex_74320-4004_Horizontal
 DVI-D Dual Link connector, horizontal, 24 pins, Molex P/N 74320-4004, https://www.molex.com/content/dam/molex/molex-dot-com/products/automated/en-us/salesdrawingpdf/743/74320/743204004_sd.pdf?inline
@@ -49923,6 +50041,8 @@ hdmi micro type d right angle tht smd hybrid
 0
 23
 20
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Connector_Wago
 Wago_734-132_1x02_P3.50mm_Vertical
 Molex 734 Male header (for PCBs); Straight solder pin 1 x 1 mm, 734-132 , 2 Pins (http://www.farnell.com/datasheets/2157639.pdf), generated with kicad-footprint-generator
@@ -52192,6 +52312,7 @@ MesurementPoint Square SMDPad 5mmx10mm
 1
 1
 Connector_Wuerth
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Wuerth_WR-PHD_613004216921_Large_2x02_P2.54mm_Vertical
 Connector Wuerth, WR-PHD 2.54mm Dual Socket Header Bottom Entry Large, Wuerth electronics 613004216921 (https://katalog.we-online.de/em/datasheet/613004216921.pdf), generated with kicad-footprint-generator
 Connector Wuerth WR-PHD 2.54mm 613004216921
@@ -52451,6 +52572,8 @@ Connector Wuerth WR-PHD 2.54mm 61303425721
 34
 34
 Connector_Wuerth
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Wuerth_WR-WTB_64800211622_1x02_P1.50mm_Vertical
 Wuerth WR-WTB series connector, 64800211622 (https://katalog.we-online.com/em/datasheet/6480xx11622.pdf), generated with kicad-footprint-generator
 connector Wuerth WR-WTB vertical
@@ -52689,6 +52812,7 @@ Recom RAC20-xxSK
 4
 4
 Converter_ACDC
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Converter_ACDC_TRACO_TMF_051xx_THT
 ACDC-Converter, TRACO, TMF 051xx, 5W, Rev. August 26. 2024 (Script generated with StandardBox.py) (https://www.tracopower.com/products/tmf05.pdf)
 ACDC-Converter TRACO TMF05 THT 5W
@@ -52696,6 +52820,8 @@ ACDC-Converter TRACO TMF05 THT 5W
 4
 4
 Converter_ACDC
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Converter_ACDC_TRACO_TMG-15_THT
 ACDC-Converter, TRACO, TMG Series 15 https://www.tracopower.com/products/tmg.pdf
 ACDC-Converter TRACO TMG Series 15
@@ -52744,6 +52870,7 @@ Vigortronix VTX-214-010-xxx serie of ACDC converter
 0
 5
 5
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Converter_ACDC
 Converter_ACDC_ZETTLER_ZPI03Sxx00WC_THT
 PCB mounted switching power module, AC input voltage range: 90VAC-264VAC, Class II Construction, https://www.zettlermagnetics.com/pdfs/ZPI03SXX00WC.pdf
@@ -52751,6 +52878,8 @@ ACDC-Converter 3W ZETTLER ZPI
 0
 4
 4
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Converter_DCDC
 Converter_DCDC_Artesyn_ATA_SMD
 DCDC-Converter, Artesyn, ATA Series, 3W Single and Dual Output, 1500VDC Isolation, 24.0x13.7x8.0mm https://www.artesyn.com/power/assets/ata_series_ds_01apr2015_79c25814fd.pdf https://www.artesyn.com/power/assets/trn_dc-dc_ata_3w_series_releas1430412818_techref.pdf
@@ -53270,6 +53399,7 @@ DCDC-Converter TRACO TMU3 THT SIP-4 3W
 4
 4
 Converter_DCDC
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Converter_DCDC_TRACO_TOS06-05SIL_THT
 DCDC-Converter, TRACO, TOS06-05SIL, 6A, Rev. March 20. 2024 (Script generated with StandardBox.py) (https://www.tracopower.com/products/tos06sil.pdf)
 DCDC-Converter POL TRACO TOS06SIL 2.54MM THT SIP-9 6A
@@ -53284,6 +53414,8 @@ DCDC-Converter POL TRACO TOS06SIL 2.54MM THT SIP-9 6A
 5
 5
 Converter_DCDC
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Converter_DCDC_TRACO_TRI1-xxxx_THT
 DCDC-Converter, TRACO, TRI1-xxxx, 1W, Rev. November 13. 2023 (Script generated with StandardBox.py) (https://www.tracopower.com/products/tri1.pdf)
 DCDC-Converter TRACO TRI1 THT SIP-7 1W
@@ -56707,7 +56839,11 @@ ARDUINO_MINI_PRO_EESTN5
 34
 34
 EESTN5
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 ARDUINO_UNO_R2_CONTOUR
+========
+ARDUINO_as_UNO_R3_CONTOUR
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 
 
 0
@@ -57862,6 +57998,7 @@ SOT223
 4
 4
 EESTN5
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 SOT223-TAB2
 SOT223
 
@@ -57869,6 +58006,8 @@ SOT223
 4
 3
 EESTN5
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 SSOP-8
 SOIC PowerPad, 8 pins
 
@@ -58239,6 +58378,310 @@ TO220
 0
 3
 3
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
+========
+Espressif
+ESP32-C3-DevKitC-02
+
+
+0
+30
+30
+Espressif
+ESP32-C3-DevKitM-1
+
+
+0
+30
+30
+Espressif
+ESP32-C3-MINI-1
+ESP32-C3-MINI-1: https://www.espressif.com/sites/default/files/documentation/esp32-c3-mini-1_datasheet_en.pdf
+ESP32-C3
+0
+61
+53
+Espressif
+ESP32-C3-MINI-1U
+ESP32-C3-MINI-1U: https://www.espressif.com/sites/default/files/documentation/esp32-c3-mini-1_datasheet_en.pdf
+ESP32-C3
+0
+61
+53
+Espressif
+ESP32-C3-MINI-1_HandSoldering
+ESP32-C3-MINI-1: https://www.espressif.com/sites/default/files/documentation/esp32-c3-mini-1_datasheet_en.pdf
+ESP32-C3
+0
+61
+53
+Espressif
+ESP32-C3-WROOM-02
+ESP32-C3-WROOM-02: https://www.espressif.com/sites/default/files/documentation/esp32-c3-wroom-02_datasheet_en.pdf
+ESP32-C3
+0
+27
+19
+Espressif
+ESP32-C3-WROOM-02U
+ESP32-C3-WROOM-02: https://www.espressif.com/sites/default/files/documentation/esp32-c3-wroom-02_datasheet_en.pdf
+ESP32-C3
+0
+27
+19
+Espressif
+ESP32-C6-DevKitC-1
+ESP32-C6 general-purpose development board, based on ESP32-2-WROOM-1,It has all the ESP32-C6 pins exposed and is easy to connect and use.
+ESP32-C6
+0
+32
+32
+Espressif
+ESP32-C6-DevKitM-1
+ESP32-C6 general-purpose development board, based on ESP32-2-WROOM-1,It has all the ESP32-C6 pins exposed and is easy to connect and use.
+ESP32-C6
+0
+30
+30
+Espressif
+ESP32-C6-MINI-1
+ESP32-C6-MINI-1: https://www.espressif.com/sites/default/files/documentation/esp32-c6-mini-1_datasheet_en.pdf
+ESP32-C6
+0
+61
+53
+Espressif
+ESP32-C6-MINI-1U
+ESP32-C6-MINI-1U: https://www.espressif.com/sites/default/files/documentation/esp32-c6-mini-1_datasheet_en.pdf
+ESP32-C6
+0
+61
+53
+Espressif
+ESP32-C6-WROOM-1
+ESP32-C6-WROOM-1: https://www.espressif.com/sites/default/files/documentation/esp32-c6-wroom-1_datasheet_en.pdf
+esp32-c6
+0
+37
+29
+Espressif
+ESP32-C6-WROOM-1U
+ESP32-C6-WROOM-1U: https://www.espressif.com/sites/default/files/documentation/esp32-c6-wroom-1_wroom-1u_datasheet_en.pdf
+esp32-c6
+0
+37
+29
+Espressif
+ESP32-DevKitC
+ESP32-DevKitC: https://docs.espressif.com/projects/esp-idf/en/latest/esp32/hw-reference/esp32/get-started-devkitc.html
+ESP32
+0
+38
+38
+Espressif
+ESP32-H2-MINI-1
+ESP32-H2-MINI-1: https://www.espressif.com/sites/default/files/documentation/esp32-h2-mini-1_mini-1u_datasheet_en.pdf
+ESP32-H2
+0
+61
+53
+Espressif
+ESP32-MINI-1
+ESP32-MINI-1: https://www.espressif.com/sites/default/files/documentation/esp32-mini-1_datasheet_en.pdf
+ESP32-MINI-1
+0
+63
+55
+Espressif
+ESP32-MINI-1U
+ESP32-MINI-1U: https://www.espressif.com/sites/default/files/documentation/esp32-mini-1_datasheet_en.pdf
+ESP32-MINI-1U
+0
+63
+55
+Espressif
+ESP32-PICO-MINI-02
+ESP32-PICO-MINI-02: https://www.espressif.com/sites/default/files/documentation/esp32-pico-mini-02_datasheet_en.pdf
+ESP32-PICO-MINI-02
+0
+61
+53
+Espressif
+ESP32-PICO-MINI-02U
+ESP32-PICO-MINI-02U: https://www.espressif.com/sites/default/files/documentation/esp32-pico-mini-02_datasheet_en.pdf
+ESP32-PICO-MINI-02U
+0
+61
+53
+Espressif
+ESP32-PICO-MINI-02_HandSoldering
+ESP32-PICO-MINI-02: https://www.espressif.com/sites/default/files/documentation/esp32-pico-mini-02_datasheet_en.pdf
+ESP32-PICO-MINI-02
+0
+61
+53
+Espressif
+ESP32-S2-DevKitC-1
+ESP32-S2 general-purpose development board, based on ESP32-S2-SOLO or ESP32-S2-SOLO-U,It has all the ESP32-S2 pins exposed and is easy to connect and use.
+ESP32-S2
+0
+44
+44
+Espressif
+ESP32-S2-DevKitM
+ESP32-S2 general-purpose development board
+ESP32-S2
+0
+42
+42
+Espressif
+ESP32-S2-MINI-1
+ESP32-S2-MINI-1 and ESP32-S2-MINI-1U: https://www.espressif.com/sites/default/files/documentation/esp32-s2-mini-1_esp32-s2-mini-1u_datasheet_en.pdf
+ESP32-S2
+0
+73
+65
+Espressif
+ESP32-S2-MINI-1U
+ESP32-S2-MINI-1 and ESP32-S2-MINI-1U: https://www.espressif.com/sites/default/files/documentation/esp32-s2-mini-1_esp32-s2-mini-1u_datasheet_en.pdf
+ESP32-S2
+0
+73
+65
+Espressif
+ESP32-S2-MINI-1_HandSoldering
+ESP32-S2-MINI-1 and ESP32-S2-MINI-1U: https://www.espressif.com/sites/default/files/documentation/esp32-s2-mini-1_esp32-s2-mini-1u_datasheet_en.pdf
+ESP32-S2 Hand Soldering
+0
+73
+65
+Espressif
+ESP32-S2-SOLO
+ESP32-S2-SOLO https://www.espressif.com/sites/default/files/documentation/esp32-s2-solo_esp32-s2-solo-u_datasheet_en.pdf
+esp32-s2 module
+0
+49
+41
+Espressif
+ESP32-S2-SOLO-2U
+ESP32-S2-SOLO-2U https://www.espressif.com/sites/default/files/documentation/esp32-s2-solo-2_esp32-s2-solo-2u_datasheet_en.pdf
+esp32-s2 module
+0
+49
+41
+Espressif
+ESP32-S2-Saola-1
+Espressif ESP32-S2-Saola-1 Development Kit: https://docs.espressif.com/projects/esp-idf/en/latest/esp32s2/hw-reference/esp32s2/user-guide-saola-1-v1.2.html
+esp32-s2 devkit
+0
+42
+42
+Espressif
+ESP32-S2-WROOM
+ESP32-S2-WROOM and ESP32-S2-WROOM-I: https://www.espressif.com/sites/default/files/documentation/esp32-s2-wroom_esp32-s2-wroom-i_datasheet_en.pdf
+ESP32-S2
+0
+51
+43
+Espressif
+ESP32-S2-WROVER
+ESP32-S2-WROVER and ESP32-S2-WROVER-I: https://www.espressif.com/sites/default/files/documentation/esp32-s2-wrover_esp32-s2-wrover-i_datasheet_en.pdf
+ESP32-S2
+0
+55
+43
+Espressif
+ESP32-S3-DevKitC
+ESP32-S3 general-purpose development board, based on ESP32-S3-WROOM-1 or ESP32-S3-WROOM-1U,It has all the ESP32-S3 pins exposed and is easy to connect and use.
+ESP32-S3
+0
+44
+44
+Espressif
+ESP32-S3-MINI-1
+ESP32-S3-MINI-1
+esp32-s3
+0
+73
+65
+Espressif
+ESP32-S3-MINI-1U
+ESP32-S3-MINI-1 and ESP32-S3-MINI-1U
+esp32-s3
+0
+73
+65
+Espressif
+ESP32-S3-WROOM-1
+ESP32-S3-WROOM-1 is a powerful, generic Wi-Fi + Bluetooth LE MCU modules that have Dual core CPU , a rich set of peripherals, provides acceleration for neural network computing and signal processing workloads. They are an ideal choice for a wide variety of application scenarios related to AI + Internet of Things (AIoT), such as wake word detection and speech commands recognition , face detection and recognition, smart home, smart appliance, smart control panel, smart speaker etc.
+esp32-s3
+0
+51
+41
+Espressif
+ESP32-S3-WROOM-1U
+ESP32-S3-WROOM-1 is a powerful, generic Wi-Fi + Bluetooth LE MCU modules that have Dual core CPU , a rich set of peripherals, provides acceleration for neural network computing and signal processing workloads. They are an ideal choice for a wide variety of application scenarios related to AI + Internet of Things (AIoT), such as wake word detection and speech commands recognition , face detection and recognition, smart home, smart appliance, smart control panel, smart speaker etc.
+esp32-s3
+0
+49
+41
+Espressif
+ESP32-S3-WROOM-2
+ESP32-S3-WROOM-2 is a powerful, generic Wi-Fi + Bluetooth LE MCU modules that have Dual core CPU , a rich set of peripherals, provides acceleration for neural network computing and signal processing workloads. They are an ideal choice for a wide variety of application scenarios related to AI + Internet of Things (AIoT), such as wake word detection and speech commands recognition , face detection and recognition, smart home, smart appliance, smart control panel, smart speaker etc.
+esp32-s3
+0
+51
+41
+Espressif
+ESP32-WROOM-32E
+ESP32-WROOM-32E and ESP32-WROOM-32UE: https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32e_esp32-wroom-32ue_datasheet_en.pdf
+ESP32
+0
+50
+39
+Espressif
+ESP32-WROOM-32UE
+ESP32-WROOM-32E and ESP32-WROOM-32UE: https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32e_esp32-wroom-32ue_datasheet_en.pdf
+ESP32
+0
+47
+39
+Espressif
+ESP32-WROOM-DA
+ESP32-WROOM-DA: https://www.espressif.com/sites/default/files/documentation/esp32-wroom-da_datasheet_en.pdf
+ESP32 Dual Antenna DA
+0
+49
+41
+Espressif
+ESP32-WROVER-E
+ESP32-WROVER-E: https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32e_esp32-wroom-32ue_datasheet_en.pdf
+esp32 module
+0
+47
+39
+Espressif
+ESP32-WROVER-E_ThermalVias
+ESP32-WROVER-E: https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32e_esp32-wroom-32ue_datasheet_en.pdf
+esp32 module thermal vias
+0
+59
+39
+Espressif
+ESP8685-WROOM-06
+ESP32-WROOM-06: https://www.espressif.com/sites/default/files/documentation/esp8685-wroom-06_datasheet_en.pdf
+esp32 module
+0
+31
+22
+Espressif
+QFN-32-1EP_4x4mm_P0.4mm_EP2.9x2.9mm
+QFN, 32 Pin (http://ww1.microchip.com/downloads/en/DeviceDoc/atmel-8153-8-and-16-bit-avr-microcontroller-xmega-e-atxmega8e5-atxmega16e5-atxmega32e5_datasheet.pdf#page=70), generated with kicad-footprint-generator ipc_noLead_generator.py
+QFN NoLead
+0
+37
+33
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Ferrite_THT
 LairdTech_28C0236-0JW-10
 Ferrite, vertical, LairdTech 28C0236-0JW-10, https://assets.lairdtech.com/home/brandworld/files/28C0236-0JW-10.pdf, JW Miller core https://www.bourns.com/products/magnetic-products/j.w.-miller-through-hole-ferrite-beads-emi-filters
@@ -59654,6 +60097,7 @@ Inductor LMLP
 2
 2
 Inductor_SMD
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 L_Abracon_ASPI-0425
 Inductor, Abracon, ASPI-0425, 4.0x4.0x2.5mm, https://abracon.com/Magnetics/new/ASPI-0425.pdf
 Inductor power shielded low-profile
@@ -59661,6 +60105,8 @@ Inductor power shielded low-profile
 2
 2
 Inductor_SMD
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 L_Abracon_ASPI-0630LR
 smd shielded power inductor https://abracon.com/Magnetics/power/ASPI-0630LR.pdf
 inductor abracon smd shielded
@@ -59682,6 +60128,7 @@ inductor abracon smd shielded
 2
 2
 Inductor_SMD
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 L_Abracon_ASPIAIG-F4020
 Inductor, Abracon, ASPIAIG-F4020, 4.4x4.4x1.9mm, https://abracon.com/Magnetics/power/ASPIAIG-F4020.pdf
 Inductor power shielded
@@ -59689,6 +60136,8 @@ Inductor power shielded
 2
 2
 Inductor_SMD
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 L_Bourns-SRN1060
 Bourns SRN1060 series SMD inductor https://www.bourns.com/docs/Product-Datasheets/SRN1060.pdf
 Bourns SRN1060 SMD inductor
@@ -59745,6 +60194,7 @@ Bourns SRU8043 SMD inductor
 2
 2
 Inductor_SMD
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 L_Bourns_SDR0604
 SMD Power Inductor, https://www.bourns.com/pdfs/SDR0604.pdf
 SMD Power Inductor SDR0604
@@ -59752,6 +60202,8 @@ SMD Power Inductor SDR0604
 2
 2
 Inductor_SMD
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 L_Bourns_SDR1806
 https://www.bourns.com/docs/Product-Datasheets/SDR1806.pdf
 Bourns SDR1806
@@ -60151,6 +60603,7 @@ Inductor wirewound power shielded
 2
 2
 Inductor_SMD
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 L_Changjiang_FXL1365
 Inductor, Changjiang, FXL1365, 12.9x12.6x6.5mm, https://www.lcsc.com/datasheet/lcsc_datasheet_2303201000_cjiang--Changjiang-Microelectronics-Tech-FXL1365-330-M_C5359277.pdf
 Inductor power shielded cjiang fxl
@@ -60158,6 +60611,8 @@ Inductor power shielded cjiang fxl
 2
 2
 Inductor_SMD
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 L_Chilisin_BMRA00040415
 Inductor, Chilisin, BMRA00040415, 4.6x4.1x1.5mm, https://www.chilisin.com/upload/media/product/power/file/BMRx_Series.pdf
 Inductor bmrx mchi
@@ -60347,6 +60802,7 @@ inductor
 2
 2
 Inductor_SMD
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 L_Coilcraft_MOS6020-XXX
 Inductor, Coilcraft, MOS6020-XXX, 6.8x6.0x2.4mm, (https://www.coilcraft.com/getmedia/c3eb212d-a1a9-4db6-9f14-a01f21fd984c/mos6020.pdf), generated with kicad-footprint-generator gen_inductor.py
 Inductor mss
@@ -60487,6 +60943,8 @@ Inductor mss
 2
 2
 Inductor_SMD
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 L_Coilcraft_XAL1010-XXX
 Inductor, Coilcraft, XAL1010-XXX, 10.5x11.8x10.0mm, https://www.coilcraft.com/getmedia/dd74e670-e705-456a-9a69-585fe02eaf3c/xal1010.pdf
 Inductor xal
@@ -60768,91 +61226,143 @@ Inductor xal
 2
 Inductor_SMD
 L_Coilcraft_XAL7030-102
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Inductor, Coilcraft, XAL7030-102, 8.0x8.0x3.1mm, (https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf), generated with kicad-footprint-generator gen_inductor.py
+========
+Inductor, Coilcraft, XAL7030-102, 8.0x8.0x3.1mm, https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Inductor xal
 0
 2
 2
 Inductor_SMD
 L_Coilcraft_XAL7030-103
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Inductor, Coilcraft, XAL7030-103, 8.0x8.0x3.1mm, (https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf), generated with kicad-footprint-generator gen_inductor.py
+========
+Inductor, Coilcraft, XAL7030-103, 8.0x8.0x3.1mm, https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Inductor xal
 0
 2
 2
 Inductor_SMD
 L_Coilcraft_XAL7030-152
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Inductor, Coilcraft, XAL7030-152, 8.0x8.0x3.1mm, (https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf), generated with kicad-footprint-generator gen_inductor.py
+========
+Inductor, Coilcraft, XAL7030-152, 8.0x8.0x3.1mm, https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Inductor xal
 0
 2
 2
 Inductor_SMD
 L_Coilcraft_XAL7030-161
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Inductor, Coilcraft, XAL7030-161, 8.0x8.0x3.1mm, (https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf), generated with kicad-footprint-generator gen_inductor.py
+========
+Inductor, Coilcraft, XAL7030-161, 8.0x8.0x3.1mm, https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Inductor xal
 0
 2
 2
 Inductor_SMD
 L_Coilcraft_XAL7030-222
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Inductor, Coilcraft, XAL7030-222, 8.0x8.0x3.1mm, (https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf), generated with kicad-footprint-generator gen_inductor.py
+========
+Inductor, Coilcraft, XAL7030-222, 8.0x8.0x3.1mm, https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Inductor xal
 0
 2
 2
 Inductor_SMD
 L_Coilcraft_XAL7030-272
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Inductor, Coilcraft, XAL7030-272, 8.0x8.0x3.1mm, (https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf), generated with kicad-footprint-generator gen_inductor.py
+========
+Inductor, Coilcraft, XAL7030-272, 8.0x8.0x3.1mm, https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Inductor xal
 0
 2
 2
 Inductor_SMD
 L_Coilcraft_XAL7030-301
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Inductor, Coilcraft, XAL7030-301, 8.0x8.0x3.1mm, (https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf), generated with kicad-footprint-generator gen_inductor.py
+========
+Inductor, Coilcraft, XAL7030-301, 8.0x8.0x3.1mm, https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Inductor xal
 0
 2
 2
 Inductor_SMD
 L_Coilcraft_XAL7030-332
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Inductor, Coilcraft, XAL7030-332, 8.0x8.0x3.1mm, (https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf), generated with kicad-footprint-generator gen_inductor.py
+========
+Inductor, Coilcraft, XAL7030-332, 8.0x8.0x3.1mm, https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Inductor xal
 0
 2
 2
 Inductor_SMD
 L_Coilcraft_XAL7030-472
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Inductor, Coilcraft, XAL7030-472, 8.0x8.0x3.1mm, (https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf), generated with kicad-footprint-generator gen_inductor.py
+========
+Inductor, Coilcraft, XAL7030-472, 8.0x8.0x3.1mm, https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Inductor xal
 0
 2
 2
 Inductor_SMD
 L_Coilcraft_XAL7030-562
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Inductor, Coilcraft, XAL7030-562, 8.0x8.0x3.1mm, (https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf), generated with kicad-footprint-generator gen_inductor.py
+========
+Inductor, Coilcraft, XAL7030-562, 8.0x8.0x3.1mm, https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Inductor xal
 0
 2
 2
 Inductor_SMD
 L_Coilcraft_XAL7030-601
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Inductor, Coilcraft, XAL7030-601, 8.0x8.0x3.1mm, (https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf), generated with kicad-footprint-generator gen_inductor.py
+========
+Inductor, Coilcraft, XAL7030-601, 8.0x8.0x3.1mm, https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Inductor xal
 0
 2
 2
 Inductor_SMD
 L_Coilcraft_XAL7030-682
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Inductor, Coilcraft, XAL7030-682, 8.0x8.0x3.1mm, (https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf), generated with kicad-footprint-generator gen_inductor.py
+========
+Inductor, Coilcraft, XAL7030-682, 8.0x8.0x3.1mm, https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Inductor xal
 0
 2
 2
 Inductor_SMD
 L_Coilcraft_XAL7030-822
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Inductor, Coilcraft, XAL7030-822, 8.0x8.0x3.1mm, (https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf), generated with kicad-footprint-generator gen_inductor.py
+========
+Inductor, Coilcraft, XAL7030-822, 8.0x8.0x3.1mm, https://www.coilcraft.com/getmedia/0d05a05e-d55d-4a0c-911d-46bd73686633/xal7030.pdf
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Inductor xal
 0
 2
@@ -61075,6 +61585,7 @@ smd inductor dlg-1005
 2
 2
 Inductor_SMD
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 L_KOHERelec_MDA7030
 Inductor, KOHERelec, MDA7030, 7.1x6.6x2.8mm, https://www.lcsc.com/datasheet/lcsc_datasheet_2401252310_KOHERelec-MDA7030-220M_C2847487.pdf
 Inductor high-current power shielded
@@ -61082,6 +61593,8 @@ Inductor high-current power shielded
 2
 2
 Inductor_SMD
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 L_Murata_DEM35xxC
 https://www.murata.com/~/media/webrenewal/products/inductor/chip/tokoproducts/wirewoundferritetypeforpl/m_dem3518c.ashx
 Inductor SMD DEM35xxC
@@ -65338,6 +65851,7 @@ LED Dialight 591
 2
 2
 LED_SMD
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 LED_Inolux_IN-P55TATRGB_PLCC6_5.0x5.5mm_P1.8mm
 5.0x5.0mm PLCC-6 RGB LED, Inolux, https://www.inolux-corp.com/datasheet/SMDLED/RGB%20Top%20View/IN-P55TATRGB.pdf
 LED RGB
@@ -65345,6 +65859,8 @@ LED RGB
 6
 6
 LED_SMD
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 LED_Inolux_IN-PI554FCH_PLCC4_5.0x5.0mm_P3.2mm
 5.0mm x 5.0mm PLCC4 Addressable RGB LED, http://www.inolux-corp.com/datasheet/SMDLED/Addressable%20LED/IN-PI554FCH.pdf
 LED RGB NeoPixel addressable PLCC-4 5050
@@ -66240,6 +66756,7 @@ Yellow 5381 Series LED
 0
 2
 2
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 MixLib
 Bornera_2_duo
 2-way 5.08mm pitch terminal block, Phoenix MKDS series
@@ -66450,6 +66967,57 @@ reze
 0
 0
 0
+========
+Library
+Alita1
+
+
+0
+0
+0
+Library
+s2
+
+
+0
+0
+0
+Library
+s3
+
+
+0
+0
+0
+Library
+s4
+
+
+0
+0
+0
+MCU_RaspberryPi_and_Boards
+Crystal_SMD_HC49-US
+SMD Crystal HC-49-SD http://cdn-reichelt.de/documents/datenblatt/B400/xxx-HC49-SMD.pdf, 11.4x4.7mm^2 package
+SMD SMT crystal
+0
+2
+2
+MCU_RaspberryPi_and_Boards
+RP2040-QFN-56
+QFN, 56 Pin (http://www.cypress.com/file/416486/download#page=40), generated with kicad-footprint-generator ipc_dfn_qfn_generator.py
+QFN DFN_QFN
+0
+70
+57
+MCU_RaspberryPi_and_Boards
+RPi_Pico_SMD_TH
+Through hole straight pin header, 2x20, 2.54mm pitch, double rows
+Through hole pin header THT 2x20 2.54mm double row
+0
+86
+43
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Module
 A20_OLINUXINO_LIME2
 A20 Olinuxino LIME2, 1.2GHz, 512-1024MB RAM, Micro-SD, NAND or eMMC, 1000Mbit Ethernet
@@ -67886,6 +68454,7 @@ mounting hole 8.4mm m8
 9
 1
 Mounting_Wuerth
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Mounting_Wuerth_WA-SMRA-D3.3mm_L7mm_7466300R_Horizontal
 Right-angle SMD mounting hardware, inside through hole 3.3mm, lenght 7mm, total height 5mm, Würth electronics 7466300R (https://www.we-online.com/components/products/datasheet/7466300R.pdf)
 screw
@@ -67900,6 +68469,8 @@ threaded screw
 4
 1
 Mounting_Wuerth
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Mounting_Wuerth_WA-SMSE-ExternalM3_H5mm_9771050360
 Mounting Hardware, external M3, height 5, Wuerth electronics 9771050360 (https://katalog.we-online.com/em/datasheet/9771050360.pdf), generated with kicad-footprint-generator
 Mounting M3 9771050360
@@ -69824,6 +70395,7 @@ IR Receiver Vishay TSOP-xxxx MOLD
 0
 3
 3
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 OptoDevice
 Vishay_TCRT5000
 IR Reflective Optical Sensor with Transistor Output TCRT5000 https://www.vishay.com/docs/83760/tcrt5000.pdf
@@ -69831,6 +70403,8 @@ IR Reflective Optical Sensor with Transistor Output TCRT5000 Vishay Distance Sen
 0
 4
 4
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Oscillator
 Oscillator_DIP-8
 Oscillator, DIP8,http://cdn-reichelt.de/documents/datenblatt/B400/OSZI.pdf
@@ -70833,6 +71407,7 @@ BGA 361 0.5
 361
 361
 Package_BGA
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 ST_UFBGA-59_5x5mm_Layout8x8_P0.5mm
 ST UFBGA-59, 5.0x5.0mm, 59 Ball, 8x8 Layout, 0.5mm Pitch, https://www.st.com/resource/en/datasheet/stm32wba55ug.pdf
 BGA 59 0.5
@@ -70840,6 +71415,8 @@ BGA 59 0.5
 59
 59
 Package_BGA
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 ST_UFBGA-73_5x5mm_Layout9x9_P0.5mm
 ST UFBGA-73, 5.0x5.0mm, 73 Ball, 9x9 Layout, 0.5mm Pitch, https://www.st.com/resource/en/datasheet/stm32wl54jc.pdf
 BGA 73 0.5
@@ -70847,6 +71424,7 @@ BGA 73 0.5
 73
 73
 Package_BGA
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 ST_UFBGA-81_5x5mm_Layout9x9_P0.5mm
 ST UFBGA-81, 5.0x5.0mm, 81 Ball, 9x9 Layout, 0.5mm Pitch, https://www.st.com/resource/en/datasheet/stm32u073mb.pdf
 BGA 81 0.5
@@ -70854,6 +71432,8 @@ BGA 81 0.5
 81
 81
 Package_BGA
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 ST_UFBGA-121_6x6mm_Layout11x11_P0.5mm
 ST UFBGA-121, 6.0x6.0mm, 121 Ball, 11x11 Layout, 0.5mm Pitch, https://www.st.com/resource/en/datasheet/stm32g473pb.pdf
 BGA 121 0.5
@@ -71155,6 +71735,7 @@ BGA 113 0.5
 113
 113
 Package_BGA
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Texas_PicoStar_BGA-4_0.758x0.758mm_Layout2x2_P0.4mm
 Texas Instruments PicoStar - 0.15 mm max height, 0.758x0.758mm, 4 Ball, 2x2 Layout, 0.4mm Pitch, https://www.ti.com/lit/ds/symlink/tmp114.pdf
 BGA 4 0.4 PicoStar
@@ -71169,6 +71750,8 @@ BGA 20 0.4
 20
 20
 Package_BGA
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 UCBGA-36_2.5x2.5mm_Layout6x6_P0.4mm
 UCBGA-36, 2.5x2.5mm, 36 Ball, 6x6 Layout, 0.4mm Pitch, https://www.latticesemi.com/view_document?document_id=213
 BGA 36 0.4
@@ -71666,6 +72249,7 @@ Analog LFCSP-UQ NoLead
 10
 10
 Package_CSP
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Dialog_WLCSP-34_4.54x1.66mm_Stagger
 Dialog Semiconductor (Renesas) WLCSP-34, staggered array, 4.54x1.66mm, 34 Ball, 17x4 Layout, 0.25x0.34mm Pitch, https://www.renesas.com/us/en/document/dst/da7212-datasheet
 CSP 34 0.25x0.34 34-ball
@@ -71673,6 +72257,8 @@ CSP 34 0.25x0.34 34-ball
 34
 34
 Package_CSP
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 DiodesInc_GEA20_WLCSP-20_1.70x2.10mm_Layout4x5_P0.4mm
 Diodes Incorporated WLCSP-20, GEA20, 1.7x2.1mm, 20 Ball, 4x5 Layout, 0.4mm Pitch, https://www.diodes.com/assets/Package-Files/GEA20.pdf
 CSP 20 0.4
@@ -71736,6 +72322,7 @@ LFCSP 8pin 2x2mm Pitch 0.5mm
 8
 8
 Package_CSP
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 LFCSP-10_2x2mm_P0.5mm
 LFCSP, 10 Pin (https://www.analog.com/media/en/package-pcb-resources/package/pkg_pdf/lfcspcp/cp-10/cp_10_11.pdf), generated with kicad-footprint-generator ipc_noLead_generator.py
 LFCSP NoLead
@@ -71743,6 +72330,8 @@ LFCSP NoLead
 10
 10
 Package_CSP
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 LFCSP-16-1EP_3x3mm_P0.5mm_EP1.3x1.3mm
 LFCSP, 16 Pin (https://www.analog.com/media/en/package-pcb-resources/package/pkg_pdf/lfcspcp/cp-16/CP_16_21.pdf), generated with kicad-footprint-generator ipc_noLead_generator.py
 LFCSP NoLead
@@ -71757,6 +72346,7 @@ LFCSP NoLead
 26
 17
 Package_CSP
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 LFCSP-16-1EP_3x3mm_P0.5mm_EP1.5x1.5mm
 LFCSP, 16 Pin (https://www.analog.com/media/en/package-pcb-resources/package/pkg_pdf/lfcspcp/cp-16/cp_16_27.pdf), generated with kicad-footprint-generator ipc_noLead_generator.py
 LFCSP NoLead
@@ -71764,6 +72354,8 @@ LFCSP NoLead
 21
 17
 Package_CSP
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 LFCSP-16-1EP_3x3mm_P0.5mm_EP1.6x1.6mm
 LFCSP, 16 Pin (https://www.analog.com/media/en/package-pcb-resources/package/pkg_pdf/lfcspcp/cp-16/CP_16_22.pdf), generated with kicad-footprint-generator ipc_noLead_generator.py
 LFCSP NoLead
@@ -72023,6 +72615,7 @@ LFCSP NoLead
 75
 49
 Package_CSP
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 LFCSP-56-1EP_8x8mm_P0.5mm_EP6.6x6.6mm
 LFCSP, 56 Pin (https://www.analog.com/media/en/package-pcb-resources/package/pkg_pdf/lfcspcp/cp-56/CP_56_9.pdf), generated with kicad-footprint-generator ipc_noLead_generator.py
 LFCSP NoLead Analog-LFCSP_WQ-CP-56-9
@@ -72037,6 +72630,8 @@ LFCSP NoLead Analog-LFCSP_WQ-CP-56-9
 71
 57
 Package_CSP
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 LFCSP-64-1EP_9x9mm_P0.5mm_EP5.21x5.21mm
 LFCSP, 64 Pin (https://www.analog.com/media/en/package-pcb-resources/package/pkg_pdf/lfcspcp/cp_64_7.pdf), generated with kicad-footprint-generator ipc_noLead_generator.py
 LFCSP NoLead
@@ -72114,6 +72709,7 @@ LFCSP-WD NoLead
 24
 11
 Package_CSP
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Macronix_WLCSP-12_2.02x2.09mm_P0.5mm
 WLCSP-12, 2.02x2.09mm, 12 Ball, 4x4 Layout, 0.5mm Pitch, https://www.macronix.com/Lists/Datasheet/Attachments/8909/MX25U3232F,%201.8V,%2032Mb,%20v1.2.pdf#page=93
 CSP 12 0.5
@@ -72121,6 +72717,8 @@ CSP 12 0.5
 12
 12
 Package_CSP
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Maxim_WLCSP-35_3.0x2.17mm_Layout7x5_P0.4mm_Ball0.27mm_Pad0.25mm
 WLCSP-35, 2.998x2.168mm, 35 Ball, 7x5 Layout, 0.4mm Pitch, https://pdfserv.maximintegrated.com/package_dwgs/21-100489.PDF
 CSP 35 0.4
@@ -72191,6 +72789,7 @@ CSP 25 0.4
 25
 25
 Package_CSP
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 ST_WLCSP-27_2.34x2.55mm_P0.40mm_Stagger
 ST WLCSP-27, ST Die ID 459, 2.34x2.55mm, 27 Ball, X-staggered 9x6 Layout, 0.4mm Pitch, https://www.st.com/resource/en/datasheet/stm32u031g6.pdf
 CSP 27 0.4
@@ -72205,6 +72804,8 @@ CSP 27 0.4
 27
 27
 Package_CSP
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 ST_WLCSP-36_2.58x3.07mm_Layout6x6_P0.4mm
 ST WLCSP-36, ST die ID 464, 2.58x3.07mm, 36 Ball, 6x6 Layout, 0.4mm Pitch, https://www.st.com/resource/en/datasheet/stm32l412t8.pdf
 CSP 36 0.4
@@ -72240,6 +72841,7 @@ CSP 36 0.4
 36
 36
 Package_CSP
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 ST_WLCSP-42_2.82x2.93mm_P0.40mm_Stagger
 ST WLCSP-42, ST Die ID 489, 2.82x2.93mm, 42 Ball, X-staggered 12x7 Layout, 0.4mm Pitch, https://www.st.com/resource/en/datasheet/stm32u073rc.pdf
 CSP 42 0.4
@@ -72254,6 +72856,8 @@ CSP 42 0.4
 42
 42
 Package_CSP
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 ST_WLCSP-49_3.15x3.13mm_Layout7x7_P0.4mm
 ST WLCSP-49, ST die ID 468, 3.15x3.13mm, 49 Ball, 7x7 Layout, 0.4mm Pitch, https://www.st.com/resource/en/datasheet/stm32g431c6.pdf
 CSP 49 0.4
@@ -72485,6 +73089,7 @@ CSP 90 0.4
 90
 90
 Package_CSP
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 ST_WLCSP-99_4.42x3.77mm_Layout9x11_P0.35mm
 ST WLCSP-99, ST die ID 415, 4.42x3.77mm, 99 Ball, 11x9 Layout, 0.35mm Pitch, https://www.st.com/resource/en/datasheet/stm32l476vg.pdf
 CSP 99 0.35
@@ -72492,6 +73097,8 @@ CSP 99 0.35
 99
 99
 Package_CSP
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 ST_WLCSP-100_4.40x4.38mm_Layout10x10_P0.4mm_Offcenter
 ST WLCSP-100, off-center ball grid, ST die ID 495, 4.4x4.38mm, 100 Ball, 10x10 Layout, 0.4mm Pitch, https://www.st.com/resource/en/datasheet/stm32wb55vc.pdf
 CSP 100 0.4
@@ -72534,6 +73141,7 @@ CSP 100 0.4
 100
 100
 Package_CSP
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 ST_WLCSP-101_3.86x3.79mm_P0.35mm_Stagger
 ST WLCSP-101, ST Die ID 485, 3.86x3.79mm, 101 Ball, Y-staggered 11x19 Layout, 0.35mm Pitch, https://www.st.com/resource/en/datasheet/stm32h7r3v8.pdf
 CSP 101 0.35
@@ -72541,6 +73149,8 @@ CSP 101 0.35
 101
 101
 Package_CSP
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 ST_WLCSP-104_Die437
 WLCSP-104, 4.095x5.094mm, 104 Ball, 9x12 Layout, 0.4mm Pitch, http://www.st.com/resource/en/datasheet/stm32l152ze.pdf#page=127
 CSP 104 0.4
@@ -72667,6 +73277,7 @@ CSP 8 0.5
 8
 8
 Package_CSP
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 WLCSP-9_1.21x1.22mm_P0.4mm
 WLCSP-9, 1.21x1.22mm, 9 Ball, 3x3 Layout, 0.4mm Pitch, https://www.analog.com/media/en/package-pcb-resources/package/pkg_pdf/wlcspcb/cb_9_3.pdf
 CSP 9 0.4
@@ -72674,6 +73285,8 @@ CSP 9 0.4
 9
 9
 Package_CSP
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 WLCSP-12_1.56x1.56mm_P0.4mm
 WLCSP 12 1.56x1.56 https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BMM150-DS001-01.pdf
 BMM150 WLCSP
@@ -72828,6 +73441,7 @@ DFN NoLead
 9
 7
 Package_DFN_QFN
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 DFN-6-1EP_2x2mm_P0.5mm_EP0.7x1.6mm
 DFN, 6 Pin (http://www.junmintech.com/UploadFiles/Product/20211129145204_37021.pdf#page=10), generated with kicad-footprint-generator ipc_noLead_generator.py
 DFN NoLead
@@ -72835,6 +73449,8 @@ DFN NoLead
 9
 7
 Package_DFN_QFN
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 DFN-6-1EP_2x2mm_P0.5mm_EP0.61x1.42mm
 DC6 Package; 6-Lead Plastic DFN (2mm x 2mm) (see Linear Technology DFN_6_05-08-1703.pdf)
 DFN 0.5
@@ -72884,6 +73500,7 @@ DFN 0.4
 6
 6
 Package_DFN_QFN
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 DFN-8-1EP_1.5x1.5mm_P0.4mm_EP0.7x1.2mm
 DFN, 8 Pin (https://www.kinet-ic.com/uploads/KTD2026-7-04h.pdf), generated with kicad-footprint-generator ipc_noLead_generator.py
 DFN NoLead
@@ -72891,6 +73508,8 @@ DFN NoLead
 13
 9
 Package_DFN_QFN
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 DFN-8-1EP_2x2mm_P0.5mm_EP0.6x1.2mm
 DFN, 8 Pin (https://www.onsemi.com/pub/Collateral/506AQ.PDF), generated with kicad-footprint-generator ipc_noLead_generator.py
 DFN NoLead 506AQ
@@ -72940,13 +73559,28 @@ DFN 0.45
 11
 9
 Package_DFN_QFN
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 DFN-8-1EP_2x3mm_P0.5mm_EP0.61x2.2mm
 DFN, 8 Pin (https://www.analog.com/media/en/package-pcb-resources/package/pkg_pdf/ltc-legacy-dfn/05081702_c_ddb8.pdf), generated with kicad-footprint-generator ipc_noLead_generator.py
+========
+DFN-8-1EP_2x3mm_P0.5mm_EP0.56x2.15mm
+DFN, 8 Pin (https://www.analog.com/media/en/technical-documentation/data-sheets/2451fg.pdf#page=17), generated with kicad-footprint-generator ipc_noLead_generator.py
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 DFN NoLead
 0
 11
 9
 Package_DFN_QFN
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
+========
+DFN-8-1EP_2x3mm_P0.5mm_EP0.61x2.2mm
+DDB Package; 8-Lead Plastic DFN (3mm x 2mm) (see Linear Technology DFN_8_05-08-1702.pdf)
+DFN 0.5
+0
+12
+9
+Package_DFN_QFN
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 DFN-8-1EP_3x2mm_P0.5mm_EP1.3x1.5mm
 8-Lead Plastic Dual Flat, No Lead Package (8MA2) - 2x3x0.6 mm Body [UDFN] (see Atmel-8815-SEEPROM-AT24CS01-02-Datasheet.pdf)
 DFN 0.5
@@ -72989,6 +73623,7 @@ DFN 0.45
 13
 9
 Package_DFN_QFN
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 DFN-8-1EP_3x3mm_P0.5mm_EP1.7x2.4mm
 DFN, 8 Pin (https://stcmicro.com/datasheet/STC8G-en.pdf#page=81), generated with kicad-footprint-generator ipc_noLead_generator.py
 DFN NoLead STC8G1K08A-36I-DFN8
@@ -73003,6 +73638,8 @@ DFN NoLead STC8G1K08A-36I-DFN8
 20
 9
 Package_DFN_QFN
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 DFN-8-1EP_3x3mm_P0.5mm_EP1.65x2.38mm
 DFN, 8 Pin (https://www.analog.com/media/en/technical-documentation/data-sheets/4320fb.pdf#page=10), generated with kicad-footprint-generator ipc_noLead_generator.py
 DFN NoLead
@@ -73206,6 +73843,16 @@ DFN NoLead
 24
 13
 Package_DFN_QFN
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
+========
+DFN-12-1EP_3x3mm_P0.45mm_EP1.66x2.38mm
+DD Package; 12-Lead Plastic DFN (3mm x 3mm) (see Linear Technology DFN_12_05-08-1725.pdf)
+DFN 0.45
+0
+17
+13
+Package_DFN_QFN
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 DFN-12-1EP_3x4mm_P0.5mm_EP1.7x3.3mm
 DE/UE Package; 12-Lead Plastic DFN (4mm x 3mm) (see Linear Technology DFN_12_05-08-1695.pdf)
 DFN 0.5
@@ -73388,6 +74035,7 @@ U-DFN2020-6 (Type F)
 8
 8
 Package_DFN_QFN
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Diodes_ZL32_TQFN-32-1EP_3x6mm_P0.4mm_EP1.25x3.5mm
 Diodes ZL32 TQFN, 32 Pin (https://www.diodes.com/assets/Package-Files/ZL32.pdf), generated with kicad-footprint-generator ipc_noLead_generator.py
 Diodes TQFN NoLead
@@ -73395,6 +74043,8 @@ Diodes TQFN NoLead
 41
 33
 Package_DFN_QFN
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 HVQFN-16-1EP_3x3mm_P0.5mm_EP1.5x1.5mm
 HVQFN, 16 Pin (https://www.nxp.com/docs/en/package-information/SOT758-1.pdf), generated with kicad-footprint-generator ipc_noLead_generator.py
 HVQFN NoLead
@@ -74382,6 +75032,7 @@ QFN NoLead
 43
 29
 Package_DFN_QFN
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 QFN-28-1EP_4x4mm_P0.45mm_EP2.6x2.6mm
 QFN, 28 Pin (http://www.everest-semi.com/pdf/ES8388%20DS.pdf), generated with kicad-footprint-generator ipc_noLead_generator.py
 QFN NoLead
@@ -74389,6 +75040,8 @@ QFN NoLead
 33
 29
 Package_DFN_QFN
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 QFN-28-1EP_4x5mm_P0.5mm_EP2.65x3.65mm
 QFN, 28 Pin (http://www.analog.com/media/en/technical-documentation/data-sheets/3555fe.pdf#page=32), generated with kicad-footprint-generator ipc_noLead_generator.py
 QFN NoLead
@@ -74970,6 +75623,7 @@ QFN NoLead
 91
 49
 Package_DFN_QFN
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 QFN-48-1EP_7x7mm_P0.5mm_EP5.7x5.7mm
 QFN, 48 Pin (http://www.analog.com/media/en/package-pcb-resources/package/pkg_pdf/ltc-legacy-qfn/QFN_48_05-08-1704.pdf), generated with kicad-footprint-generator ipc_noLead_generator.py
 QFN NoLead
@@ -74984,6 +75638,8 @@ QFN NoLead
 91
 49
 Package_DFN_QFN
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 QFN-48-1EP_7x7mm_P0.5mm_EP5.15x5.15mm
 QFN, 48 Pin (http://www.analog.com/media/en/package-pcb-resources/package/pkg_pdf/ltc-legacy-qfn/QFN_48_05-08-1704.pdf), generated with kicad-footprint-generator ipc_noLead_generator.py
 QFN NoLead
@@ -75609,7 +76265,11 @@ TDFN NoLead
 Package_DFN_QFN
 TQFN-16-1EP_3x3mm_P0.5mm_EP1.6x1.6mm
 TQFN, 16 Pin (https://www.diodes.com/assets/Datasheets/PI6C5946002.pdf#page=12), generated with kicad-footprint-generator ipc_noLead_generator.py
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 TQFN NoLead Pericom-TQFN-16-ZH Analog-CP-16-22
+========
+TQFN NoLead
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 0
 21
 17
@@ -75852,6 +76512,7 @@ TQFN NoLead
 55
 41
 Package_DFN_QFN
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 TQFN-44-1EP_7x7mm_P0.5mm_EP4.7x4.7mm
 TQFN, 44 Pin (https://www.analog.com/media/en/package-pcb-resources/package/pkg_pdf/tqfn/21-0144.pdf), generated with kicad-footprint-generator ipc_noLead_generator.py
 TQFN NoLead T4477+2 T4477+2C T4477+3
@@ -75866,6 +76527,8 @@ TQFN NoLead T4477+2 T4477+2C T4477+3
 71
 45
 Package_DFN_QFN
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 TQFN-48-1EP_7x7mm_P0.5mm_EP5.1x5.1mm
 TQFN, 48 Pin (https://pdfserv.maximintegrated.com/package_dwgs/21-0144.PDF), generated with kicad-footprint-generator ipc_noLead_generator.py
 TQFN NoLead
@@ -76181,6 +76844,7 @@ Texas VQFN NoLead
 24
 21
 Package_DFN_QFN
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Texas_RMG0012A_WQFN-12_1.8x1.8mm_P0.4mm
 Texas RMG0012A WQFN, 12 Pin (https://www.ti.com/lit/ds/symlink/tmux131.pdf#page=18), generated with kicad-footprint-generator ipc_noLead_generator.py
 Texas WQFN NoLead
@@ -76188,6 +76852,8 @@ Texas WQFN NoLead
 12
 12
 Package_DFN_QFN
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Texas_RNN0018A
 Texas Instruments, VQFN-HR RNN0018A (http://www.ti.com/lit/ds/symlink/tps568215.pdf)
 ti vqfn-hr rnn0018a
@@ -76195,6 +76861,7 @@ ti vqfn-hr rnn0018a
 26
 18
 Package_DFN_QFN
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Texas_RPU0010A_VQFN-HR-10_2x2mm_P0.5mm
 VQFN-HR, 10 Pin (https://www.ti.com/lit/ds/symlink/tps62912.pdf#page=39)
 VQFN-HR NO LEAD
@@ -76202,6 +76869,8 @@ VQFN-HR NO LEAD
 10
 10
 Package_DFN_QFN
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Texas_RSA_VQFN-16-1EP_4x4mm_P0.65mm_EP2.7x2.7mm
 Texas RSA VQFN, 16 Pin (http://www.ti.com/lit/ds/symlink/msp430g2001.pdf#page=44), generated with kicad-footprint-generator ipc_noLead_generator.py
 Texas VQFN NoLead
@@ -76230,6 +76899,7 @@ Texas WQFN NoLead
 47
 33
 Package_DFN_QFN
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Texas_RTE0016D_WQFN-16-1EP_3x3mm_P0.5mm_EP0.8x0.8mm
 Texas RTE0016D WQFN, 16 Pin (https://www.ti.com/lit/ds/symlink/dac80504.pdf#page=47), generated with kicad-footprint-generator ipc_noLead_generator.py
 Texas WQFN NoLead
@@ -76244,6 +76914,8 @@ Texas WQFN NoLead
 20
 17
 Package_DFN_QFN
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Texas_RTE_WQFN-16-1EP_3x3mm_P0.5mm_EP1.2x0.8mm
 Texas RTE WQFN, 16 Pin (https://www.ti.com/lit/ds/symlink/tps43060.pdf#page=40), generated with kicad-footprint-generator ipc_noLead_generator.py
 Texas WQFN NoLead
@@ -76307,6 +76979,7 @@ Texas WQFN NoLead
 10
 10
 Package_DFN_QFN
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Texas_RVA_VQFN-16-1EP_3.5x3.5mm_P0.5mm_EP2.14x2.14mm
 Texas RVA VQFN, 16 Pin (https://www.ti.com/lit/pdf/MPQF232), generated with kicad-footprint-generator ipc_noLead_generator.py
 Texas VQFN NoLead
@@ -76321,6 +76994,8 @@ Texas VQFN NoLead
 26
 17
 Package_DFN_QFN
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Texas_RVE0028A_VQFN-28-1EP_3.5x4.5mm_P0.4mm_EP2.1x3.1mm
 Texas RVE0028A VQFN, 28 Pin (http://www.ti.com/lit/ds/symlink/tps51363.pdf#page=29), generated with kicad-footprint-generator ipc_noLead_generator.py
 Texas VQFN NoLead
@@ -76952,14 +77627,22 @@ VQFN NoLead
 49
 Package_DFN_QFN
 VQFN-64-1EP_9x9mm_P0.5mm_EP5.4x5.4mm
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 VQFN, 64 Pin (https://ww1.microchip.com/downloads/en/DeviceDoc/PIC16LF19195-6-7-Data-Sheet-40001873D.pdf#page=718), generated with kicad-footprint-generator ipc_noLead_generator.py
+========
+VQFN, 64 Pin (http://ww1.microchip.com/downloads/en/DeviceDoc/PIC16LF19195-6-7-Data-Sheet-40001873D.pdf#page=718), generated with kicad-footprint-generator ipc_noLead_generator.py
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 VQFN NoLead
 0
 74
 65
 Package_DFN_QFN
 VQFN-64-1EP_9x9mm_P0.5mm_EP5.4x5.4mm_ThermalVias
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 VQFN, 64 Pin (https://ww1.microchip.com/downloads/en/DeviceDoc/PIC16LF19195-6-7-Data-Sheet-40001873D.pdf#page=718), generated with kicad-footprint-generator ipc_noLead_generator.py
+========
+VQFN, 64 Pin (http://ww1.microchip.com/downloads/en/DeviceDoc/PIC16LF19195-6-7-Data-Sheet-40001873D.pdf#page=718), generated with kicad-footprint-generator ipc_noLead_generator.py
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 VQFN NoLead
 0
 100
@@ -77049,6 +77732,7 @@ WDFN NoLead
 13
 9
 Package_DFN_QFN
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 WDFN-8-1EP_8x6mm_P1.27mm_EP6x4.8mm
 WDFN, 8 Pin (https://ww1.microchip.com/downloads/en/DeviceDoc/8L_WDFN_6x8mm_MN_C04172A.pdf), generated with kicad-footprint-generator ipc_noLead_generator.py
 WDFN NoLead Microchip-8L-WDFN-6x8mm-MN-C04172A
@@ -77063,6 +77747,8 @@ WDFN NoLead Microchip-8L-WDFN-6x8mm-MN-C04172A
 42
 9
 Package_DFN_QFN
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 WDFN-8_2x2mm_P0.5mm
 DFN8 2x2, 0.5P; No exposed pad (http://www.onsemi.com/pub/Collateral/NCP4308-D.PDF)
 DFN 0.5
@@ -77170,14 +77856,22 @@ WQFN-20 4.5mm 2.5mm 0.5mm
 Package_DFN_QFN
 WQFN-20-1EP_3x3mm_P0.4mm_EP1.7x1.7mm
 WQFN, 20 Pin (https://www.ti.com/lit/ds/symlink/ts3ds10224.pdf#page=29), generated with kicad-footprint-generator ipc_noLead_generator.py
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 WQFN NoLead Texas_RUK0020B
+========
+WQFN NoLead
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 0
 25
 21
 Package_DFN_QFN
 WQFN-20-1EP_3x3mm_P0.4mm_EP1.7x1.7mm_ThermalVias
 WQFN, 20 Pin (https://www.ti.com/lit/ds/symlink/ts3ds10224.pdf#page=29), generated with kicad-footprint-generator ipc_noLead_generator.py
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 WQFN NoLead Texas_RUK0020B
+========
+WQFN NoLead
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 0
 30
 21
@@ -78666,6 +79360,7 @@ LSOP 2.54mm 300mil
 8
 8
 Package_DIP
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 IXYS_Flatpak-8_6.3x9.7mm_P2.54mm
 IXYS  Flatpak, 8 Pin (https://www.littelfuse.com/media?resourcetype=datasheets&itemid=996c6e8f-cc1b-44f6-811e-251c6e004c56&filename=littelfuse-integrated-circuits-loc112-datasheet), generated with kicad-footprint-generator ipc_gullwing_generator.py
 IXYS Flatpak DIP
@@ -78680,6 +79375,8 @@ IXYS Flatpak DIP
 8
 8
 Package_DIP
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 PowerIntegrations_PDIP-8B
 Power Integrations variant of 8-lead though-hole mounted DIP package, row spacing 7.62 mm (300 mils), LongPads, see https://www.power.com/sites/default/files/product-docs/lnk520.pdf
 THT DIP DIL PDIP 2.54mm 7.62mm 300mil LongPads
@@ -79667,7 +80364,11 @@ NXP LGA NoLead
 8
 8
 Package_LGA
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Rohm_MLGA010V020A_LGA-10_2x2mm_P0.45mm_LayoutBorder2x3y
+========
+Rohm_MLGA010V020A_LGA-10_2x2mm_P0.45mm_LayoutBorder_3x2y
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Rohm  LGA, 10 Pin (https://fscdn.rohm.com/en/techdata_basic/ic/package/Jisso_MLGA010V020A-1-2_Rev005s_E2(MSL3).pdf)
 Rohm LGA NoLead
 0
@@ -79975,6 +80676,7 @@ LQFP QFP
 128
 128
 Package_QFP
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 LQFP-144-1EP_20x20mm_P0.5mm_EP6.5x6.5mm
 LQFP, 144 Pin (https://www.infineon.com/cms/en/product/packages/PG-LQFP/PG-LQFP-144-22), generated with kicad-footprint-generator ipc_gullwing_generator.py
 LQFP QFP Infineon-PG-LQFP-144-24 Infineon-PG-LQFP-144-26
@@ -79989,6 +80691,8 @@ LQFP QFP Infineon-PG-LQFP-144-24 Infineon-PG-LQFP-144-26
 171
 145
 Package_QFP
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 LQFP-144_20x20mm_P0.5mm
 LQFP, 144 Pin (http://ww1.microchip.com/downloads/en/PackagingSpec/00000049BQ.pdf#page=425), generated with kicad-footprint-generator ipc_gullwing_generator.py
 LQFP QFP
@@ -80885,6 +81589,7 @@ HVSSOP SO
 20
 11
 Package_SO
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Infineon_PG-DSO-8-24_4x5mm
 Infineon  PG-DSO, 8 Pin (https://www.infineon.com/dgdl/Infineon-BSP752R-DS-v01_02-EN.pdf?fileId=db3a304316f112290116f233cbd271e9#page=17), generated with kicad-footprint-generator ipc_gullwing_generator.py
 Infineon PG-DSO SO
@@ -80892,6 +81597,8 @@ Infineon PG-DSO SO
 8
 8
 Package_SO
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Infineon_PG-DSO-8-27_3.9x4.9mm_EP2.65x3mm
 Infineon  PG-DSO, 8 Pin (https://www.infineon.com/cms/en/product/packages/PG-DSO/PG-DSO-8-27), generated with kicad-footprint-generator ipc_gullwing_generator.py
 Infineon PG-DSO SO
@@ -80913,6 +81620,7 @@ DSO DSO-8 SOIC SOIC-8
 12
 9
 Package_SO
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Infineon_PG-DSO-8-59_7.5x6.3mm
 Infineon  PG-DSO, 8 Pin (https://www.infineon.com/dgdl/Infineon-1EDCxxI12AH-DS-v02_00-EN.pdf), generated with kicad-footprint-generator ipc_gullwing_generator.py
 Infineon PG-DSO SO
@@ -80920,6 +81628,8 @@ Infineon PG-DSO SO
 8
 8
 Package_SO
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Infineon_PG-DSO-12-9
 Infineon PG-DSO 12 pin, exposed pad: 4.5x8.1mm, (https://www.infineon.com/cms/en/product/packages/PG-DSO/PG-DSO-12-9/)
 PG-DSO
@@ -81326,6 +82036,7 @@ PowerPAK SO-8 Single
 9
 5
 Package_SO
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 PowerSSO-16-1EP_3.9x4.9mm_P0.5mm_EP2.5x3.61mm
 PowerSSO, 16 Pin (https://www.st.com/resource/en/datasheet/vnd7020aj.pdf), generated with kicad-footprint-generator ipc_gullwing_generator.py
 PowerSSO SO
@@ -81340,6 +82051,8 @@ PowerSSO SO
 27
 17
 Package_SO
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 QSOP-16_3.9x4.9mm_P0.635mm
 QSOP, 16 Pin (https://pdfserv.maximintegrated.com/package_dwgs/21-0055.PDF), generated with kicad-footprint-generator ipc_gullwing_generator.py
 QSOP SO
@@ -81403,6 +82116,7 @@ SO SOIC 2.54
 4
 4
 Package_SO
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 SO-5-6_4.55x3.7mm_P1.27mm
 SO, 5 Pin (https://toshiba.semicon-storage.com/us/semiconductor/design-development/package/detail.5pin%20SO6.html), generated with kicad-footprint-generator ipc_gullwing_generator.py
 SO SO TLP2310 Toshiba
@@ -81410,6 +82124,8 @@ SO SO TLP2310 Toshiba
 5
 5
 Package_SO
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 SO-5_4.4x3.6mm_P1.27mm
 5-Lead Plastic Small Outline (SO), see https://docs.broadcom.com/cs/Satellite?blobcol=urldata&blobheader=application%2Fpdf&blobheadername1=Content-Disposition&blobheadername2=Content-Type&blobheadername3=MDT-Type&blobheadervalue1=attachment%3Bfilename%3DIPD-Selection-Guide_AV00-0254EN_030617.pdf&blobheadervalue2=application%2Fx-download&blobheadervalue3=abinary%253B%2Bcharset%253DUTF-8&blobkey=id&blobnocache=true&blobtable=MungoBlobs&blobwhere=1430884105675&ssbinary=true
 SO SOIC 1.27
@@ -81684,8 +82400,13 @@ SOIC 1.27 16 12 Wide
 12
 Package_SO
 SOIC-16W_5.3x10.2mm_P1.27mm
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 SOIC, 16 Pin (http://www.ti.com/lit/ml/msop002a/msop002a.pdf), generated with kicad-footprint-generator ipc_gullwing_generator.py
 SOIC SO
+========
+16-Lead Plastic Small Outline (SO) - Wide, 5.3 mm Body (http://www.ti.com/lit/ml/msop002a/msop002a.pdf)
+SOIC 1.27
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 0
 16
 16
@@ -81879,6 +82600,7 @@ SOP SO
 24
 24
 Package_SO
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 SOP-28_8.4x18.16mm_P1.27mm
 SOP, 28 Pin (https://www.issi.com/WW/pdf/62-65C256AL.pdf#page=12), generated with kicad-footprint-generator ipc_gullwing_generator.py
 SOP SO
@@ -81886,6 +82608,8 @@ SOP SO
 28
 28
 Package_SO
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 SOP-44_12.6x28.5mm_P1.27mm
 SOP, 44 Pin (https://www.mxic.com.tw/Lists/Datasheet/Attachments/8177/MX23C6410,%205V,%2064Mb,%20v3.1.pdf#page=5), generated with kicad-footprint-generator ipc_gullwing_generator.py
 SOP SO
@@ -81921,6 +82645,7 @@ SSO SO
 7
 7
 Package_SO
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 SSO-8-7_6.4x9.7mm_P2.54mm
 SSO, 7 Pin (https://gitlab.com/Sirdel/public/-/blob/3a5b5234461aee14649dc0eb10cbdef84d37b29e/Datasheets/BC2213A-EN.pdf), generated with kicad-footprint-generator ipc_gullwing_generator.py
 SSO SO
@@ -81928,6 +82653,8 @@ SSO SO
 7
 7
 Package_SO
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 SSO-8_6.7x9.8mm_P2.54mm_Clearance8mm
 8-Lead Plastic Stretched Small Outline (SSO/Stretched SO), see https://www.vishay.com/docs/83831/lh1533ab.pdf
 SSO Stretched SO SOIC Pitch 2.54
@@ -81963,6 +82690,7 @@ SSO Stretched SO SOIC Pitch 1.27
 8
 8
 Package_SO
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 SSOP-4_4.4x2.6mm_P1.27mm
 SSOP, 4 Pin (https://www.vishay.com/docs/83465/vos618a.pdf), generated with kicad-footprint-generator ipc_gullwing_generator.py
 SSOP SO
@@ -81970,6 +82698,8 @@ SSOP SO
 4
 4
 Package_SO
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 SSOP-8_2.95x2.8mm_P0.65mm
 SSOP-8 2.9 x2.8mm Pitch 0.65mm
 SSOP-8 2.95x2.8mm Pitch 0.65mm
@@ -81998,6 +82728,7 @@ SSOP SO
 8
 8
 Package_SO
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 SSOP-10-1EP_3.9x4.9mm_P1mm_EP2.1x3.3mm
 SSOP, 10 Pin (http://download.py32.org/%E6%95%B0%E6%8D%AE%E6%89%8B%E5%86%8C/zh-CN/PY32F002A%20%E7%B3%BB%E5%88%97%E6%95%B0%E6%8D%AE%E6%89%8B%E5%86%8C_Rev1.0.pdf#page=44), generated with kicad-footprint-generator ipc_gullwing_generator.py
 SSOP SO ESSOP-10
@@ -82012,6 +82743,8 @@ SSOP SO ESSOP-10
 15
 11
 Package_SO
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 SSOP-10_3.9x4.9mm_P1.00mm
 10-Lead SSOP, 3.9 x 4.9mm body, 1.00mm pitch (http://www.st.com/resource/en/datasheet/viper01.pdf)
 SSOP 3.9 4.9 1.00
@@ -82062,8 +82795,13 @@ SSOP 0.635
 20
 Package_SO
 SSOP-20_4.4x6.5mm_P0.65mm
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 SSOP, 20 Pin (https://www.jedec.org/system/files/docs/Mo-152c.pdf), generated with kicad-footprint-generator ipc_gullwing_generator.py
 SSOP SO JEDEC-MO-152-AC SOT266-1 Nisshinbo-PI-SSOP20-E-A Rohm-SSOP-B20
+========
+SSOP20: plastic shrink small outline package; 20 leads; body width 4.4 mm; (see NXP SSOP-TSSOP-VSO-REFLOW.pdf and sot266-1_po.pdf)
+SSOP 0.65
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 0
 20
 20
@@ -82887,6 +83625,7 @@ TSSOP SO
 100
 100
 Package_SO
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Texas_DGN0008B_VSSOP-8-1EP_3x3mm_P0.65mm_EP2x3mm_Mask1.88x1.98mm
 Texas DGN0008B VSSOP, 8 Pin (https://www.ti.com/lit/ds/symlink/tps7a4101.pdf), generated with kicad-footprint-generator ipc_gullwing_generator.py
 Texas VSSOP SO
@@ -82936,6 +83675,8 @@ TSSOP SO
 16
 16
 Package_SO
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Texas_HSOP-8-1EP_3.9x4.9mm_P1.27mm
 Texas Instruments HSOP 9, 1.27mm pitch, 3.9x4.9mm body, exposed pad, DDA0008J (http://www.ti.com/lit/ds/symlink/tps5430.pdf)
 HSOP 1.27
@@ -83000,15 +83741,33 @@ SSOP 0.75
 56
 Package_SO
 VSSOP-8_2.3x2mm_P0.5mm
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 VSSOP, 8 Pin (https://www.jedec.org/standards-documents/docs/mo-187-f), generated with kicad-footprint-generator ipc_gullwing_generator.py
 VSSOP SO JEDEC-MO-187-CA TI-DCU0008A
+========
+VSSOP-8 2.3x2mm Pitch 0.5mm
+VSSOP-8 2.3x2mm Pitch 0.5mm
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 0
 8
 8
 Package_SO
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 VSSOP-8_3x3mm_P0.65mm
 VSSOP, 8 Pin (https://www.jedec.org/standards-documents/docs/mo-187-f), generated with kicad-footprint-generator ipc_gullwing_generator.py
 VSSOP SO JEDEC-MO-187-AA TI-DGK0008A
+========
+VSSOP-8_2.4x2.1mm_P0.5mm
+http://www.ti.com/lit/ml/mpds050d/mpds050d.pdf
+VSSOP DCU R-PDSO-G8 Pitch0.5mm
+0
+8
+8
+Package_SO
+VSSOP-8_3.0x3.0mm_P0.65mm
+VSSOP-8 3.0 x 3.0, http://www.ti.com/lit/ds/symlink/lm75b.pdf
+VSSOP-8 3.0 x 3.0
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 0
 8
 8
@@ -83146,6 +83905,7 @@ tison
 34
 8
 Package_SON
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 MicroCrystal_C7_SON-8_1.5x3.2mm_P0.9mm
 MicroCrystal C7 SON, 8 Pin (https://www.microcrystal.com/fileadmin/Media/Products/RTC/App.Manual/RV-3028-C7_App-Manual.pdf#page=107), generated with kicad-footprint-generator ipc_noLead_generator.py
 MicroCrystal SON NoLead MicroCrystal-RV3028-C7
@@ -83153,6 +83913,8 @@ MicroCrystal SON NoLead MicroCrystal-RV3028-C7
 8
 8
 Package_SON
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 NXP_XSON-16
 http://www.nxp.com/documents/outline_drawing/SOT1341-1.pdf
 NXP XSON SOT-1341
@@ -83371,7 +84133,11 @@ Texas VSON-HR NoLead
 8
 Package_SON
 Texas_X2SON-4_1x1mm_P0.65mm
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 X2SON 5 pin 1x1mm package, DQN0004A (Reference Datasheet: http://www.ti.com/lit/ds/sbvs193d/sbvs193d.pdf Reference part: TPS383x) [StepUp generated footprint]
+========
+X2SON 5 pin 1x1mm package (Reference Datasheet: http://www.ti.com/lit/ds/sbvs193d/sbvs193d.pdf Reference part: TPS383x) [StepUp generated footprint]
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 X2SON
 0
 13
@@ -83671,6 +84437,7 @@ WSON-12
 19
 13
 Package_SON
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 WSON-12-1EP_3x3mm_P0.5mm_EP1.5x2.5mm
 WSON, 12 Pin (https://www.ti.com/lit/ds/symlink/tps63710.pdf#page=33), generated with kicad-footprint-generator ipc_noLead_generator.py
 WSON NoLead
@@ -83685,6 +84452,8 @@ WSON NoLead
 24
 13
 Package_SON
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 WSON-12-1EP_4x4mm_P0.5mm_EP2.6x3mm
 WSON, 12 Pin (http://www.ti.com/lit/ds/symlink/ldc1312.pdf#page=62), generated with kicad-footprint-generator ipc_noLead_generator.py
 WSON NoLead
@@ -83713,6 +84482,7 @@ WSON-16 3.3 x 1.35mm  Pitch 0.4mm
 20
 17
 Package_SON
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Winbond_USON-8-1EP_3x2mm_P0.5mm_EP0.2x1.6mm
 Winbond  USON, 8 Pin (https://www.lcsc.com/datasheet/lcsc_datasheet_2205122030_Winbond-Elec-W25Q16JVUXIQ_C2843335.pdf#page=66f), generated with kicad-footprint-generator ipc_noLead_generator.py
 Winbond USON NoLead
@@ -83720,6 +84490,8 @@ Winbond USON NoLead
 10
 9
 Package_SON
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 X2SON-8_1.4x1mm_P0.35mm
 X2SON-8 1.4x1mm Pitch0.35mm http://www.ti.com/lit/ds/symlink/pca9306.pdf
 X2SON-8 1.4x1mm Pitch0.35mm
@@ -85618,43 +86390,70 @@ TO-100-10_Window Window
 10
 Package_TO_SOT_THT
 TO-126-2_Horizontal_TabDown
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 TO-126-2, Horizontal, RM 5.08mm, see https://www.caddock.com/online_catalog/mrktg_lit/MP9000_Series.pdf
+========
+TO-126-2, Horizontal, RM 5.08mm, see https://www.diodes.com/assets/Package-Files/TO126.pdf
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 TO-126-2 Horizontal RM 5.08mm
 0
 2
 2
 Package_TO_SOT_THT
 TO-126-2_Horizontal_TabUp
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 TO-126-2, Horizontal, RM 5.08mm, see https://www.caddock.com/online_catalog/mrktg_lit/MP9000_Series.pdf
+========
+TO-126-2, Horizontal, RM 5.08mm, see https://www.diodes.com/assets/Package-Files/TO126.pdf
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 TO-126-2 Horizontal RM 5.08mm
 0
 2
 2
 Package_TO_SOT_THT
 TO-126-2_Vertical
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 TO-126-2, Vertical, RM 5.08mm, see https://www.caddock.com/online_catalog/mrktg_lit/MP9000_Series.pdf
+========
+TO-126-2, Vertical, RM 5.08mm, see https://www.diodes.com/assets/Package-Files/TO126.pdf
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 TO-126-2 Vertical RM 5.08mm
 0
 2
 2
 Package_TO_SOT_THT
 TO-126-3_Horizontal_TabDown
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 TO-126-3, Horizontal, RM 2.28mm, see https://www.diodes.com/assets/Package-Files/TO126.pdf
 TO-126-3 Horizontal RM 2.28mm
+========
+TO-126-3, Horizontal, RM 2.54mm, see https://www.diodes.com/assets/Package-Files/TO126.pdf
+TO-126-3 Horizontal RM 2.54mm
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 0
 3
 3
 Package_TO_SOT_THT
 TO-126-3_Horizontal_TabUp
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 TO-126-3, Horizontal, RM 2.28mm, see https://www.diodes.com/assets/Package-Files/TO126.pdf
 TO-126-3 Horizontal RM 2.28mm
+========
+TO-126-3, Horizontal, RM 2.54mm, see https://www.diodes.com/assets/Package-Files/TO126.pdf
+TO-126-3 Horizontal RM 2.54mm
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 0
 3
 3
 Package_TO_SOT_THT
 TO-126-3_Vertical
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 TO-126-3, Vertical, RM 2.28mm, see https://www.diodes.com/assets/Package-Files/TO126.pdf
 TO-126-3 Vertical RM 2.28mm
+========
+TO-126-3, Vertical, RM 2.54mm, see https://www.diodes.com/assets/Package-Files/TO126.pdf
+TO-126-3 Vertical RM 2.54mm
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 0
 3
 3
@@ -86365,6 +87164,16 @@ TO-264-5 Vertical RM 3.81mm
 0
 5
 5
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
+========
+Pi pico
+MODULE_SC0918
+
+
+0
+40
+40
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Potentiometer_SMD
 Potentiometer_ACP_CA6-VSMD_Vertical
 Potentiometer, vertical, ACP CA6-VSMD, http://www.acptechnologies.com/wp-content/uploads/2017/06/01-ACP-CA6.pdf
@@ -87303,6 +88112,7 @@ Potentiometer vertical Vishay T73YP
 0
 3
 3
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Potentiometer_THT
 Potentiometer_Vishay_T93XA_Horizontal
 Potentiometer, horizontal, Vishay, https://www.vishay.com/docs/51026/t93.pdf, 3/8" x 3/8" x 3/16" (9.7 x 9.8 x 5mm max.)
@@ -87317,6 +88127,8 @@ Potentiometer vertical vishay
 0
 3
 3
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 RF
 Skyworks_SKY13575_639LF
 http://www.skyworksinc.com/uploads/documents/SKY13575_639LF_203270D.pdf
@@ -88123,6 +88935,7 @@ Bluetooth BLE NFC
 39
 39
 RF_Module
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 MCU_Seeed_ESP32C3
 ESP32C3 Seeed Xiao RF Wifi Shield (https://www.seeedstudio.com/blog/wp-content/uploads/2022/08/Seeed-Studio-XIAO-Series-Package-and-PCB-Design.pdf)
 wifi bluetooth microcontroller
@@ -88130,6 +88943,8 @@ wifi bluetooth microcontroller
 27
 23
 RF_Module
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 MOD-nRF8001
 BLE module, https://www.olimex.com/Products/Modules/RF/MOD-nRF8001/
 BLE module
@@ -88719,6 +89534,7 @@ AXICOM IM-Series Relay SPDT
 8
 Relay_THT
 Relay_DPDT_Finder_40.52
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 DPDT relay, Finder 40.52, 8A, 250V, body size 29x12.4mm, height 25mm, pitch 5x7.5mm, https://cdn.findernet.com/app/uploads/S40EN.pdf
 2-Form-C
 0
@@ -88728,6 +89544,10 @@ Relay_THT
 Relay_DPDT_Finder_40.62
 DPDT relay, Finder 40.62, 10A, 250V, body size 29x12.4mm, height 25mm, pitch 5x7.5mm, https://cdn.findernet.com/app/uploads/S40EN.pdf
 2-Form-C
+========
+Relay DPDT Finder 40.52, Pitch 5mm/7.5mm, https://www.finder-relais.net/de/finder-relais-serie-40.pdf
+Relay DPDT Finder 40.52 Pitch 5mm
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 0
 8
 8
@@ -88739,6 +89559,7 @@ relay dpdt fujitsu tht
 8
 8
 Relay_THT
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Relay_DPDT_Hongfa_HF115F-2Z-x4
 Hongfa DPDT power relay, 8A, 250VAC, body size 29x127.x15.7mm, https://source.hongfa.com//pdf/web/viewer.html?file=/Uploads/Product/PDF/HF115F_I_en.pdf
 2-Form-C
@@ -88746,6 +89567,8 @@ Hongfa DPDT power relay, 8A, 250VAC, body size 29x127.x15.7mm, https://source.ho
 8
 8
 Relay_THT
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Relay_DPDT_Kemet_EC2
 Kemet signal relay, DPDT, non-latching, single coil latching, https://content.kemet.com/datasheets/KEM_R7002_EC2_EE2.pdf
 Kemet EC2 signal relay DPDT non single coil latching through hole THT
@@ -88774,6 +89597,7 @@ Omron G5V-2 Relay DPDT
 8
 8
 Relay_THT
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Relay_DPDT_Omron_G6A
 DPDT signal relay, Omron G6A/G6AU, 20x9.9x8.2mm https://omronfs.omron.com/en_US/ecb/products/pdf/en-g6a.pdf
 Omron G6A Relay DPDT
@@ -88788,6 +89612,8 @@ Omron G6AK Relay DPDT
 10
 10
 Relay_THT
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Relay_DPDT_Omron_G6H-2
 Omron relay G6H-2, see http://cdn-reichelt.de/documents/datenblatt/C300/G6H%23OMR.pdf
 Omron relay G6H-2
@@ -88908,33 +89734,54 @@ spdt relay
 5
 Relay_THT
 Relay_SPDT_Finder_40.11
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Relay SPDT Finder 40.11, 10/16A, 250V, body size 28.5x26.3mm, height 12.7mm, https://web.archive.org/web/20170816081018if_/https://www.finder-relais.net/de/finder-relais-serie-40.pdf
 1-Form-C
+========
+Relay SPDT Finder 40.11, https://www.finder-relais.net/de/finder-relais-serie-40.pdf
+Relay SPDT Finder 40.11 
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 0
 5
 5
 Relay_THT
 Relay_SPDT_Finder_40.31
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 DPDT relay, Finder 40.52, 10/12A, 250V, body size 29x12.4mm, height 25mm, pitch 3.5x7.5mm, https://cdn.findernet.com/app/uploads/S40EN.pdf
 1-Form-C
+========
+Relay DPDT Finder 40.31, Pitch 3.5mm/7.5mm, https://www.finder-relais.net/de/finder-relais-serie-40.pdf
+Relay DPDT Finder 40.31 Pitch 3.5mm
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 0
 5
 5
 Relay_THT
 Relay_SPDT_Finder_40.41
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Relay SPDT Finder 40.11, 10A, 250V, body size 28.5x12.3mm, height 26.3mm, https://web.archive.org/web/20170816081018if_/https://www.finder-relais.net/de/finder-relais-serie-40.pdf
 1-Form-C
+========
+Relay DPDT Finder 40.41, Pitch 3.5mm/7.5mm, https://www.finder-relais.net/de/finder-relais-serie-40.pdf
+Relay DPDT Finder 40.41 Pitch 3.5mm
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 0
 5
 5
 Relay_THT
 Relay_SPDT_Finder_40.51
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 SPDT relay, Finder 40.52, 10/12A, 250V, body size 29x12.4mm, height 25mm, pitch 5x7.5mm, https://cdn.findernet.com/app/uploads/S40EN.pdf
 1-Form-C
+========
+Relay DPDT Finder 40.51, Pitch 5mm/7.5mm, https://www.finder-relais.net/de/finder-relais-serie-40.pdf
+Relay DPDT Finder 40.51 Pitch 5mm
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 0
 5
 5
 Relay_THT
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Relay_SPDT_Finder_40.61
 SPDT relay, Finder 40.61, 16A, 250V, body size 29x12.4mm, height 25mm, pitch 5x7.5mm, https://cdn.findernet.com/app/uploads/S40EN.pdf
 2-Form-C
@@ -88942,6 +89789,8 @@ SPDT relay, Finder 40.61, 16A, 250V, body size 29x12.4mm, height 25mm, pitch 5x7
 8
 8
 Relay_THT
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Relay_SPDT_Fujitsu_FTR-LYCA005x_FormC_Vertical
 Relay, SPDT Form C, vertical mount, 6A, 5-60V, https://www.fujitsu.com/sg/imagesgig5/ftr-ly.pdf
 relay SPDT form c vertical
@@ -88956,6 +89805,7 @@ Relay SPDT IM-relay HJR-4102
 6
 6
 Relay_THT
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Relay_SPDT_Hongfa_HF3F-L-xx-1ZL1T
 Hongfa subminature high power latching relay 5, 6, 9, 12, 24, 48VDC. 10A switching current, Form-C https://source.hongfa.com//Api/DownloadPdf/362
 relays Hongfa form-c 1-coil 
@@ -88977,6 +89827,8 @@ relays Hongfa form-c 2-coil reverse-polarity
 6
 6
 Relay_THT
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Relay_SPDT_HsinDa_Y14
 http://www.hsinda.com.tw/upload/file/Y14-20200430135145.pdf
 Relay Y14
@@ -89131,6 +89983,7 @@ Finder 32.21-x300 Relay SPST
 4
 4
 Relay_THT
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Relay_SPST_Hongfa_HF3F-L-xx-1HL1T
 Hongfa subminature high power latching relay 5, 6, 9, 12, 24, 48VDC. 15A switching current, Form-A https://source.hongfa.com//Api/DownloadPdf/362
 relays Hongfa form-a 1-coil 
@@ -89152,6 +90005,8 @@ relays Hongfa form-a 2-coil reverse-polarity
 5
 5
 Relay_THT
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Relay_SPST_Omron-G5Q-1A
 Relay SPST-NO Omron Serie G5Q, http://omronfs.omron.com/en_US/ecb/products/pdf/en-g5q.pdf
 Relay SPST-NO Omron Serie G5Q
@@ -89180,6 +90035,7 @@ Omron G5NB Relay SPST-NO
 4
 4
 Relay_THT
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Relay_SPST_Omron_G5PZ
 Relay Omron G5PZ, see https://components.omron.com/us-en/sites/components.omron.com.us/files/datasheet_pdf/K320-E1.pdf
 Relay Omron G5PZ
@@ -89187,6 +90043,8 @@ Relay Omron G5PZ
 4
 4
 Relay_THT
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Relay_SPST_Panasonic_ADW11
 Panasonic power relay, SPST, latching, 10x24mm, 18.8mm height, https://api.pim.na.industrial.panasonic.com/file_stream/main/fileversion/270
 Panasonic Relay SPST
@@ -90664,6 +91522,7 @@ rotary encoder
 7
 6
 Rotary_Encoder
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 RotaryEncoder_Bourns_Horizontal_PEL12D-2x16F-Sxxxx
 Rotary encoder with switch and illuminated 4mm shaft, dual-led, https://www.bourns.com/docs/product-datasheets/PEL12D.pdf
 rotary encoder illuminated switch horizontal
@@ -90706,6 +91565,8 @@ rotary encoder illuminated switch horizontal
 9
 8
 Rotary_Encoder
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 RotaryEncoder_Bourns_Vertical_PEC12R-3x17F-Nxxxx
 Bourns rotary encoder, PEC12R, without switch, with bushing, vertical shaft, 17.5mm shaft, https://www.bourns.com/docs/product-datasheets/pec12r.pdf
 rotary encoder
@@ -90719,6 +91580,7 @@ rotary encoder
 0
 7
 6
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Rotary_Encoder
 RotaryEncoder_Bourns_Vertical_PEL12D-4x25S-Sxxxx
 Rotary encoder with switch and illuminated 13mm shaft, dual-led, https://www.bourns.com/docs/product-datasheets/PEL12D.pdf
@@ -90733,6 +91595,8 @@ rotary encoder illuminated switch vertical
 0
 9
 8
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Sensor
 ASAIR_AM2302_P2.54mm_Lead2.75mm_TabDown
 Temperature and humidity module, http://akizukidenshi.com/download/ds/aosong/AM2302.pdf
@@ -91133,6 +91997,7 @@ hall current
 6
 6
 Sensor_Current
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 LEM_LA25-NP
 LEM LA 25-NP Current Transducer (https://www.lem.com/sites/default/files/products_datasheets/la%2025-np.pdf)
 Current sensor LEM
@@ -91140,6 +92005,8 @@ Current sensor LEM
 13
 13
 Sensor_Current
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 LEM_LA25-P
 LEM Current Transducer (https://www.lem.com/sites/default/files/products_datasheets/la_25-p.pdf)
 current transducer
@@ -92092,6 +92959,7 @@ Logo RoHS
 0
 0
 Symbol
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Smolhaj_Scale_0.1
 BLÅHAJ , smol 50cm nominal, 1:10 scale (56mm Snoot-Flosse), MPN 205.406.63 (https://www.ikea.com/gb/en/p/blahaj-soft-toy-baby-shark-20540663/)
 Ikea Smol Haj
@@ -92099,6 +92967,8 @@ Ikea Smol Haj
 0
 0
 Symbol
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Symbol_Attention_Triangle_8x7mm_Copper
 Symbol, Attention, 8x7mm, copper layer
 warning graphic
@@ -92435,6 +93305,7 @@ Wuerth WR-TBL Series 3114 terminal block pitch 7.62mm
 2
 2
 TerminalBlock
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 TerminalBlock_Xinya_XY308-2.54-2P_1x02_P2.54mm_Horizontal
 Terminal Block Xinya XY308-2.54-2P, 2 pins, pitch 2.54mm, size 5.58x6.5mm^2, drill diameter 1.2mm, pad diameter 2mm, see http://www.xinyaelectronic.com/product/xy308-254, script-generated using https://gitlab.com/kicad/libraries/kicad-footprint-generator/-/tree/master/scripts/TerminalBlock_Xinya
 THT Terminal Block Xinya XY308-2.54-2P pitch 2.54mm size 5.58x6.5mm^2 drill 1.2mm pad 2mm
@@ -92589,6 +93460,8 @@ THT Terminal Block Xinya XY308-2.54-23P pitch 2.54mm size 58.9x6.5mm^2 drill 1.2
 23
 23
 TerminalBlock
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 TerminalBlock_bornier-2_P5.08mm
 simple 2-pin terminal block, pitch 5.08mm, revamped version of bornier2
 terminal block bornier2
@@ -96985,6 +97858,7 @@ Transformer current sense SMD
 8
 8
 Transformer_SMD
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Transformer_ED8_4-Lead_10.5x8mm_P5mm
 Isolated audio transformer, ED8, 4-lead, body 10.5x8mm body, pitch 5mm, height 5mm, https://gitlab.com/kicad/libraries/kicad-footprints/-/merge_requests/3626
 permalloy core 
@@ -96992,6 +97866,8 @@ permalloy core
 4
 4
 Transformer_SMD
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Transformer_Ethernet_Bel_S558-5999-T7-F
 Ethernet Transformer, Bel S558-5999-T7-F, https://www.belfuse.com/resources/ICMs/lan-/S558-5999-T7-F.pdf
 Ethernet Transformer
@@ -97559,6 +98435,7 @@ Transformer Toroid tapped horizontal laying Diameter 14mm Amidon T50
 6
 6
 Transformer_THT
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Transformer_Triad_VPP16-310
 Power transformer, 2x Pri, 2x Sec, 230/115 VAC to 16/8V (0.31/0.62 A)
 power center-tap
@@ -97566,6 +98443,8 @@ power center-tap
 8
 8
 Transformer_THT
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Transformer_Wuerth_750343373
 Transformer, horizontal core with bobbin, 10 pin, 3.81mm pitch, 15.24mm row spacing, 22x23x17.53mm (https://katalog.we-online.com/ctm/datasheet/750343373.pdf)
 transformer flyback
@@ -97622,6 +98501,7 @@ igbt diode module
 28
 28
 Transistor_Power_Module
+<<<<<<<< HEAD:Hardware/PCB_DIY_V4/fp-info-cache
 Infineon_AG-ECONO3
 35-lead TH, EconoPACK 3, similar(+0.5mm for Fab layer on Y) as Littelfuse_Package_W_XN2MM, https://www.infineon.com/dgdl/Infineon-FS200R12N3T7-DataSheet-v01_00-EN.pdf?fileId=8ac78c8c80027ecd018083b6ce263011
 igbt diode module
@@ -97650,6 +98530,8 @@ igbt diode module
 22
 15
 Transistor_Power_Module
+========
+>>>>>>>> sumo:Hardware/old_TriatlonPlanB/fp-info-cache
 Infineon_EasyPIM-1B
 35-lead TH, EasyPIM 1B, https://www.infineon.com/dgdl/Infineon-FP10R06W1E3-DS-v02_01-en_de.pdf?fileId=db3a304412b407950112b43312285a63
 brifge rectifier igbt diode module
