@@ -42,7 +42,6 @@ Motor motorLeft(16, 17, 2, 3, 1000, 8);
 --------------------------------------------------------------------------*/
 /* Menu section */
 
-// Define display size in pixels
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
 #define OLED_RESET -1
@@ -243,7 +242,6 @@ int maxSpeed = 180;
 int minSpeed = 140;
 int speed = 160;
 
-// PID const
 float kp = 0.013;
 float ki = 0;
 float kd = 0;
@@ -288,18 +286,6 @@ void StartSprinterModality()
   }
 }
 
-void StartModalityTriggers()
-{
-  if (current_screen == flags && selected == calibration)
-  {
-    StartSprinterCalibration();
-  }
-  else if (current_screen == flags && selected == sprinter)
-  {
-    StartSprinterModality();
-  }
-}
-
 #define QRE_BLACK 3900
 #define SHARP_ATTACK 1000
 #define SET_OUT_BACKWARDS_TIME 250
@@ -321,9 +307,13 @@ int qre_right;
 
 int signal_input;
 
-CD74HC4067 my_mux(4, 25, 33, 32); // s0, s1, s2, s3
-
+#define PIN_S0 4
+#define PIN_S1 25
+#define PIN_S2 33
+#define PIN_S3 32
 #define PIN_SIG 34
+
+CD74HC4067 my_mux(PIN_S0, PIN_S1, PIN_S2, PIN_S3);
 
 void ReadCleanerSensors()
 {
@@ -688,7 +678,6 @@ int brakePWM;
 int leftPWM;
 int rightPWM;
 
-// This callback gets called any time a new gamepad is connected.
 void onConnectedController(ControllerPtr ctl)
 {
 
@@ -735,14 +724,12 @@ void processGamepad(ControllerPtr ctl)
   bool brakeRight;
   bool brakeLeft;
 
-  // Variables to store the input of each stick
   int yAxisValueR = ctl->axisRY();
   int yAxisValueL = ctl->axisY();
 
   int RBValue = ctl->throttle();
   int LBValue = ctl->brake();
 
-  // Mapping of each stick input to 8bit
   int rightWheelSpeedF = map(yAxisValueR, 0, -511, 0, 255);
   int rightWheelSpeedB = map(yAxisValueR, 0, 512, 0, 255);
 
@@ -855,11 +842,13 @@ void StartModalityTriggers()
   {
     StartSumoModality();
   }
-  else if (current_screen == flags && selected == sprinter) {
-    StartSprinterModality();
-  }
-  else if (current_screen == calibration) {
+  else if (current_screen == calibration)
+  {
     StartSprinterCalibration();
+  }
+  else if (current_screen == flags && selected == sprinter)
+  {
+    StartSprinterModality();
   }
 }
 
@@ -874,23 +863,13 @@ void setup()
   pinMode(PIN_LED, OUTPUT);
   digitalWrite(PIN_LED, HIGH);
 
-  // Begin display connection
-  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C))
-  {
-    Serial.println(F("SSD1306 allocation failed"));
-    for (;;)
-      ;
-  }
-
-  u8g2_for_adafruit_gfx.begin(display); // Begins u8g2 for gfx library
-
   BP32.setup(&onConnectedController, &onDisconnectedController);
 
   pinMode(PIN_SELECT, INPUT_PULLUP);
   pinMode(PIN_DOWN, INPUT_PULLUP);
 
   display.clearDisplay();
-  display.drawBitmap(ALITA_BITMAP_MARGIN_X, ALITA_BITMAP_MARGIN_Y, bitmap_alita, ALITA_BITMAP_WIDTH, ALITA_BITMAP_HEIGHT, WHITE); // Prints teams logo
+  display.drawBitmap(ALITA_BITMAP_MARGIN_X, ALITA_BITMAP_MARGIN_Y, bitmap_alita, ALITA_BITMAP_WIDTH, ALITA_BITMAP_HEIGHT, WHITE);
   display.display();
 
   delay(3000);
