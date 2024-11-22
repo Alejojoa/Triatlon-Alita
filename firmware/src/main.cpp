@@ -855,6 +855,12 @@ void StartModalityTriggers()
   {
     StartSumoModality();
   }
+  else if (current_screen == flags && selected == sprinter) {
+    StartSprinterModality();
+  }
+  else if (current_screen == calibration) {
+    StartSprinterCalibration();
+  }
 }
 
 #define PIN_LED 23
