@@ -83,13 +83,7 @@ Director Técnico: Prof. Barzola Maximiliano Andrés
 
  ## Directorios
 
- main
-
- |
-
-   .vscode
-
- |
+ 
 
    fimware
 
