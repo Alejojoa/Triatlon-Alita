@@ -26,6 +26,7 @@ Director Técnico: Prof. Barzola Maximiliano Andrés
 
    -.vscode
         Archivos generados por el IDE Visual Studio Code y la extensión de PlatformIO.
+        
    -fimware
         Código final individual de despeja_area.
       
@@ -35,6 +36,7 @@ Director Técnico: Prof. Barzola Maximiliano Andrés
 
    -.vscode
         Archivos generados por el IDE Visual Studio Code y la extensión de PlatformIO.
+        
    -fimware
         Código final individual de sprinter.
 
