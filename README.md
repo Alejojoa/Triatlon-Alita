@@ -28,7 +28,7 @@ Director Técnico: Prof. Barzola Maximiliano Andrés
         Archivos generados por el IDE Visual Studio Code y la extensión de PlatformIO.
         
    -fimware
-        Código final individual de despeja_area.
+        Código actual individual de despeja_area.
       
 
  ## sprinter
@@ -38,18 +38,62 @@ Director Técnico: Prof. Barzola Maximiliano Andrés
         Archivos generados por el IDE Visual Studio Code y la extensión de PlatformIO.
         
    -fimware
-        Código final individual de sprinter.
+        Código actual individual de sprinter.
 
 
  ## sumo
  Rama dedicada a la programación final (Alita V3) en la categoría de "Sumo RC" (Radio Controlado). Su objertivo será el de quitar del tatami al rival, siendo un operario el encargado de manejar el robot. 
 
- # menu
+   -.vscode
+        Archivos generados por el IDE Visual Studio Code y la extensión de PlatformIO.
+
+   -fimware
+        Código actual indiviual de sumo.
+
+        
+
+ ## menu
  Alita, en todas sus versiónes, incluye un menu comandado por pulsadores incluidos en el lateral izquierdo de robot para mayor comodidad del usuario. En esta rama encontrará la programación dedicada al manejo de esta interfaz. 
 
+  -.vscode
+       Archivos generados por el IDE Visual Studio Code y la extensión de PlatformIO.
+
+  -fimware
+       Programación de la interfaz de menú.
+
  ## main
- Esta es la rama principal del repositorio. En ella se encontrará la union de todas las ramas en una sola junto al hardware de Alita. 
+ Esta es la rama principal del repositorio. En ella se encontrará la union de todas las ramas en una sola junto al hardware de Alita.
+
+   -.vscode
+        Archivos generados por el IDE Vistual Studio Code y la extensión de PlatformIO.
+
+   -fimware
+        Unión de las ramas individuales en una sola para mayor comodidad, dandole así a la interfaz del menu.
+
+   -hardware
+        PCBs empleadas en el robot, tanto como principales como drivers y multiplexores.
+
+   -hardware 3D
+        Diseños 3D de las diferentes versiones de Alita.
 
  ## stage
  Rama de pruebas de uniones previas a la rama main.
+
+
+
+ ## Directorios
+
+ main
+
+ |
+
+   .vscode
+
+ |
+
+   fimware
+
+ |
+
+   Hardware
  
