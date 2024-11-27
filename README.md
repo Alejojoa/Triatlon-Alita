@@ -9,6 +9,10 @@ Participación en los Juegos Bonaerenses 2024 (28 Oct. - 2 Nov.)
 Llevado a cabo por alumnos de 6to año de la Técnica n°5 "2 de Abril" en la carrera de Electrónica.
 Alita es un robot diseñado para fines plenamente educativos, contado con múltiples versiones, con el objetivo de superarse a si misma en cada una de sus etapas.
 
+Todo el proyecto ha sido realizado en Vistual Studio Code con la extensión de PlarformIO en lenguaje C++ Orientado a Objetos.
+Diseño de PCBs realizado en KiCad 8.0
+Diseño de Hardware3D en Fusion 360
+
 Participantes: Guerra Alejo Joaqín
                Lazzatti Lucas
                Regidor Jeremías
