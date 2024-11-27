@@ -79,12 +79,6 @@ Director Técnico: Prof. Barzola Maximiliano Andrés
  ## stage
  Rama de pruebas de uniones previas a la rama main.
 
-
-
- ## Directorios
-
- 
-
    fimware
 
  |
